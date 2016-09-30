@@ -5,7 +5,7 @@
 #
 
 ### Flags
-DEV=0
+DEV=1
 
 ### Colors
 GREEN="\033[1;32m"
