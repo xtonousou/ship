@@ -220,7 +220,7 @@ function __init__() {
 			"-h"|"--help") usage;;
 			"-i"|"--interfaces") show_interfaces;;
 			"-m"|"--mac") show_mac;;
-			"-p"|"--public-ip") show_public_ip --public;;
+			"-p"|"--public-ip") show_public_ip;;
 			"-t4"|"--time-ipv4") show_avg_ping -4;;
 			"-t6"|"--time-ipv6") show_avg_ping -6;;
 			"--animate") show_animated_sailing_ship;;
