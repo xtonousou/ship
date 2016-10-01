@@ -5,6 +5,7 @@ A simple, handy network multitool that shows the IPv4, IPv6, MAC addresses of yo
 ##Features
 
 ###Basic
+<<<<<<< HEAD
 - Show active network interfaces.<br/>
 - Show default gateway of online interfaces.<br/>
 - Show **IPv4** addresses of active network interfaces with or without **CIDR**.<br/>
@@ -25,6 +26,7 @@ Optional tools:</br>
 Tested on **Arch Linux 4.7.5-1** with **bash 4.3.46**.
 
 ##Under development
+<<<<<<< HEAD
 - [ ] Alternative method to ping and measure average response time.
 - [ ] Finding active hosts nearby on current network.
 
