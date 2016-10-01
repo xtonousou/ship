@@ -5,25 +5,30 @@ A simple, handy network multitool that shows the IPv4, IPv6, MAC addresses of yo
 ##Features
 
 ###Basic
-- Displaying active network interfaces.<br/>
-- Displaying **IPv4** addresses of active network interfaces with **CIDR** or without.<br/>
-- Displaying **IPv6** addresses of active network interfaces with **CIDR** or without.<br/>
-- Displaying **MAC** addresses of active network interfaces.<br/>
+<<<<<<< HEAD
+- Show active network interfaces.<br/>
+- Show default gateway of online interfaces.<br/>
+- Show **IPv4** addresses of active network interfaces with or without **CIDR**.<br/>
+- Show **IPv6** addresses of active network interfaces with or without **CIDR**.<br/>
+- Show **MAC** addresses of active network interfaces.<br/>
 
 ###Miscellaneous
-- Displaying public IP.<br/>
-- Measuring response time from google.com.</br>
+- Show public IP.<br/>
+- Show average response time from google.com.</br>
+- Show active hosts on current network.</br>
 
 ##Requirements
-```
-ip ping curl head tail cut grep awk
-```
+Essential tools:</br>
+**```ip route ping curl lsmod hash printf echo head tail tr cut grep awk sed```**</br>
+Optional tools:</br>
+**```nmap```**</br>
 
 Tested on **Arch Linux 4.7.5-1** with **bash 4.3.46**.
 
 ##Under development
-- [ ] Finding live hosts on network with ```nmap```.</br>
-- [ ] Pinging Google with IPv4 or IPv6.</br>
+<<<<<<< HEAD
+- [ ] Alternative method to ping and measure average response time.
+- [ ] Finding active hosts nearby on current network.
 
 ##LICENSE
 This script is under GPLv3 (or later) License.</br>
