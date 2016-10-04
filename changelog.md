@@ -1,6 +1,24 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
+## [1.2] - 2016-10-04
+### Added
+- Get the IP address from a domain.<br/>
+- Get the local IP address directly.<br/>
+- New dialogs.<br/>
+- Some functions for better flow.<br/>
+- Comments.<br/>
+
+### Changed
+- Usage.<br/>
+- Method to check connectivity (local or network).<br/>
+- Source to ping.<br/>
+- Parameter passing.<br/>
+- Clean up code.<br/>
+
+### Removed
+- Tools: **```curl route ```**<br/>
+
 ## [1.1] - 2016-10-01
 ### Added
 - Display script's version.<br/>
