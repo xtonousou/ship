@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
+## [1.3] - 2016-10-05
+### Added
+- Get the local IPv6 directly.<br/>
+- Get full location info of a domain or IP in same command.<br/>
+- Get the quantity of connections to a port per IP with ```netstat```.<br/>
+
+### Changed
+- Usage.<br/>
+- Get external IPv4 and resolve domain's IPv4 in same command.<br/>
+- Code is cleaner and more user-friendly.<br/>
+
 ## [1.2] - 2016-10-04
 ### Added
 - Get the IP address from a domain.<br/>
