@@ -7,14 +7,14 @@ A simple, handy network multitool that shows the IPv4, IPv6, MAC addresses of yo
 ###Basic
 - Shows active network interfaces.<br/>
 - Shows default gateway of online interfaces.<br/>
-- Shows **internal** IPv4, IPv6 address.<br/>
+- Shows **internal** IPv4 **or** IPv6 address directly.<br/>
 - Shows **IPv4** addresses of active network interfaces with or without **CIDR**.<br/>
 - Shows **IPv6** addresses of active network interfaces with or without **CIDR**.<br/>
 - Shows **MAC** addresses of active network interfaces.<br/>
 
 ###Miscellaneous
-- Shows **external** IPv4 address **(user's or domain's).<br/>
-- Shows **location** info (user's or domain's).<br/>
+- Shows **external** IPv4 address (user's **or** domain's).<br/>
+- Shows **location** info (user's **or** domain's).<br/>
 - Shows the connections to a **port** per IP basis.<br/>
 - Shows average response time from google.com. (aka. **rtt**)<br/>
 - Shows active hosts on current network/s with or without MAC address.<br/>
