@@ -1,6 +1,35 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
+## [1.3] - 2016-10-05
+### Added
+- Get the local IPv6 directly.<br/>
+- Get full location info of a domain or IP in same command.<br/>
+- Get the quantity of connections to a port per IP with ```netstat```.<br/>
+
+### Changed
+- Usage.<br/>
+- Get external IPv4 and resolve domain's IPv4 in same command.<br/>
+- Code is cleaner and more user-friendly.<br/>
+
+## [1.2] - 2016-10-04
+### Added
+- Get the IP address from a domain.<br/>
+- Get the local IP address directly.<br/>
+- New dialogs.<br/>
+- Some functions for better flow.<br/>
+- Comments.<br/>
+
+### Changed
+- Usage.<br/>
+- Method to check connectivity (local or network).<br/>
+- Source to ping.<br/>
+- Parameter passing.<br/>
+- Clean up code.<br/>
+
+### Removed
+- Tools: **```curl route ```**<br/>
+
 ## [1.1] - 2016-10-01
 ### Added
 - Display script's version.<br/>
