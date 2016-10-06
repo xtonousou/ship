@@ -52,7 +52,7 @@ DIALOG_SERVER_IS_DOWN="Invalid input or server is down. ${DIALOG_ABORTING}"
 DIALOG_NOT_A_NUMBER="Option should be integer. ${DIALOG_ABORTING}"
 
 ### Arrays
-declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | gawk '{print $8}'))
+declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk '{print $8}'))
 
 ###################################### Basic Functions Section  #####################################
 
@@ -61,7 +61,7 @@ function show_ipv4() {
   
   local IPV4_ARRAY
   
-  declare -a IPV4_ARRAY=($(ip addr show | grep -w inet | gawk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
+  declare -a IPV4_ARRAY=($(ip addr show | grep -w inet | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
   
 	echo -e  "${DIALOG_INTERFACES_IPV4}"
   for i in "${!IPV4_ARRAY[@]}"; do
@@ -75,7 +75,7 @@ function show_ipv6() {
   
   local IPV6_ARRAY
   
-  declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | gawk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
+  declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
   
 	echo -e  "${DIALOG_INTERFACES_IPV6}"
   for i in "${!IPV6_ARRAY[@]}"; do
@@ -91,12 +91,12 @@ function show_all() {
   local IPV6_ARRAY
   local MAC_OF
   
-  declare -a IPV4_ARRAY=($(ip addr show | grep -w inet  | gawk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
-  declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | gawk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
+  declare -a IPV4_ARRAY=($(ip addr show | grep -w inet  | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
+  declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
   
 	echo -e  "${DIALOG_ALL}"
   for i in "${!INTERFACES_ARRAY[@]}"; do
-    MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | gawk '{print $2}')
+    MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | awk '{print $2}')
     printf " %-14s%-20s%-18s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
   done
   exit
@@ -108,11 +108,11 @@ function show_gateway() {
   local ONLINE_INTERFACES_ARRAY
   local GATEWAY
   
-  declare -a ONLINE_INTERFACES_ARRAY=($(ip route | grep default | gawk '{print $5}'))
+  declare -a ONLINE_INTERFACES_ARRAY=($(ip route | grep default | awk '{print $5}'))
   
   echo -e  "${DIALOG_INTERFACES_GATEWAY}"
   for i in "${!ONLINE_INTERFACES_ARRAY[@]}"; do
-    GATEWAY=$(ip route | grep "${ONLINE_INTERFACES_ARRAY[i]}" | grep ^default | gawk '{print $3}')
+    GATEWAY=$(ip route | grep "${ONLINE_INTERFACES_ARRAY[i]}" | grep ^default | awk '{print $3}')
     printf " %-14s%s\n" "${ONLINE_INTERFACES_ARRAY[i]}" "${GATEWAY}"
   done
   exit
@@ -169,11 +169,11 @@ function show_local_ip() {
   
   case "$1" in
     "--ipv4")
-      LOCAL_IPV4=$(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | gawk '{print $2}' | cut -d "/" -f 1)
+      LOCAL_IPV4=$(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk '{print $2}' | cut -d "/" -f 1)
       echo "${LOCAL_IPV4}"
     ;;
     "--ipv6")
-      LOCAL_IPV6=$(ip addr show | grep -w inet6 | gawk '{print $2}' | cut -d "/" -f 1 | tail -n +2)
+      LOCAL_IPV6=$(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2)
       echo "${LOCAL_IPV6}"
     ;;
   esac
@@ -187,7 +187,7 @@ function show_mac() {
   
 	echo -e  "${DIALOG_INTERFACES_MAC}"
   for i in "${!INTERFACES_ARRAY[@]}"; do
-    MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | gawk '{print $2}')
+    MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | awk '{print $2}')
     printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}"
   done
   exit
@@ -208,7 +208,7 @@ function show_ipv4_cidr() {
   
   local IPV4_CIDR_ARRAY
   
-  declare -a IPV4_CIDR_ARRAY=($(ip addr show | grep -w inet | gawk '{print $2}' | tail -n +2))
+  declare -a IPV4_CIDR_ARRAY=($(ip addr show | grep -w inet | awk '{print $2}' | tail -n +2))
   
 	echo -e  "${DIALOG_INTERFACES_IPV4_CIDR}"
   for i in "${!IPV4_CIDR_ARRAY[@]}"; do
@@ -222,7 +222,7 @@ function show_ipv6_cidr() {
   
   local IPV6_CIDR_ARRAY
   
-  declare -a IPV6_CIDR_ARRAY=($(ip addr show | grep -w inet6 | gawk '{print $2}' | tail -n +2))
+  declare -a IPV6_CIDR_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | tail -n +2))
   
 	echo -e  "${DIALOG_INTERFACES_IPV6_CIDR}"
   for i in "${!IPV6_CIDR_ARRAY[@]}"; do
@@ -238,12 +238,12 @@ function show_all_cidr() {
   local IPV6_CIDR_ARRAY
   local MAC_OF
   
-  declare -a IPV4_CIDR_ARRAY=($(ip addr show | grep -w inet  | gawk '{print $2}' | tail -n +2))
-  declare -a IPV6_CIDR_ARRAY=($(ip addr show | grep -w inet6 | gawk '{print $2}' | tail -n +2))
+  declare -a IPV4_CIDR_ARRAY=($(ip addr show | grep -w inet  | awk '{print $2}' | tail -n +2))
+  declare -a IPV6_CIDR_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | tail -n +2))
   
 	echo -e "${DIALOG_ALL_CIDR}"
   for i in "${!INTERFACES_ARRAY[@]}"; do
-    MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | gawk '{print $2}')
+    MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | awk '{print $2}')
     printf " %-14s%-20s%-21s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}" "${IPV4_CIDR_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
   done
   exit
@@ -255,7 +255,7 @@ function show_all_cidr() {
 function show_arp_cache() {
   
   echo -e "${DIALOG_IPV4_MAC}"
-  ip neigh | gawk '{print $1 "\t " $5}' | sed 's/^/ /'
+  ip neigh | awk '{print $1 "\t " $5}' | sed 's/^/ /'
 }
 
 # Prints the public IP address of a website or server. If $1 is empty prints user's public IP, if not, $1 should be example.com.
@@ -265,7 +265,7 @@ function show_ip_from() {
   local IP
   
   if [[ -z "$1" ]]; then
-    HTTP_CODE_IPINFO=$(wget --spider -S "${IPINFO}" 2>&1 | grep "HTTP/" | gawk '{print $2}' | tail -n1)
+    HTTP_CODE_IPINFO=$(wget --spider -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     if [[ "${HTTP_CODE_IPINFO}" -eq "200" ]]; then
       IP=$(wget "${IPINFO}/ip" -qO -)
 		  echo "${IP}"
@@ -274,9 +274,9 @@ function show_ip_from() {
 		  error_exit "${DIALOG_SERVER_IS_DOWN}"
 	  fi
   else
-    HTTP_CODE_IPINFO=$(wget --spider -S "$1" 2>&1 | grep "HTTP/" | gawk '{print $2}' | tail -n1)
+    HTTP_CODE_IPINFO=$(wget --spider -S "$1" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     if [[ "${HTTP_CODE_IPINFO}" -eq "200" ]]; then
-      IP=$(netcat -vz "$1" 80 2>&1 | gawk '{print $2}' | tail -n1 | sed 's/\(\[\|\]\)//g' | sed 's/[^0-9.]*//g')
+      IP=$(netcat -vz "$1" 80 2>&1 | awk '{print $2}' | tail -n1 | sed 's/\(\[\|\]\)//g' | sed 's/[^0-9.]*//g')
       if [[ ! "$IP" ]]; then
         error_exit "${DIALOG_INVALID_SERVICE}"
       else
@@ -305,7 +305,7 @@ function show_location_info() {
   local LOC
   local ORG  
   
-  HTTP_CODE_IPINFO=$(wget --spider -S "${IPINFO}" 2>&1 | grep "HTTP/" | gawk '{print $2}' | tail -n1)
+  HTTP_CODE_IPINFO=$(wget --spider -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   
   if [[ -z "$1" ]]; then
     if [[ "${HTTP_CODE_IPINFO}" -eq "200" ]]; then
@@ -328,7 +328,7 @@ function show_location_info() {
 	  fi
   else
     if [[ "${HTTP_CODE_IPINFO}" -eq "200" ]]; then
-      IP=$(netcat -vz "$1" 80 2>&1 | gawk '{print $2}' | tail -n1 | sed 's/\(\[\|\]\)//g' | sed 's/[^0-9.]*//g')
+      IP=$(netcat -vz "$1" 80 2>&1 | awk '{print $2}' | tail -n1 | sed 's/\(\[\|\]\)//g' | sed 's/[^0-9.]*//g')
       if [[ ! "$IP" ]]; then
         error_exit "${DIALOG_INVALID_SERVICE}"
       else
@@ -376,7 +376,7 @@ function show_port_connections() {
     echo -e "      ${GREEN}┌─> ${RED}Count Port ${GREEN}<─┐"
     echo -e "      │ ┌───────> ${RED}IPv4 ${GREEN}└─> ${RED}${PORT}"
     echo -e "    ${GREEN}┌─┘ └──────────────┐${NORMAL}"
-    netstat -np | grep ":${PORT}" | grep -v LISTEN | gawk '{print $5}' | cut -d : -f 1 | uniq -c
+    netstat -np | grep ":${PORT}" | grep -v LISTEN | awk '{print $5}' | cut -d : -f 1 | uniq -c
     sleep 3.5
   done
 }
@@ -389,21 +389,21 @@ function show_avg_ping() {
   local HAS_IPV6
   local PING_6
   
-  HTTP_CODE_GOOGLE=$(wget --spider -S "${GOOGLE}" 2>&1 | grep "HTTP/" | gawk '{print $2}' | tail -n1)
+  HTTP_CODE_GOOGLE=$(wget --spider -S "${GOOGLE}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
  
   if [[ "${HTTP_CODE_GOOGLE}" -eq "200" ]]; then
     case "$1" in
       "--ipv4")
         echo    "Playing ping pong with Google, please wait..."
-        PING_4=$(ping -c 6 ${GOOGLE} | tail -1 | gawk '{print $4}' | cut -d '/' -f 2)
+        PING_4=$(ping -c 6 ${GOOGLE} | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
 		    echo -e "Average response time: ${GREEN}${PING_4} ms${NORMAL}"
         exit
       ;;
       "--ipv6")
-        HAS_IPV6=$(lsmod | gawk '{print $1}' | grep -o ipv6)
+        HAS_IPV6=$(lsmod | awk '{print $1}' | grep -o ipv6)
         if [[ "${HAS_IPV6}" -ne "0" ]]; then
           echo     "Playing ping pong with Google, please wait..."
-          PING_6=$(ping -6 -c 6 "${GOOGLE}" | tail -1 | gawk '{print $4}' | cut -d '/' -f 2)
+          PING_6=$(ping -6 -c 6 "${GOOGLE}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
 		      echo -e "Average response time: ${GREEN}${PING_6} ms${NORMAL}"
           exit
         else
@@ -424,19 +424,19 @@ function show_live_hosts() {
   local SCANNED_HOSTS
   local SCANNED_HOSTS_WITH_MAC
   
-  ONLINE_INTERFACE=$(ip route get "${GOOGLE_DNS}" | gawk -F "dev " 'NR == 1 { split($2, a, " "); print a[1] }')
-  NETWORK_ADDRESS_CIDR=$(ip route | grep "${ONLINE_INTERFACE}" | egrep '[0-9]{1,3}(?:\.[0-9]{1,3}){0,3}/[0-9]+' | gawk '{print $1}')
+  ONLINE_INTERFACE=$(ip route get "${GOOGLE_DNS}" | awk -F "dev " 'NR == 1 { split($2, a, " "); print a[1] }')
+  NETWORK_ADDRESS_CIDR=$(ip route | grep "${ONLINE_INTERFACE}" | egrep '[0-9]{1,3}(?:\.[0-9]{1,3}){0,3}/[0-9]+' | awk '{print $1}')
   
   case "$1" in
     "--normal")
-      SCANNED_HOSTS=$(nmap -sn "${NETWORK_ADDRESS_CIDR}" -oG - | gawk '/Up$/{print $2}' | sed 's/^/ /' | sort -n)
+      SCANNED_HOSTS=$(nmap -sn "${NETWORK_ADDRESS_CIDR}" -oG - | awk '/Up$/{print $2}' | sed 's/^/ /' | sort -n)
       echo -e "${DIALOG_IPV4}"
       echo    "${SCANNED_HOSTS}"
       exit
     ;;
     "--mac")
       check_root_user
-      SCANNED_HOSTS_WITH_MAC=$(nmap -sn "${NETWORK_ADDRESS_CIDR}" | gawk '/Nmap scan report for/{printf $5;}/MAC Address:/{print "\t "$3;}' | sed 's/^/ /' | sort -n)
+      SCANNED_HOSTS_WITH_MAC=$(nmap -sn "${NETWORK_ADDRESS_CIDR}" | awk '/Nmap scan report for/{printf $5;}/MAC Address:/{print "\t "$3;}' | sed 's/^/ /' | sort -n)
       echo -e "${DIALOG_IPV4_MAC}"
       echo    "${SCANNED_HOSTS_WITH_MAC}"
       echo
