@@ -7,7 +7,6 @@ A simple, handy network multitool that shows the IPv4, IPv6, MAC addresses of yo
 ###Basic
 - Shows active network **interfaces**.<br/>
 - Shows **gateway** of online interfaces.<br/>
-=======
 - Shows active network interfaces.<br/>
 - Shows default gateway of online interfaces.<br/>
 - Shows **internal** IPv4 **or** IPv6 address directly.<br/>
