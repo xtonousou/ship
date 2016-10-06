@@ -1,11 +1,27 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
+## [1.4] - 2016-10-07
+### Added
+- Show ARP cache.<br/>
+- Show location info of a domain. Map location image provided.<br/>
+
+### Changed
+- Usage.<br/>
+- Method for grabbing IPv4 address of user, domain. Now using **```netcat```**.<br/> 
+- **Fixed** some user input 'bugs'.<br/> 
+- **Fixed** regex for domain and IP validation.<br/> 
+- Order of commands in functions.<br/> 
+- Execution speed increased by a little.<br/>
+- Checking methods.<br/>
+- Dialogs and messages.<br/>
+- Position of functions based on usage for better readability.<br/>
+
 ## [1.3] - 2016-10-05
 ### Added
 - Get the local IPv6 directly.<br/>
 - Get full location info of a domain or IP in same command.<br/>
-- Get the quantity of connections to a port per IP with ```netstat```.<br/>
+- Get the quantity of connections to a port per IP with **```netstat```**.<br/>
 
 ### Changed
 - Usage.<br/>
