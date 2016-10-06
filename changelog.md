@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.<br/>
 
 ### Changed
 - Usage.<br/>
+- **```gawk```** --> **```awk```**
 - Method for grabbing IPv4 address of user, domain. Now using **```netcat```**.<br/> 
 - **Fixed** some user input 'bugs'.<br/> 
 - **Fixed** regex for domain and IP validation.<br/> 
