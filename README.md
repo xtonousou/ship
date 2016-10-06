@@ -5,33 +5,27 @@ A simple, handy network multitool that shows the IPv4, IPv6, MAC addresses of yo
 ##Features
 
 ###Basic
-<<<<<<< HEAD
 - Shows active network **interfaces**.<br/>
 - Shows **gateway** of online interfaces.<br/>
-=======
 - Shows active network interfaces.<br/>
 - Shows default gateway of online interfaces.<br/>
 - Shows **internal** IPv4 **or** IPv6 address directly.<br/>
->>>>>>> 89760d71710c185d3f75f4541d7c1c70d9c290dd
 - Shows **IPv4** addresses of active network interfaces with or without **CIDR**.<br/>
 - Shows **IPv6** addresses of active network interfaces with or without **CIDR**.<br/>
 - Shows **MAC** addresses of active network interfaces.<br/>
 
 ###Miscellaneous
-<<<<<<< HEAD
 - Shows active **hosts** on current network/s with or without **MAC** address.<br/>
 - Shows **external IPv4** address of someone, including user.<br/>
 - Shows **location** info. User, domain or IPv4 address.<br/>
 - Shows the location on **map**.<br/>
 - Shows the connections to a **port** per IPv4 basis.<br/>
 - Shows **average response time** from Google. IPv4 or IPv6.<br/>
-=======
 - Shows **external** IPv4 address (user's **or** domain's).<br/>
 - Shows **location** info (user's **or** domain's).<br/>
 - Shows the connections to a **port** per IP basis.<br/>
 - Shows average response time from google.com. (aka. **rtt**)<br/>
 - Shows active hosts on current network/s with or without MAC address.<br/>
->>>>>>> 89760d71710c185d3f75f4541d7c1c70d9c290dd
 
 ##Requirements
 Essential...: **```coreutils iproute2 iputils net-tools```**<br/>
