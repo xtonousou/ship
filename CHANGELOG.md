@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.<br/>
 - Function to handle sleeping time (depends on number of CPU cores).<br/>
 
 ## Changed
+- Usage.<br/>
 - Dialogs.<br/>
 - Increase performance.<br/>
 - Method to find active hosts on network. Multithreaded ```ping arping```.<br/>
@@ -14,13 +15,6 @@ All notable changes to this project will be documented in this file.<br/>
 - **Fixed** Ubuntu cannot grab info with ```ip```.<br/>
 - **Fixed** Ubuntu cannot parse domain to find location info.<br/>
 - **Fixed** Kali prints other info with ```arping```.<br/>
-
-### Changed
-- Usage.<br/>
-- Method to check connectivity (local or network).<br/>
-- Source to ping.<br/>
-- Parameter passing.<br/>
-- Clean up code.<br/>
 
 ### Removed
 - Tools: **```nmap netstat netcat```**<br/>
