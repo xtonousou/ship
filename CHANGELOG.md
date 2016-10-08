@@ -1,6 +1,24 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
+## [1.5] - 2016-10-09
+### Added
+- Function to handle sleeping time (depends on number of CPU cores).<br/>
+
+## Changed
+- Usage.<br/>
+- Dialogs.<br/>
+- Increase performance.<br/>
+- Method to find active hosts on network. Multithreaded ```ping arping```.<br/>
+- Method to find external IP or location.<br/>
+- Regex to extract IPv4 and MAC address in some functions.<br/>
+- **Fixed** Ubuntu cannot grab info with ```ip```.<br/>
+- **Fixed** Ubuntu cannot parse domain to find location info.<br/>
+- **Fixed** Kali prints other info with ```arping```.<br/>
+
+### Removed
+- Tools: **```nmap netstat netcat```**<br/>
+
 ## [1.4] - 2016-10-07
 ### Added
 - Show ARP cache.<br/>
