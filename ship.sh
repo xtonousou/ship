@@ -3,14 +3,14 @@
 #### Written by : Sotirios Roussis (aka. xtonousou) - xtonousou@gmail.com on 10-2016
 #### Limitations: ipinfo.io offers free 1,000 daily requests. (ship -F, -L)
 
-########################################### Declarations  ###########################################
+######################## Declarations  #################################
 
 ### INFO
 AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="${HTTPS}github.com/${AUTHOR_NICKNAME}"
-VERSION="1.4"
+VERSION="1.5"
 
 ### Colors
 GREEN="\033[1;32m"
@@ -19,9 +19,10 @@ CYAN="\033[1;36m"
 ORANGE="\033[1;33m"
 NORMAL="\e[1;0m"
 
-### Strings and values
-ROOT="${RED}*${NORMAL}"
+### Directories, strings and domains
+TMP="/tmp/ship"
 NULL="/dev/null"
+ROOT="${RED}*${NORMAL}"
 HTTPS="https://"
 IPINFO="ipinfo.io"
 GOOGLE="google.com"
@@ -29,32 +30,31 @@ GOOGLE_DNS="8.8.8.8"
 LOOPBACK="127.0.0.1"
 
 ### Dialogs
-DIALOG_ALL="┌─┤${GREEN}Interface${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬────┤${GREEN}IPv4${NORMAL}├─────┬─┬─────────┤${GREEN}IPv6${NORMAL}├──────────┐"
-DIALOG_ALL_CIDR="┌─┤${GREEN}Interface${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬────┤${GREEN}IPv4${NORMAL}├────────┬─┬───────────┤${GREEN}IPv6${NORMAL}├────────────┐"
-DIALOG_INTERFACES="┌─┤${GREEN}Interface${NORMAL}├─┐"
-DIALOG_INTERFACES_MAC="┌─┤${GREEN}Interface${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┐"
-DIALOG_INTERFACES_GATEWAY="┌─┤${GREEN}Interface${NORMAL}├─┬───┤${GREEN}Gateway${NORMAL}├───┐"
-DIALOG_INTERFACES_IPV4="┌─┤${GREEN}Interface${NORMAL}├─┬───┤${GREEN}IPv4${NORMAL}├──────┐"
-DIALOG_INTERFACES_IPV4_CIDR="┌─┤${GREEN}Interface${NORMAL}├─┬──────┤${GREEN}IPv4${NORMAL}├──────┐"
-DIALOG_INTERFACES_IPV6="┌─┤${GREEN}Interface${NORMAL}├─┬──────────┤${GREEN}IPv6${NORMAL}├─────────┐"
-DIALOG_INTERFACES_IPV6_CIDR="┌─┤${GREEN}Interface${NORMAL}├─┬────────────┤${GREEN}IPv6${NORMAL}├───────────┐"
-DIALOG_IPV4="┌────┤${GREEN}IPv4${NORMAL}├─────┐"
-DIALOG_IPV4_MAC="┌───┤${GREEN}IPv4${NORMAL}├──────┬──────┤${GREEN}MAC${NORMAL}├──────┐"
-DIALOG_PORTS="┌────┤${GREEN}Protocol${NORMAL}├──┬──┤${GREEN}TCP/UDP${NORMAL}├──┬┤${GREEN}Port${NORMAL}├┐"
+DIALOG_ALL="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬────┤${GREEN}IPV4${NORMAL}├─────┬─┬────────────────┤${GREEN}IPV6${NORMAL}├─────────────────┐"
+DIALOG_ALL_CIDR="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬────┤${GREEN}IPV4${NORMAL}├────────┬─┬──────────────────┤${GREEN}IPV6${NORMAL}├───────────────────┐"
+DIALOG_INTERFACES="┌─┤${GREEN}INTERFACE${NORMAL}├─┐"
+DIALOG_INTERFACES_MAC="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┐"
+DIALOG_INTERFACES_GATEWAY="┌─┤${GREEN}INTERFACE${NORMAL}├─┬───┤${GREEN}GATEWAY${NORMAL}├───┐"
+DIALOG_INTERFACES_IPV4="┌─┤${GREEN}INTERFACE${NORMAL}├─┬───┤${GREEN}IPV4${NORMAL}├──────┐"
+DIALOG_INTERFACES_IPV4_CIDR="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──────┤${GREEN}IPV4${NORMAL}├──────┐"
+DIALOG_INTERFACES_IPV6="┌─┤${GREEN}INTERFACE${NORMAL}├─┬─────────────────┤${GREEN}IPV6${NORMAL}├────────────────┐"
+DIALOG_INTERFACES_IPV6_CIDR="┌─┤${GREEN}INTERFACE${NORMAL}├─┬───────────────────┤${GREEN}IPV6${NORMAL}├──────────────────┐"
+DIALOG_IPV4="┌────┤${GREEN}IPV4${NORMAL}├─────┐"
+DIALOG_IPV4_MAC="┌───┤${GREEN}IPV4${NORMAL}├──────┬─┬──────┤${GREEN}MAC${NORMAL}├──────┐"
+DIALOG_IPV4_MAC_STATE="┌───┤${GREEN}IPV4${NORMAL}├──────┬─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬─┤${GREEN}STATE${NORMAL}├──┐"
+DIALOG_PORTS="┌────┤${GREEN}PROTOCOL${NORMAL}├──┬──┤${GREEN}TCP/UDP${NORMAL}├──┬┤${GREEN}PORT${NORMAL}├┐"
 DIALOG_PRESS_CTRL_C="Press [CTRL+C] to stop"
-DIALOG_NMAP_MAC_NOTE="Try ${GREEN}ship -a${NORMAL} to list missing values."
 DIALOG_ERROR="Try ${GREEN}ship -h${NORMAL} or ${GREEN}ship --help${NORMAL} for more information."
 DIALOG_ABORTING="${RED}Aborting${NORMAL}."
 DIALOG_NO_INTERNET="Internet connection unavailable. ${DIALOG_ABORTING}"
 DIALOG_NO_LOCAL_CONNECTION="Local connection unavailable. ${DIALOG_ABORTING}"
-DIALOG_INVALID_SERVICE="e.g. ${GREEN}example.com${NORMAL}. ${DIALOG_ABORTING}"
-DIALOG_SERVER_IS_DOWN="Invalid input or server is down. ${DIALOG_ABORTING}"
+DIALOG_SERVER_IS_DOWN="Destination is unreachable. Server may be down or input was invalid. ${DIALOG_ABORTING}"
 DIALOG_NOT_A_NUMBER="Option should be integer. ${DIALOG_ABORTING}"
 
 ### Arrays
-declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk '{print $8}'))
+declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
 
-###################################### Basic Functions Section  #####################################
+##################### Basic Functions Section  #########################
 
 # Prints active network interfaces with their IPv4 address.
 function show_ipv4() {
@@ -126,11 +126,9 @@ function usage() {
 	echo -e "  ${GREEN}ship -4 ${NORMAL}, ${GREEN}--ipv4 ${NORMAL}          shows active interfaces with their IPv4 address"
 	echo -e "  ${GREEN}ship -6 ${NORMAL}, ${GREEN}--ipv6 ${NORMAL}          shows active interfaces with their IPv6 address"
 	echo -e "  ${GREEN}ship -a ${NORMAL}, ${GREEN}--all ${NORMAL}           shows all basic info"
-	echo -e "  ${GREEN}ship -g ${NORMAL}, ${GREEN}--gateway ${NORMAL}       shows the default gateway"
+	echo -e "  ${GREEN}ship -g ${NORMAL}, ${GREEN}--gateway ${NORMAL}       shows the gateway of online interfaces"
 	echo -e "  ${GREEN}ship -h ${NORMAL}, ${GREEN}--help ${NORMAL}          shows this help message"
 	echo -e "  ${GREEN}ship -i ${NORMAL}, ${GREEN}--interfaces ${NORMAL}    shows active interfaces"
-	echo -e "  ${GREEN}ship -l ${NORMAL}, ${GREEN}--local-ipv4 ${NORMAL}    shows local IPv4 address"
-	echo -e "  ${GREEN}ship -l6${NORMAL}, ${GREEN}--local-ipv6 ${NORMAL}    shows local IPv6 address"
   echo -e "  ${GREEN}ship -m ${NORMAL}, ${GREEN}--mac ${NORMAL}           shows active interfaces with their MAC address"
   echo -e "  ${GREEN}ship -v ${NORMAL}, ${GREEN}--version ${NORMAL}       shows version of script"
 	echo -e "  ${GREEN}ship --cidr-4${NORMAL}, ${GREEN}--cidr-ipv4 ${NORMAL}shows active interfaces with their IPv4 address and CIDR"
@@ -138,7 +136,7 @@ function usage() {
 	echo -e "  ${GREEN}ship --cidr-a${NORMAL}, ${GREEN}--cidr-all ${NORMAL} shows all basic info and CIDR"
 	echo
 	echo    "  miscellaneous operations:"
-  echo -e "  ${GREEN}ship -A ${NORMAL}, ${GREEN}--arp ${NORMAL}           shows neighbour/ARP cache"
+  echo -e "  ${GREEN}ship -A ${NORMAL}, ${GREEN}--arp ${NORMAL}           shows neighbor/ARP cache"
   echo -e "  ${GREEN}ship -F ${NORMAL}, ${GREEN}--find ${CYAN}{DOMAIN}${NORMAL}  shows the IP address of a domain"
   echo -e "  ${GREEN}ship -L ${NORMAL}, ${GREEN}--location ${CYAN}{IP}${NORMAL}  shows location info of an IP address or a domain"
   echo -e " ${ROOT}${GREEN}ship -P ${NORMAL}, ${GREEN}--port ${NORMAL}{PORT}    shows the quantity of connections to {PORT} per IP"
@@ -158,25 +156,6 @@ function show_interfaces() {
   
 	echo -e "${DIALOG_INTERFACES}"
   printf  " %s\n" "${INTERFACES_ARRAY[@]}"
-  exit
-}
-
-# Prints user's local IPv4 or IPv6 address (aka. internal IP)
-function show_local_ip() {
-  
-  local LOCAL_IPV4
-  local LOCAL_IPV6
-  
-  case "$1" in
-    "--ipv4")
-      LOCAL_IPV4=$(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk '{print $2}' | cut -d "/" -f 1)
-      echo "${LOCAL_IPV4}"
-    ;;
-    "--ipv6")
-      LOCAL_IPV6=$(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2)
-      echo "${LOCAL_IPV6}"
-    ;;
-  esac
   exit
 }
 
@@ -238,8 +217,8 @@ function show_all_cidr() {
   local IPV6_CIDR_ARRAY
   local MAC_OF
   
-  declare -a IPV4_CIDR_ARRAY=($(ip addr show | grep -w inet  | awk '{print $2}' | tail -n +2))
-  declare -a IPV6_CIDR_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | tail -n +2))
+  IPV4_CIDR_ARRAY=($(ip addr show | grep -w inet  | awk '{print $2}' | tail -n +2))
+  IPV6_CIDR_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | tail -n +2))
   
 	echo -e "${DIALOG_ALL_CIDR}"
   for i in "${!INTERFACES_ARRAY[@]}"; do
@@ -249,20 +228,31 @@ function show_all_cidr() {
   exit
 }
 
-################################## Miscellaneous Functions Section  #################################
+################## Miscellaneous Functions Section  ####################
 
 # Shows arp cache table.
 function show_arp_cache() {
   
-  echo -e "${DIALOG_IPV4_MAC}"
-  ip neigh | awk '{print $1 "\t " $5}' | sed 's/^/ /'
+  local FILENAME
+  
+  FILENAME="ARP_CACHE"
+  check_directory_or_touch_file "${FILENAME}"
+  
+  ip neigh | egrep -i 'permanent|noarp|stale|reachable|incomplete|delay|probe' | \
+  awk '{printf (" %-18s%-20s%s\n", $1, $5, $6)}' | sort -V  >> "${TMP}/${FILENAME}"
+  echo -e "${DIALOG_IPV4_MAC_STATE}"
+  cat < "${TMP}/${FILENAME}" | sort -V
+  mr_proper
 }
 
 # Prints the public IP address of a website or server. If $1 is empty prints user's public IP, if not, $1 should be example.com.
 function show_ip_from() {
   
   local HTTP_CODE_IPINFO
+  local FILENAME
+  local COUNTER
   local IP
+  
   
   if [[ -z "$1" ]]; then
     HTTP_CODE_IPINFO=$(wget --spider -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
@@ -276,13 +266,17 @@ function show_ip_from() {
   else
     HTTP_CODE_IPINFO=$(wget --spider -S "$1" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     if [[ "${HTTP_CODE_IPINFO}" -eq "200" ]]; then
-      IP=$(netcat -vz "$1" 80 2>&1 | awk '{print $2}' | tail -n1 | sed 's/\(\[\|\]\)//g' | sed 's/[^0-9.]*//g')
-      if [[ ! "$IP" ]]; then
-        error_exit "${DIALOG_INVALID_SERVICE}"
-      else
-        echo "${IP}"
-        exit
-      fi
+      FILENAME="IPS_FROM"
+      check_directory_or_touch_file "${FILENAME}"
+      INPUT=$(echo "$1" | sed 's/^http\(\|s\):\/\///g')
+      COUNTER=0
+      while [[ "${COUNTER}" -lt "20" ]]; do
+        ping -c 1 -i 0.2 -w 5 "${INPUT}" 2>"${NULL}" | awk -F '[()]' '/PING/{print $2}' >> "${TMP}/${FILENAME}" &
+        let COUNTER=COUNTER+1
+      done
+      take_your_time
+      cat < "${TMP}/${FILENAME}" | sort -V | uniq 
+      mr_proper
     else
 		  error_exit "${DIALOG_SERVER_IS_DOWN}"
 	  fi
@@ -293,6 +287,7 @@ function show_ip_from() {
 function show_location_info() {
   
   local HTTP_CODE_IPINFO
+  local INPUT
   local MAP_LOC
   local ZOOM
   
@@ -307,48 +302,41 @@ function show_location_info() {
   
   HTTP_CODE_IPINFO=$(wget --spider -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   
-  if [[ -z "$1" ]]; then
-    if [[ "${HTTP_CODE_IPINFO}" -eq "200" ]]; then
-      ZOOM="12"
-      IP=$(wget -qO - ${IPINFO}/ip)
-      HOSTNAME=$(wget -qO - ${IPINFO}/"${IP}"/hostname)
-      CITY=$(wget -qO - ${IPINFO}/"${IP}"/city)
-      REGION=$(wget -qO - ${IPINFO}/"${IP}"/region)
-      COUNTRY=$(wget -qO - ${IPINFO}/"${IP}"/country)
-      LOC=$(wget -qO - ${IPINFO}/"${IP}"/loc)
-      ORG=$(wget -qO - ${IPINFO}/"${IP}"/org)
+  if [[ ! "${HTTP_CODE_IPINFO}" -eq "200" ]]; then
+    error_exit "${DIALOG_SERVER_IS_DOWN}"
+  else
+    if [[ ! -z "$1" ]]; then
+      INPUT=$(echo "$1" | sed 's/^http\(\|s\):\/\///g')
+      IP=$(ping -c 1 -w 5 "${INPUT}" 2>"${NULL}" | awk -F'[()]' '/PING/{print $2}' &)
+      ZOOM="9"
+      HOSTNAME=$(wget -qO - ${IPINFO}/"${IP}"/hostname &)
+      CITY=$(wget -qO - ${IPINFO}/"${IP}"/city &)
+      REGION=$(wget -qO - ${IPINFO}/"${IP}"/region &)
+      COUNTRY=$(wget -qO - ${IPINFO}/"${IP}"/country &)
+      LOC=$(wget -qO - ${IPINFO}/"${IP}"/loc &)
+      ORG=$(wget -qO - ${IPINFO}/"${IP}"/org &)
       # pass data one by one to print_location_info()
       print_location_info "${IP}" "${HOSTNAME}" "${CITY}" "${REGION}" "${COUNTRY}" "${LOC}" "${ORG}"
       MAP_LOC="${HTTPS}maps.googleapis.com/maps/api/staticmap?center=${LOC}&zoom=${ZOOM}&size=640x640&sensor=false"
       echo
       echo -e "${MAP_LOC}"
       exit
-	  else
-		  error_exit "${DIALOG_SERVER_IS_DOWN}"
-	  fi
-  else
-    if [[ "${HTTP_CODE_IPINFO}" -eq "200" ]]; then
-      IP=$(netcat -vz "$1" 80 2>&1 | awk '{print $2}' | tail -n1 | sed 's/\(\[\|\]\)//g' | sed 's/[^0-9.]*//g')
-      if [[ ! "$IP" ]]; then
-        error_exit "${DIALOG_INVALID_SERVICE}"
-      else
-        ZOOM="9"
-        HOSTNAME=$(wget -qO - ${IPINFO}/"${IP}"/hostname)
-        CITY=$(wget -qO - ${IPINFO}/"${IP}"/city)
-        REGION=$(wget -qO - ${IPINFO}/"${IP}"/region)
-        COUNTRY=$(wget -qO - ${IPINFO}/"${IP}"/country)
-        LOC=$(wget -qO - ${IPINFO}/"${IP}"/loc)
-        ORG=$(wget -qO - ${IPINFO}/"${IP}"/org)
-        # pass data one by one to print_location_info()
-        print_location_info "${IP}" "${HOSTNAME}" "${CITY}" "${REGION}" "${COUNTRY}" "${LOC}" "${ORG}"
-        MAP_LOC="${HTTPS}maps.googleapis.com/maps/api/staticmap?center=${LOC}&zoom=${ZOOM}&size=640x640&sensor=false"
-        echo
-        echo -e "${MAP_LOC}"
-        exit
-      fi
     else
-		  error_exit "${DIALOG_SERVER_IS_DOWN}"
-	  fi
+      ZOOM="12"
+      IP=$(wget -qO - ${IPINFO}/ip &)
+      HOSTNAME=$(wget -qO - ${IPINFO}/"${IP}"/hostname &)
+      CITY=$(wget -qO - ${IPINFO}/"${IP}"/city &)
+      REGION=$(wget -qO - ${IPINFO}/"${IP}"/region &)
+      COUNTRY=$(wget -qO - ${IPINFO}/"${IP}"/country &)
+      LOC=$(wget -qO - ${IPINFO}/"${IP}"/loc &)
+      ORG=$(wget -qO - ${IPINFO}/"${IP}"/org &)
+      # pass data one by one to print_location_info()
+      print_location_info "${IP}" "${HOSTNAME}" "${CITY}" "${REGION}" "${COUNTRY}" "${LOC}" "${ORG}"
+      MAP_LOC="${HTTPS}maps.googleapis.com/maps/api/staticmap?center=${LOC}&zoom=${ZOOM}&size=640x640&sensor=false"
+      echo
+      echo -e "${MAP_LOC}"
+      exit
+    fi
   fi
 }
 
@@ -360,9 +348,9 @@ function show_port_connections() {
     exit
   fi
   
+  check_root_user
   check_for_missing_parameter "-P" "--port" "$1"
   check_if_parameter_is_not_numerical "$1"
-  check_root_user
   
   local PORT
   
@@ -376,8 +364,8 @@ function show_port_connections() {
     echo -e "      ${GREEN}┌─> ${RED}Count Port ${GREEN}<─┐"
     echo -e "      │ ┌───────> ${RED}IPv4 ${GREEN}└─> ${RED}${PORT}"
     echo -e "    ${GREEN}┌─┘ └──────────────┐${NORMAL}"
-    netstat -np | grep ":${PORT}" | grep -v LISTEN | awk '{print $5}' | cut -d : -f 1 | uniq -c
-    sleep 3.5
+    ss -np | grep ":${PORT}" | awk '{print $6}' | cut -d : -f 1 | uniq -c
+    sleep 3
   done
 }
 
@@ -395,15 +383,15 @@ function show_avg_ping() {
     case "$1" in
       "--ipv4")
         echo    "Playing ping pong with Google, please wait..."
-        PING_4=$(ping -c 6 ${GOOGLE} | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+        PING_4=$(ping -i 0.5 -c 10 ${GOOGLE} | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
 		    echo -e "Average response time: ${GREEN}${PING_4} ms${NORMAL}"
         exit
       ;;
       "--ipv6")
         HAS_IPV6=$(lsmod | awk '{print $1}' | grep -o ipv6)
-        if [[ "${HAS_IPV6}" -ne "0" ]]; then
-          echo     "Playing ping pong with Google, please wait..."
-          PING_6=$(ping -6 -c 6 "${GOOGLE}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+        if [[ "${HAS_IPV6}" ]]; then
+          echo    "Playing ping pong with Google, please wait..."
+          PING_6=$(ping -6 -i 0.5 -c 10 "${GOOGLE}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
 		      echo -e "Average response time: ${GREEN}${PING_6} ms${NORMAL}"
           exit
         else
@@ -416,38 +404,57 @@ function show_avg_ping() {
 	fi
 }
 
-# Scans live hosts on network and prints their IPv4 address with or without MAC address.
+# Scans live hosts on network and prints their IPv4 address with or without MAC address. ICMP and ARP.
 function show_live_hosts() {
   
   local ONLINE_INTERFACE
-  local NETWORK_ADDRESS_CIDR
-  local SCANNED_HOSTS
-  local SCANNED_HOSTS_WITH_MAC
+  local NETWORK_IP
+  local FILTERED_IP
+  local FILENAME
+  local FILENAME_TWO
   
   ONLINE_INTERFACE=$(ip route get "${GOOGLE_DNS}" | awk -F "dev " 'NR == 1 { split($2, a, " "); print a[1] }')
-  NETWORK_ADDRESS_CIDR=$(ip route | grep "${ONLINE_INTERFACE}" | egrep '[0-9]{1,3}(?:\.[0-9]{1,3}){0,3}/[0-9]+' | awk '{print $1}')
+  NETWORK_IP=$(ip route | grep "${ONLINE_INTERFACE}" | grep -v default | awk '{print $1}' | cut -f 1 -d "/")
+  FILTERED_IP=$(echo "${NETWORK_IP}" | awk 'BEGIN{FS=OFS="."} NF--')
   
   case "$1" in
     "--normal")
-      SCANNED_HOSTS=$(nmap -sn "${NETWORK_ADDRESS_CIDR}" -oG - | awk '/Up$/{print $2}' | sed 's/^/ /' | sort -n)
+      FILENAME="IPV4_OF_PING"
+      check_directory_or_touch_file "${FILENAME}"
+      for i in {1..254}; do
+        ping "${FILTERED_IP}.${i}" -c 1 -w 5 >"${NULL}" &&
+        echo " ${FILTERED_IP}.${i}" >> "${TMP}/${FILENAME}" &
+        sleep 0.012
+      done
+      take_your_time
       echo -e "${DIALOG_IPV4}"
-      echo    "${SCANNED_HOSTS}"
+      cat < "${TMP}/${FILENAME}" | sort -V | uniq -u
+      mr_proper
       exit
     ;;
     "--mac")
+      FILENAME="IPS_OF_ARPING"
+      FILENAME_TWO="MACS_OF_ARPING"
+      check_directory_or_touch_file "${FILENAME}"
+      check_directory_or_touch_file "${FILENAME_TWO}"
       check_root_user
-      SCANNED_HOSTS_WITH_MAC=$(nmap -sn "${NETWORK_ADDRESS_CIDR}" | awk '/Nmap scan report for/{printf $5;}/MAC Address:/{print "\t "$3;}' | sed 's/^/ /' | sort -n)
+      for i in {1..254}; do
+        arping -I "${ONLINE_INTERFACE}" "${FILTERED_IP}.${i}" -c 1 2>"${NULL}" | tail -n +2 | head -n 1 | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' >> "${TMP}/${FILENAME}" &
+        sleep 0.012
+        arping -I "${ONLINE_INTERFACE}" "${FILTERED_IP}.${i}" -c 1 2>"${NULL}" | tail -n +2 | head -n 1 | grep -io '[0-9A-F]\{2\}\(:[0-9A-F]\{2\}\)\{5\}'  >> "${TMP}/${FILENAME_TWO}" &
+      done
+      take_your_time
+      sed -i 's/^/ /' "${TMP}/${FILENAME}"
       echo -e "${DIALOG_IPV4_MAC}"
-      echo    "${SCANNED_HOSTS_WITH_MAC}"
-      echo
-      echo -e "${DIALOG_NMAP_MAC_NOTE}"
+      pr -mtw 37 "${TMP}/${FILENAME}" "${TMP}/${FILENAME_TWO}"
+      mr_proper
       exit
     ;;
   esac
 }
 
-################################# In-function functions section ^-^ #################################
-######################################### Printing functions ########################################
+################ In-function functions section ^-^ #####################
+###################### Printing functions ##############################
 
 # Animation parts used in show_version().
 function print_animated_ship() {
@@ -509,7 +516,7 @@ function print_animated_ship() {
 			echo -e "  ${CYAN}~~~~~~~~~~~~~~~~~${NORMAL}"
 		;;
 	esac
-	sleep .5
+	sleep .25
 }
 
 # Prints show_location_info() data.
@@ -531,9 +538,17 @@ function print_port_protocol_list() {
   local PORTS_TCP_UDP_ARRAY
   local PORTS_PROTOCOL_ARRAY
 
-  declare -a PORTS_ARRAY=("20-21" "22" "23" "25" "53" "67-68" "69" "80" "110" "123" "137-139" "143" "161-162" "179" "389" "443" "636" "989-990")
-  declare -a PORTS_TCP_UDP_ARRAY=("TCP" "TCP" "TCP" "TCP" "TCP/UDP" "UDP" "UDP" "TCP" "TCP" "UDP" "TCP/UDP" "TCP" "TCP/UDP" "TCP" "TCP/UDP" "TCP" "TCP/UDP" "TCP")
-  declare -a PORTS_PROTOCOL_ARRAY=("FTP" "SSH" "Telnet" "SMTP" "DNS" "DHCP" "TFTP" "HTTP" "POPv3" "NTP" "NetBIOS" "IMAP" "SNMP" "BGP" "LDAP" "HTTPS" "LDAPS" "FTP over TLS/SSL")
+  declare -a PORTS_ARRAY=("20-21" "22" "23" "25" "53" "67-68" "69" "80"\
+                          "110" "123" "137-139" "143" "161-162" "179"\
+                          "389" "443" "636" "989-990")
+  declare -a PORTS_TCP_UDP_ARRAY=("TCP" "TCP" "TCP" "TCP" "TCP/UDP"\
+                                  "UDP" "UDP" "TCP" "TCP" "UDP"\
+                                  "TCP/UDP" "TCP" "TCP/UDP" "TCP"\
+                                  "TCP/UDP" "TCP" "TCP/UDP" "TCP")
+  declare -a PORTS_PROTOCOL_ARRAY=("FTP" "SSH" "Telnet" "SMTP" "DNS"\
+                                   "DHCP" "TFTP" "HTTP" "POPv3" "NTP"\
+                                   "NetBIOS" "IMAP" "SNMP" "BGP" "LDAP"\
+                                   "HTTPS" "LDAPS" "FTP over TLS/SSL")
   
   echo -e  "${DIALOG_PORTS}"
   for i in "${!PORTS_ARRAY[@]}"; do
@@ -542,7 +557,7 @@ function print_port_protocol_list() {
   exit
 }
 
-######################################### Checking functions ########################################
+################### Checking n' Cleaning functions #####################
 
 # Checks network connection (local or internet).
 function check_connectivity() {
@@ -565,7 +580,7 @@ function check_connectivity() {
   esac
 }
 
-# Checks tool's existance in system.
+# CURRENTLY NOT USED. Checks tool's existance in system.
 function check_for_missing_tool() {
   
   hash "$1" 2>"${NULL}" || {
@@ -590,6 +605,17 @@ function check_if_parameter_is_not_numerical() {
   esac
 }
 
+# Checks if /tmp/ship exists, if not creates the dir and touches a file given by user.
+function check_directory_or_touch_file() {
+  
+  if [[ ! -d "${TMP}" ]]; then
+      mkdir "${TMP}"
+      if [[ ! -z "$1" ]]; then
+        touch "${TMP}/$1" 2>"${NULL}"
+      fi
+  fi
+}
+
 # Checks for root privileges.
 function check_root_user() {
   
@@ -598,7 +624,13 @@ function check_root_user() {
   fi
 }
 
-######################################### Error handling functions ########################################
+# Deletes every file that is created by this script. Usually in /tmp
+function mr_proper() {
+  
+  rm -rf "${TMP}"
+}
+
+####################### Error handling functions #######################
 
 # Used with zero parameters: exit 1.
 # Used with one parameter  : echoes parameter, usually error dialogs.
@@ -617,10 +649,29 @@ function error_exit() {
   fi
 }
 
-######################################## Initializes script. ########################################
+# Checks how many cores does the system has. Sleeping time depends on number of CPU cores.
+function take_your_time() {
+  
+  local NUMBER_OF_CORES
+  
+  NUMBER_OF_CORES=$(grep -c "^processor" /proc/cpuinfo)
+  
+  case "${NUMBER_OF_CORES}" in
+    "8")  sleep 1   ;;
+    "4")  sleep 1.2 ;;
+    "2")  sleep 1.5 ;;
+    "1")  sleep 1.8 ;;
+    *)    sleep .5  ;;
+  esac
+  
+}
+
+###################### Initializes script. #############################
 function __init__() {
   
   if [[ -z "$1" ]]; then error_exit "${DIALOG_ERROR}"; fi
+  
+  check_directory_or_touch_file
   
   while :
   do
@@ -634,14 +685,12 @@ function __init__() {
       "-h"|"--help") usage; break ;;
       "-i"|"--interfaces") show_interfaces; break ;;
       "-L"|"--location") check_connectivity "--internet"; show_location_info "$2"; shift 2; break ;;
-      "-l"|"--local-ipv4") check_connectivity "--local"; show_local_ip "--ipv4"; break ;;
-      "-l6"|"--local-ipv6") check_connectivity "--local"; show_local_ip "--ipv6"; break ;;
       "-P"|"--port") check_connectivity "--internet"; show_port_connections "$2"; shift 2; break ;;
       "-m"|"--mac") show_mac; break ;;
       "-T"|"--time") check_connectivity "--internet"; show_avg_ping --ipv4; break ;;
       "-T6"|"--time-ipv6") check_connectivity "--internet"; show_avg_ping --ipv6; break ;;
-      "-S"|"--scan") check_for_missing_tool "nmap"; check_connectivity "--internet"; show_live_hosts --normal; break ;;
-      "-SM"|"--scan-mac") check_for_missing_tool "nmap"; check_connectivity "--internet"; show_live_hosts --mac; break ;;
+      "-S"|"--scan") check_connectivity "--local"; show_live_hosts --normal; break ;;
+      "-SM"|"--scan-mac") check_connectivity "--local"; show_live_hosts --mac; break ;;
       "-v"|"--version") show_version; break ;;
       "--cidr-4"|"--cidr-ipv4") show_ipv4_cidr; break ;;
       "--cidr-6"|"--cidr-ipv6") show_ipv6_cidr; break ;;
