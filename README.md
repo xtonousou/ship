@@ -35,7 +35,7 @@ Tested on Linux:<br/>
 - [ ] Shows hops to a certain destination given by user.<br/>
 
 ##Changelog.
-See [this](https://github.com/xtonousou/shIP/blob/master/changelog.md) file to review changes.<br/>
+See [this](https://github.com/xtonousou/shIP/blob/master/CHANGELOG.md) file to review changes.<br/>
 
 ##LICENSE
 This script is under GPLv3 (or later) License.<br/>
