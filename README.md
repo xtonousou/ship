@@ -25,18 +25,22 @@ Essential packages: **```coreutils iproute2 iputils```**<br/>
 
 Tested on Linux:<br/>
 
+- Ubuntu **16.04.1**.<br/>
 - Ubuntu **14.04.5**.<br/>
 - Ubuntu Mate **14.04.3**.<br/>
 - Debian **7** and **8**.<br/>
 - Kali **2.0**, 2016.2.<br/>
 - Arch **4.7.5-1**, **4.7.6-1**.<br/>
 
-##Under development
-- [ ] Monitor download and upload speed with an interval given by user.<br/>
+##Development
 - [ ] Shows hops to a certain destination given by user.<br/>
 
+Want to try **dev version**?<br/>
+Click [here](https://github.com/xtonousou/shIP/tree/dev).<br/>
+
 ##Changelog.
-See [this](https://github.com/xtonousou/shIP/blob/master/CHANGELOG.md) file to review changes.<br/>
+[master](https://github.com/xtonousou/shIP/blob/master/CHANGELOG.md) version.<br/>
+[dev](https://github.com/xtonousou/shIP/blob/dev/CHANGELOG.md) version.<br/>
 
 ##LICENSE
 This script is under GPLv3 (or later) License.<br/>
