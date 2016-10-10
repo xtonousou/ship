@@ -10,7 +10,7 @@ AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="${HTTPS}github.com/${AUTHOR_NICKNAME}"
-VERSION="1.5"
+VERSION="1.6-dev"
 
 ### Colors
 GREEN="\033[1;32m"
@@ -42,6 +42,7 @@ DIALOG_INTERFACES_IPV6_CIDR="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──�
 DIALOG_IPV4="┌────┤${GREEN}IPV4${NORMAL}├─────┐"
 DIALOG_IPV4_MAC="┌───┤${GREEN}IPV4${NORMAL}├──────┬─┬──────┤${GREEN}MAC${NORMAL}├──────┐"
 DIALOG_IPV4_MAC_STATE="┌───┤${GREEN}IPV4${NORMAL}├──────┬─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬─┤${GREEN}STATE${NORMAL}├──┐"
+DIALOG_SPEED="┌─┤${GREEN}INTERFACE${NORMAL}├─┬─┬─┤${GREEN}↓${NORMAL} kB/s├─┬─┬─┤${GREEN}↑${NORMAL} kB/s├──┐"
 DIALOG_PORTS="┌────┤${GREEN}PROTOCOL${NORMAL}├──┬──┤${GREEN}TCP/UDP${NORMAL}├──┬┤${GREEN}PORT${NORMAL}├┐"
 DIALOG_PRESS_CTRL_C="Press [CTRL+C] to stop"
 DIALOG_ERROR="Try ${GREEN}ship -h${NORMAL} or ${GREEN}ship --help${NORMAL} for more information."
@@ -52,7 +53,8 @@ DIALOG_SERVER_IS_DOWN="Destination is unreachable. Server may be down or input w
 DIALOG_NOT_A_NUMBER="Option should be integer. ${DIALOG_ABORTING}"
 
 ### Arrays
-declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
+declare -a INTERFACES_ARRAY
+INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
 
 ##################### Basic Functions Section  #########################
 
@@ -138,12 +140,13 @@ function usage() {
 	echo    "  miscellaneous operations:"
   echo -e "  ${GREEN}ship -A ${NORMAL}, ${GREEN}--arp ${NORMAL}           shows neighbor/ARP cache"
   echo -e "  ${GREEN}ship -F ${NORMAL}, ${GREEN}--find ${CYAN}{DOMAIN}${NORMAL}  shows the IP address of a domain"
+  echo -e "  ${GREEN}ship -H${NORMAL} , ${GREEN}--hosts ${NORMAL}         shows active hosts on network"
+  echo -e " ${ROOT}${GREEN}ship -HM${NORMAL}, ${GREEN}--hosts-mac ${NORMAL}     shows active hosts on network with their MAC address"
   echo -e "  ${GREEN}ship -L ${NORMAL}, ${GREEN}--location ${CYAN}{IP}${NORMAL}  shows location info of an IP address or a domain"
   echo -e " ${ROOT}${GREEN}ship -P ${NORMAL}, ${GREEN}--port ${NORMAL}{PORT}    shows the quantity of connections to {PORT} per IP"
+	echo -e "  ${GREEN}ship -S${NORMAL} , ${GREEN}--speed ${NORMAL}         shows in realtime download and upload speed"
 	echo -e "  ${GREEN}ship -T${NORMAL} , ${GREEN}--time ${NORMAL}          shows average latency using IPv4"
 	echo -e "  ${GREEN}ship -T6${NORMAL}, ${GREEN}--time-ipv6 ${NORMAL}     shows average latency using IPv6"
-  echo -e "  ${GREEN}ship -S${NORMAL} , ${GREEN}--scan ${NORMAL}          shows active hosts on network"
-  echo -e " ${ROOT}${GREEN}ship -SM${NORMAL}, ${GREEN}--scan-mac ${NORMAL}      shows active hosts on network with their MAC address"
   echo
   echo -e "If the ${CYAN}{PARAMETER}${NORMAL} is not passed, the action becomes passive."
   echo -e "If the {PARAMETER} is not passed, the action shows some possible options."
@@ -253,7 +256,6 @@ function show_ip_from() {
   local COUNTER
   local IP
   
-  
   if [[ -z "$1" ]]; then
     HTTP_CODE_IPINFO=$(wget --spider -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     if [[ "${HTTP_CODE_IPINFO}" -eq "200" ]]; then
@@ -275,7 +277,7 @@ function show_ip_from() {
         let COUNTER=COUNTER+1
       done
       take_your_time
-      cat < "${TMP}/${FILENAME}" | sort -V | uniq 
+      cat < "${TMP}/${FILENAME}" | sort -V | uniq -u
       mr_proper
     else
 		  error_exit "${DIALOG_SERVER_IS_DOWN}"
@@ -369,6 +371,39 @@ function show_port_connections() {
   done
 }
 
+# Prints in realtime download and upload speed
+function show_speed() {
+  
+  local ONLINE_INTERFACE
+  local R1
+  local T1
+  local R2
+  local T2
+  local TBPS
+  local RBPS
+  local TKBPS
+  local RKBPS
+  
+  ONLINE_INTERFACE=$(ip route get "${GOOGLE_DNS}" | awk -F "dev " 'NR == 1 { split($2, a, " "); print a[1] }')
+  
+  while true; do
+    clear
+    echo -e "${DIALOG_PRESS_CTRL_C}"
+    echo
+    echo -e "${DIALOG_SPEED}"
+    printf " %-16s%-13s%s\n" "${ONLINE_INTERFACE}" "${RKBPS}" "${TKBPS}"
+    R1=$(cat /sys/class/net/"${ONLINE_INTERFACE}"/statistics/rx_bytes)
+    T1=$(cat /sys/class/net/"${ONLINE_INTERFACE}"/statistics/tx_bytes)
+    sleep 1
+    R2=$(cat /sys/class/net/"${ONLINE_INTERFACE}"/statistics/rx_bytes)
+    T2=$(cat /sys/class/net/"${ONLINE_INTERFACE}"/statistics/tx_bytes)
+    TBPS=$((T2 - T1))
+    RBPS=$((R2 - R1))
+    TKBPS=$(echo "scale=2; $TBPS / 1024" | bc)
+    RKBPS=$(echo "scale=2; $RBPS / 1024" | bc)
+  done
+}
+
 # Prints average rtt from google.com after six pings. IPv4 or IPv6.
 function show_avg_ping() {
 
@@ -414,7 +449,7 @@ function show_live_hosts() {
   local FILENAME_TWO
   
   ONLINE_INTERFACE=$(ip route get "${GOOGLE_DNS}" | awk -F "dev " 'NR == 1 { split($2, a, " "); print a[1] }')
-  NETWORK_IP=$(ip route | grep "${ONLINE_INTERFACE}" | grep -v default | awk '{print $1}' | cut -f 1 -d "/")
+  NETWORK_IP=$(ip route | grep "${ONLINE_INTERFACE}" | grep src | awk '{print $1}' | cut -f 1 -d "/")
   FILTERED_IP=$(echo "${NETWORK_IP}" | awk 'BEGIN{FS=OFS="."} NF--')
   
   case "$1" in
@@ -682,6 +717,8 @@ function __init__() {
       "-a"|"--all") show_all; break ;;
       "-F"|"--find") check_connectivity "--internet"; show_ip_from "$2"; shift 2; break ;;
       "-g"|"--gateway") check_connectivity "--local"; show_gateway; break ;;
+      "-H"|"--hosts") check_connectivity "--local"; show_live_hosts --normal; break ;;
+      "-HM"|"--hosts-mac") check_connectivity "--local"; show_live_hosts --mac; break ;;
       "-h"|"--help") usage; break ;;
       "-i"|"--interfaces") show_interfaces; break ;;
       "-L"|"--location") check_connectivity "--internet"; show_location_info "$2"; shift 2; break ;;
@@ -689,8 +726,7 @@ function __init__() {
       "-m"|"--mac") show_mac; break ;;
       "-T"|"--time") check_connectivity "--internet"; show_avg_ping --ipv4; break ;;
       "-T6"|"--time-ipv6") check_connectivity "--internet"; show_avg_ping --ipv6; break ;;
-      "-S"|"--scan") check_connectivity "--local"; show_live_hosts --normal; break ;;
-      "-SM"|"--scan-mac") check_connectivity "--local"; show_live_hosts --mac; break ;;
+      "-S"|"--speed") check_connectivity "--internet"; show_speed; break ;;
       "-v"|"--version") show_version; break ;;
       "--cidr-4"|"--cidr-ipv4") show_ipv4_cidr; break ;;
       "--cidr-6"|"--cidr-ipv6") show_ipv6_cidr; break ;;

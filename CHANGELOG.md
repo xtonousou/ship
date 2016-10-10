@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
+## [1.6-dev] - 2016-10-11
+### Added
+- Monitor download and upload speed of online network interface.<br/>
+
+## Changed
+- **Fixed** Issue #17.<br/>
+
 ## [1.5] - 2016-10-09
 ### Added
 - Function to handle sleeping time (depends on number of CPU cores).<br/>

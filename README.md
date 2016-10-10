@@ -15,6 +15,7 @@ A simple, handy network multitool that shows the IPv4, IPv6, MAC addresses of yo
 - Shows **external IP/s** of user/a domain.<br/>
 - Shows **location** info of user/a domain.<br/>
 - Shows location on **map**.<br/>
+- Shows **download** and **upload** speed of online interface.<br/>
 - Shows the connections to a **port** per IP basis.<br/>
 - Shows **average latency** from Google. IPv4/IPv6.<br/>
 - Shows active **hosts** on current network with or without **MAC** address.<br/>
