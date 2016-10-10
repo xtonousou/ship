@@ -25,10 +25,9 @@ Essential packages: **```coreutils iproute2 iputils```**<br/>
 
 Tested on Linux:<br/>
 
-- Ubuntu **16.04.1**.<br/>
-- Ubuntu **14.04.5**.<br/>
+- Ubuntu **16.04.1**, **14.04.5**.<br/>
 - Ubuntu Mate **14.04.3**.<br/>
-- Debian **7** and **8**.<br/>
+- Debian **7**, **8**.<br/>
 - Kali **2.0**, 2016.2.<br/>
 - Arch **4.7.5-1**, **4.7.6-1**.<br/>
 

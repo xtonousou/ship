@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.<br/>
 
 ## Changed
 - ```ship -F {DOMAIN|IP}``` now shows multiple IPs (maximum 20).<br/>
-- **Fixed** Issue #17.<br/>
+- **Fixed** Issue [#17](https://github.com/xtonousou/shIP/issues/17).<br/>
 
 ## [1.5] - 2016-10-09
 ### Added
