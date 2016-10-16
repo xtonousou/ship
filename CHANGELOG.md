@@ -1,13 +1,24 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
-## [1.6-dev] - 2016-10-11
+## [1.6-dev] - 2016-10-15
 ### Added
-- Monitor download and upload speed of online network interface.<br/>
+- Monitor **download** and **upload speed** of online network interface.<br/>
+- Show results of scans for **malicious activities** of a URL.<br/>
+- Show internet connection **bandwidth** to CDN and different locations *e.g. USA, Netherlands and France*.<br/>
+- Show **hops** to a network host (IPv4 or IPv6).<br/>
 
 ## Changed
-- ```ship -F {DOMAIN|IP}``` now shows multiple IPs (maximum 20).<br/>
-- **Fixed** Issue [#17](https://github.com/xtonousou/shIP/issues/17).<br/>
+- README.<br/>
+- Usage.<br/>
+- Some dialogs.<br/>
+- ```ship -F {DOMAIN|IP}``` now shows multiple IPs (maximum 10).<br/>
+- **Fixed** issue [#17](https://github.com/xtonousou/shIP/issues/17).<br/>
+- **Fixed** when ```ship -L``` or ```ship -F``` input had a lot of suffixes with slashes, it showed user's info.<br/>
+- **Fixed** some issues when IPv6 is used.<br/>
+
+## Removed
+- Tools: ```lsmod``` now using ```cat /proc/modules```.<br/>
 
 ## [1.5] - 2016-10-09
 ### Added
@@ -25,7 +36,7 @@ All notable changes to this project will be documented in this file.<br/>
 - **Fixed** Kali prints other info with ```arping```.<br/>
 
 ### Removed
-- Tools: **```nmap netstat netcat```**<br/>
+- Tools: ```nmap netstat netcat```.<br/>
 
 ## [1.4] - 2016-10-07
 ### Added
@@ -34,8 +45,8 @@ All notable changes to this project will be documented in this file.<br/>
 
 ### Changed
 - Usage.<br/>
-- **```gawk```** --> **```awk```**
-- Method for grabbing IPv4 address of user, domain. Now using **```netcat```**.<br/> 
+- ```gawk``` to ```awk```
+- Method for grabbing IPv4 address of user, domain. Now using ```netcat```.<br/> 
 - **Fixed** some user input 'bugs'.<br/> 
 - **Fixed** regex for domain and IP validation.<br/> 
 - Order of commands in functions.<br/> 
@@ -48,7 +59,7 @@ All notable changes to this project will be documented in this file.<br/>
 ### Added
 - Get the local IPv6 directly.<br/>
 - Get full location info of a domain or IP in same command.<br/>
-- Get the quantity of connections to a port per IP with **```netstat```**.<br/>
+- Get the quantity of connections to a port per IP with ```netstat```.<br/>
 
 ### Changed
 - Usage.<br/>
@@ -71,7 +82,7 @@ All notable changes to this project will be documented in this file.<br/>
 - Clean up code.<br/>
 
 ### Removed
-- Tools: **```curl route ```**<br/>
+- Tools: ```curl route ```.<br/>
 
 ## [1.1] - 2016-10-01
 ### Added
