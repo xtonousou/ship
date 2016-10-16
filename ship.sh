@@ -144,6 +144,7 @@ function usage() {
 	echo    " miscellaneous operations:"
   echo -e " ${GREEN}ship -A ${NORMAL}, ${GREEN}--arp ${NORMAL}           shows ARP/neighbor cache"
   echo -e " ${GREEN}ship -B ${NORMAL}, ${GREEN}--bandwidth ${NORMAL}     shows connection bandwidth to different locations"
+  echo -e " ${GREEN}ship -C ${NORMAL}, ${GREEN}--check ${NORMAL}<>       shows results of scans for malicious activities of a URL"
   echo -e " ${GREEN}ship -F ${NORMAL}, ${GREEN}--find ${NORMAL}<>        shows the external IP address of {USER|DOMAIN}"
   echo -e " ${GREEN}ship -H ${NORMAL}, ${GREEN}--hosts ${NORMAL}         shows active hosts on network"
   echo -e " ${RED}ship -HM${NORMAL}, ${RED}--hosts-mac ${NORMAL}     shows active hosts on network with their MAC address"
@@ -156,7 +157,7 @@ function usage() {
 	echo -e " ${GREEN}ship -T6${NORMAL}, ${GREEN}--time-ipv6 ${NORMAL}     shows the average latency using IPv6"
   echo
   echo -e " Commands shown in ${RED}RED${NORMAL} require root privileges"
-  echo -e " [${GREEN}-R${NORMAL}] [${GREEN}-R6${NORMAL}] require <destination> and <number of hops>"
+  echo -e " [${GREEN}-C${NORMAL}] [${GREEN}-R${NORMAL}] [${GREEN}-R6${NORMAL}] require <destination>"
   echo -e " [${GREEN}-F${NORMAL}] [${GREEN}-L${NORMAL}] require <destination>, otherwise user's info is shown"
   echo -e " [${GREEN}-P${NORMAL}] requires <destination>, otherwise possible options are shown"
   exit
