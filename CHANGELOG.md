@@ -1,18 +1,22 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
-## [1.6-dev] - 2016-10-15
+## [1.6-dev-2] - 2016-10-18
 ### Added
+- More locations to test bandwidth.<br/>
 - Monitor **download** and **upload speed** of online network interface.<br/>
-- Show results of scans for **malicious activities** of a URL.<br/>
+- Increased performance by handling background tasks properly.<br/>
+- Show results of scans for **malicious activities** of a domain.<br/>
 - Show internet connection **bandwidth** to CDN and different locations *e.g. USA, Netherlands and France*.<br/>
-- Show **hops** to a network host (IPv4 or IPv6).<br/>
+- Show the path to a network host (IPv4 or IPv6).<br/>
 
 ## Changed
 - README.<br/>
 - Usage.<br/>
 - Some dialogs.<br/>
-- ```ship -F {DOMAIN|IP}``` now shows multiple IPs (maximum 10).<br/>
+- Uppercase MAC and IPv6 addresses.<br/>
+- ```ship -F {DOMAIN|IP}``` now shows multiple IPs (maximum 15).<br/>
+- Faster method for checking internet connection. Now using ```netcat```.<br/>
 - **Fixed** issue [#17](https://github.com/xtonousou/shIP/issues/17).<br/>
 - **Fixed** when ```ship -L``` or ```ship -F``` input had a lot of suffixes with slashes, it showed user's info.<br/>
 - **Fixed** some issues when IPv6 is used.<br/>

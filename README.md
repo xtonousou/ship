@@ -19,8 +19,8 @@ A simple, handy network multitool that shows the IPv4, IPv6, MAC addresses of yo
 - Shows **download** and **upload** speed of online interface.<br/>
 - Shows results of scans for **malicious activities** of a URL.<br/>
 - Shows the connections to a **port** per IP basis.<br/>
-- Shows **hops** to a network host. IPv4/IPv6.<br/>
-- Shows **average RTT** to Google. IPv4/IPv6.<br/>
+- Shows the path to a network host. IPv4/IPv6.<br/>
+- Shows **average RTT** to a network host. IPv4/IPv6.<br/>
 - Shows active **hosts** on current network with or without **MAC** address.<br/>
 
 ## Requirements
@@ -32,13 +32,10 @@ Tested on Linux:<br/>
 - Ubuntu Mate **14.04.3**.<br/>
 - Debian **7**, **8**.<br/>
 - Kali **2.0**, 2016.2.<br/>
-- Arch **4.7.5-1**, **4.7.6-1**.<br/>
+- Arch **4.7.5-1**, **4.7.6-1**, **4.8.2-1**.<br/>
 
 ## Under Development
-- [ ] **Android** support.<br/>
-- [ ] Show **average RTT** to a network host *specified by user*. IPv4/IPv6.<br/>
-- [ ] Add **more servers** for bandwidth measuring.<br/>
-- [ ] Malicious activities scanner accepts IPv4.<br/>
+- [ ] Fix when domain blocks ICMP packets. ```ship -R <DOMAIN>```.<br/> 
 
 ## LICENSE
 This script is under GPLv3 (or later) License.<br/>
