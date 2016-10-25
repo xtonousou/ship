@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
+## [1.7] - 2016-10-26
+### Added
+- Bash version checking function.<br/>
+- **INT** and **SIGTSTP** trapping (exit confirmation).<br/>
+
+## Changed
+- Some dialogs on bandwidth testing functions.<br/>
+
 ## [1.6] - 2016-10-25
 ### Added
 - More locations to test bandwidth.<br/>

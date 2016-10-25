@@ -24,7 +24,8 @@ A simple, handy network multitool that shows the IPv4, IPv6, MAC addresses of yo
 - Shows active **hosts** on current network with or without **MAC** address.<br/>
 
 ## Requirements
-Essential: **```bash coreutils iproute2 iputils```**<br/>
+**Bash 4.0** or later.<br/>
+**```coreutils iproute2 iputils```**<br/>
 
 Tested on Linux:<br/>
 

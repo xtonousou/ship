@@ -10,7 +10,7 @@ AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="https://github.com/${AUTHOR_NICKNAME}"
-VERSION="1.6-dev-3"
+VERSION="1.7"
 
 ### Colors
 GREEN="\033[1;32m"
@@ -19,7 +19,7 @@ CYAN="\033[1;36m"
 ORANGE="\033[1;33m"
 NORMAL="\e[1;0m"
 
-### Directories, strings and domains
+### Locations
 TMP="/tmp/ship"
 NULL="/dev/null"
 GOOGLE_DNS="8.8.8.8"
@@ -190,6 +190,7 @@ function show_version() {
 	echo -e "      ${ORANGE}_!__!__!_${NORMAL}		Github .: ${GREEN}${GITHUB}${NORMAL}"
 	echo -e "      ${ORANGE}\_______/${NORMAL}         Version : ${GREEN}${VERSION}${NORMAL}"
 	echo -e "  ${CYAN}~~~~~~~~~~~~~~~~~${NORMAL}"
+  exit
 }
 
 # Prints active network interfaces with their IPv4 address and CIDR suffix.
@@ -251,6 +252,7 @@ function show_arp_cache() {
   echo -e "${DIALOG_IPV4_MAC_STATE}"
   cat < "${TMP}/${FILENAME}" | sort -V
   mr_proper
+  exit
 }
 
 # Prints bandwidth from different locations
@@ -269,7 +271,8 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "Cachefly" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+    print_network_host_down "${CDN_TEST}"
+	  error_exit
 	fi
   
   sleep 1.5
@@ -284,8 +287,9 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "UK" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
-	fi
+    print_network_host_down "${UK_TEST}"
+	  error_exit
+  fi
   
   sleep 1.5
   
@@ -299,7 +303,8 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "Australia" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+	  print_network_host_down "${AUSTRALIA_TEST}"
+	  error_exit
 	fi
   
   sleep 1.5
@@ -314,7 +319,8 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "USA" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+	  print_network_host_down "${USA_TEST}"
+	  error_exit
 	fi
   
   sleep 1.5
@@ -329,7 +335,8 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "Singapore" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+	  print_network_host_down "${SINGAPORE_TEST}"
+	  error_exit
 	fi
   
   sleep 1.5
@@ -344,7 +351,8 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "Netherlands" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+	  print_network_host_down "${NETHERLANDS_TEST}"
+	  error_exit
 	fi
   
   sleep 1.5
@@ -359,7 +367,8 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "France" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+	  print_network_host_down "${FRANCE_TEST}"
+	  error_exit
 	fi
   
   sleep 1.5
@@ -374,8 +383,11 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "Greece" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+	  print_network_host_down "${GREECE_TEST}"
+	  error_exit
 	fi
+  
+  exit
 }
 
 # Prints the public IP address of a website or server. If $1 is empty prints user's public IP, if not, $1 should be example.com.
@@ -837,7 +849,13 @@ function print_port_protocol_list() {
   exit
 }
 
-# Clears previous line
+# Informs when a network host is down. Requires $1 as the host.
+function print_network_host_down() {
+  
+  echo -e "Unfortunately ${1} is down. ${DIALOG_ABORTING}"
+}
+
+# Clears previous line.
 function clear_line() {
   
   printf "\r\033[K"
@@ -900,10 +918,44 @@ function check_root_permissions() {
   fi
 }
 
+# Checks Bash version. Minimum is version 4.
+function check_bash_version() {
+  
+  if [[ "${BASH_VERSINFO[0]}" -lt "4" ]]; then
+    error_exit "Sorry, you need at least bash-4.0 to set sail."
+  fi
+}
+
 # Deletes every file that is created by this script. Usually in /tmp
 function mr_proper() {
   
-  rm -rf "${TMP}" 2>"${NULL}"
+  rm -rf "${TMP}"
+}
+
+# Traps INT and SIGTSTP.
+function trap_handler() {
+  
+  local YESNO
+  
+  echo
+  YESNO=""
+	while [[ ! "${YESNO}" =~ ^[YyNn]$ ]]; do
+		echo -ne "Exit? [y/n] "
+    read -r YESNO 2>"${NULL}"
+	done
+
+	if [[ "${YESNO}" = "Y" ]]; then
+		YESNO="y"
+	elif [[ "${YESNO}" = "N" ]]; then
+		YESNO="n"
+	fi
+  
+	if [[ "${YESNO}" = "y" ]]; then
+    handle_jobs
+    clear_line
+    mr_proper
+    exit
+  fi
 }
 
 # Used with zero parameters: exit 1.
@@ -938,6 +990,9 @@ function __init__() {
   
   if [[ -z "$1" ]]; then error_exit "${DIALOG_ERROR}"; fi
   
+  trap trap_handler INT 2>"${NULL}"
+  trap trap_handler SIGTSTP 2>"${NULL}"
+  check_bash_version
   check_directory_or_touch_file
   
   while :
