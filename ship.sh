@@ -10,7 +10,11 @@ AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="https://github.com/${AUTHOR_NICKNAME}"
+<<<<<<< HEAD
 VERSION="1.7"
+=======
+VERSION="1.6"
+>>>>>>> d33cc9fc398df40a1d4ccadfdfab06a2e6df756b
 
 ### Colors
 GREEN="\033[1;32m"
