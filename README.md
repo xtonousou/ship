@@ -24,7 +24,7 @@ A simple, handy network multitool that shows the IPv4, IPv6, MAC addresses of yo
 - Shows active **hosts** on current network with or without **MAC** address.<br/>
 
 ## Requirements
-Essential packages: **```coreutils iproute2 iputils```**<br/>
+Essential packages: **```bash coreutils iproute2 iputils```**<br/>
 
 Tested on Linux:<br/>
 
@@ -32,7 +32,7 @@ Tested on Linux:<br/>
 - Ubuntu Mate **14.04.3**.<br/>
 - Debian **7**, **8**.<br/>
 - Kali **2.0**, 2016.2.<br/>
-- Arch **4.7.5-1**, **4.7.6-1**, **4.8.2-1**.<br/>
+- Arch **4.7.5-1** - **4.8.4-1**.<br/>
 
 ## Under Development
 - [ ] Fix when domain blocks ICMP packets. ```ship -R <DOMAIN>```.<br/> 

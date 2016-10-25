@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
-## [1.6-dev-2] - 2016-10-18
+## [1.6] - 2016-10-25
 ### Added
 - More locations to test bandwidth.<br/>
 - Monitor **download** and **upload speed** of online network interface.<br/>
@@ -16,7 +16,6 @@ All notable changes to this project will be documented in this file.<br/>
 - Some dialogs.<br/>
 - Uppercase MAC and IPv6 addresses.<br/>
 - ```ship -F {DOMAIN|IP}``` now shows multiple IPs (maximum 15).<br/>
-- Faster method for checking internet connection. Now using ```netcat```.<br/>
 - **Fixed** issue [#17](https://github.com/xtonousou/shIP/issues/17).<br/>
 - **Fixed** when ```ship -L``` or ```ship -F``` input had a lot of suffixes with slashes, it showed user's info.<br/>
 - **Fixed** some issues when IPv6 is used.<br/>

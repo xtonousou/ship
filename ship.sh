@@ -10,7 +10,7 @@ AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="https://github.com/${AUTHOR_NICKNAME}"
-VERSION="1.6-dev-2"
+VERSION="1.6-dev-3"
 
 ### Colors
 GREEN="\033[1;32m"
@@ -22,7 +22,6 @@ NORMAL="\e[1;0m"
 ### Directories, strings and domains
 TMP="/tmp/ship"
 NULL="/dev/null"
-GOOGLE="google.com"
 GOOGLE_DNS="8.8.8.8"
 LOOPBACK="127.0.0.1"
 IPINFO="ipinfo.io"
@@ -70,7 +69,7 @@ function show_ipv4() {
   declare -a IPV4_ARRAY=($(ip addr show | grep -w inet | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
   
 	echo -e "${DIALOG_INTERFACES_IPV4}"
-  for i in "${!IPV4_ARRAY[@]}"; do
+  for i in "${!INTERFACES_ARRAY[@]}"; do
     printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV4_ARRAY[i]}"
   done
   exit
@@ -80,10 +79,9 @@ function show_ipv4() {
 function show_ipv6() {
   
   declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
-  declare -a IPV6_ARRAY=($(ip -6 addr | grep inet6 | awk -F '[ \t]+|/' '{print $3}' | grep -v ^::1 | grep -v ^fe80 | awk '{print toupper($0)}'))
-  
+declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))  
 	echo -e "${DIALOG_INTERFACES_IPV6}"
-  for i in "${!IPV6_ARRAY[@]}"; do
+  for i in "${!INTERFACES_ARRAY[@]}"; do
     printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV6_ARRAY[i]}"
   done
   exit
@@ -395,6 +393,7 @@ function show_ip_from() {
       echo -ne "Grabbing IP..."
       IP=$(wget "${IPINFO}/ip" -qO -)
       clear_line
+      echo -e "${DIALOG_IPV4}"
 		  echo " ${IP}"
       exit
 	  else
@@ -456,15 +455,15 @@ function show_malicious_results() {
     sed -e 's/^[ \t]*//' > "${TMP}/PARSED_URL_DATA"
     RESULT=$(cat ${TMP}/PARSED_URL_DATA)
     clear_line
-    if [[ "${RESULT}" -eq 0 ]]; then
+    if [[ "${RESULT}" -eq "0" ]]; then
       echo -e "${FILTERED_URL} is ${GREEN}clean${NORMAL}"
-    elif [[ "${RESULT}" -ge 1 ]] && [[ "${RESULT}" -le 3 ]]; then
+    elif [[ "${RESULT}" -ge "1" ]] && [[ "${RESULT}" -le "3" ]]; then
       echo -e "${FILTERED_URL} is identified by $(cat ${TMP}/PARSED_URL_DATA) scanning engine/s"
       echo -e "${CYAN}${SCAN}${FILTERED_URL}${NORMAL}"
-    elif [[ "${RESULT}" -ge 4 ]] && [[ "${RESULT}" -le 13 ]]; then
+    elif [[ "${RESULT}" -ge "4" ]] && [[ "${RESULT}" -le "13" ]]; then
       echo -e "${ORANGE}${FILTERED_URL}${NORMAL} is identified by $(cat ${TMP}/PARSED_URL_DATA) scanning engine/s${NORMAL}"
       echo -e "${CYAN}${SCAN}${FILTERED_URL}${NORMAL}"
-    elif [[ "${RESULT}" -ge 14 ]]; then
+    elif [[ "${RESULT}" -ge "14" ]]; then
       echo -e "${RED}${FILTERED_URL}${NORMAL} is identified by $(cat ${TMP}/PARSED_URL_DATA) scanning engine/s${NORMAL}"
       echo -e "${CYAN}${SCAN}${FILTERED_URL}${NORMAL}"
     else
@@ -851,7 +850,7 @@ function check_connectivity() {
   
   case "$1" in
     "--local") ip route | grep "^default" >"${NULL}" || error_exit "${DIALOG_NO_LOCAL_CONNECTION}" ;;
-    "--internet") nc -z "${GOOGLE}" 80    >"${NULL}" || error_exit "${DIALOG_NO_INTERNET}" ;;
+    "--internet") ping -q -c 1 -W 1 "${GOOGLE_DNS}" >"${NULL}" || error_exit "${DIALOG_NO_INTERNET}" ;;
   esac
 }
 
@@ -888,7 +887,7 @@ function check_directory_or_touch_file() {
       fi
   fi
   
-  if [[ "$(id -u)" -eq 0 ]]; then
+  if [[ "$(id -u)" -eq "0" ]]; then
     chmod -R a+w "${TMP}"
   fi
 }
@@ -896,7 +895,7 @@ function check_directory_or_touch_file() {
 # Checks for root privileges.
 function check_root_permissions() {
   
-  if [[ "$(id -u)" -ne 0 ]]; then
+  if [[ "$(id -u)" -ne "0" ]]; then
     error_exit "${GREEN}ship${NORMAL} requires ${RED}root${NORMAL} privileges for this action."
   fi
 }
