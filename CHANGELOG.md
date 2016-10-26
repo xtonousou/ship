@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.<br/>
 - **INT** and **SIGTSTP** trapping (exit confirmation).<br/>
 
 ## Changed
+- Probably **fixed** issue #21.<br/>
 - Some dialogs on bandwidth testing functions.<br/>
 
 ## [1.6] - 2016-10-25

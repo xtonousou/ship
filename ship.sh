@@ -760,31 +760,79 @@ function show_avg_ping() {
   local HAS_IPV6
   
   if [[ -z "$2" ]]; then
-    case "$1" in
-      "--ipv4")
-        echo -ne "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
-        PING_4=$(ping -4 -i 0.5 -c 10 ${GOOGLE_DNS} | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
-        clear_line
-        echo -e "Average RTT: ${GREEN}${PING_4} ms${NORMAL}"
-        exit
-      ;;
-      "--ipv6")
-        HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
-        if [[ "${HAS_IPV6}" ]]; then
-          echo -ne " Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
-          PING_6=$(ping -6 -i 0.5 -c 10 "${GOOGLE_DNS}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+    if [[ ! $(hash ping6 2>"${NULL}") ]]; then
+      case "$1" in
+        "--ipv4")
+          echo -ne "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+          PING_4=$(ping -4 -i 0.5 -c 10 ${GOOGLE_DNS} | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
           clear_line
-          echo -e "Average RTT: ${GREEN}${PING_6} ms${NORMAL}"
+          echo -e "Average RTT: ${GREEN}${PING_4} ms${NORMAL}"
           exit
-        else
-          error_exit "IPv6 unavailable. ${DIALOG_ABORTING}"
-        fi
-      ;;
-    esac
+        ;;
+        "--ipv6")
+          HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
+          if [[ "${HAS_IPV6}" ]]; then
+            echo -ne " Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+            PING_6=$(ping -6 -i 0.5 -c 10 "${GOOGLE_DNS}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+            clear_line
+            echo -e "Average RTT: ${GREEN}${PING_6} ms${NORMAL}"
+            exit
+          else
+            error_exit "IPv6 unavailable. ${DIALOG_ABORTING}"
+          fi
+        ;;
+      esac
+    else
+      case "$1" in
+        "--ipv4")
+          echo -ne "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+          PING_4=$(ping -i 0.5 -c 10 ${GOOGLE_DNS} | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+          clear_line
+          echo -e "Average RTT: ${GREEN}${PING_4} ms${NORMAL}"
+          exit
+        ;;
+        "--ipv6")
+          HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
+          if [[ "${HAS_IPV6}" ]]; then
+            echo -ne " Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+            PING_6=$(ping6 -i 0.5 -c 10 "${GOOGLE_DNS}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+            clear_line
+            echo -e "Average RTT: ${GREEN}${PING_6} ms${NORMAL}"
+            exit
+          else
+            error_exit "IPv6 unavailable. ${DIALOG_ABORTING}"
+          fi
+        ;;
+      esac
+    fi
   else
     FILTERED_URL=$(echo "$2" | sed 's/^http\(\|s\):\/\///g' | sed 's/www.//' | cut -f 1 -d "/")
     HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     if [[ "${HTTP_CODE}" -eq "200" ]]; then
+      if [[ ! $(hash ping6 2>"${NULL}") ]]; then
+        case "$1" in
+          "--ipv4")
+            echo -ne "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
+            PING_4=$(ping -4 -i 0.5 -c 10 "${FILTERED_URL}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+            clear_line
+            echo -e "Average response time: ${GREEN}${PING_4} ms${NORMAL}"
+            exit
+          ;;
+          "--ipv6")
+            HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
+            if [[ "${HAS_IPV6}" ]]; then
+              echo -ne "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
+              PING_6=$(ping -6 -i 0.5 -c 10 "${FILTERED_URL}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+              clear_line
+              echo -e "Average response time: ${GREEN}${PING_6} ms${NORMAL}"
+              exit
+            else
+              error_exit "IPv6 unavailable. ${DIALOG_ABORTING}"
+            fi
+          ;;
+        esac
+      fi
+    else
       case "$1" in
         "--ipv4")
           echo -ne "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
@@ -806,8 +854,8 @@ function show_avg_ping() {
           fi
         ;;
       esac
+      fi
     fi
-  fi
 }
 
 # Scans live hosts on network and prints their IPv4 address with or without MAC address. ICMP and ARP.
@@ -918,19 +966,9 @@ function clear_line() {
 function check_connectivity() {
   
   case "$1" in
-    "--local") cat < "/sys/class/net/$/carrier" 2>"${NULL}" || error_exit "${DIALOG_NO_LOCAL_CONNECTION}" ;;
     "--local") ip route | grep "^default" >"${NULL}" || error_exit "${DIALOG_NO_LOCAL_CONNECTION}" ;;
     "--internet") ping -q -c 1 -W 1 "${GOOGLE_DNS}" >"${NULL}" || error_exit "${DIALOG_NO_INTERNET}" ;;
   esac
-}
-
-# CURRENTLY NOT USED. Checks tool's existance in system.
-function check_for_missing_tool() {
-  
-  hash "$1" 2>"${NULL}" || {
-    
-    error_exit "Install ${ORANGE}$1${NORMAL} and then try again. ${DIALOG_ABORTING}"
-  }
 }
 
 # e.g.(-f example.com). Checks if "example.com" is empty. $1 is the option, $2 is the alternative option and $3 is the passed parameter.
