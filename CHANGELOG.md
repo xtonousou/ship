@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.<br/>
 
 ## [1.7] - 2016-10-26
 ### Added
+- Timeout while getting http code, in ```wget``` commands.<br/>
+- Extract IPv4 and IPv6 addresses from a file.<br/>
 - Bash version checking function.<br/>
 - **INT** and **SIGTSTP** trapping (exit confirmation).<br/>
 

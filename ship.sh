@@ -10,11 +10,7 @@ AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="https://github.com/${AUTHOR_NICKNAME}"
-<<<<<<< HEAD
 VERSION="1.7"
-=======
-VERSION="1.6"
->>>>>>> d33cc9fc398df40a1d4ccadfdfab06a2e6df756b
 
 ### Colors
 GREEN="\033[1;32m"
@@ -29,15 +25,15 @@ NULL="/dev/null"
 GOOGLE_DNS="8.8.8.8"
 LOOPBACK="127.0.0.1"
 IPINFO="ipinfo.io"
-CDN_TEST="http://cachefly.cachefly.net/10mb.test"
-SINGAPORE_TEST="http://phantom.starserverspeedtest.com/test10.zip"
-USA_TEST="http://mirror.us.leaseweb.net/speedtest/10mb.bin"
-AUSTRALIA_TEST="http://mirror.filearena.net/pub/speed/SpeedTest_16MB.dat"
-NETHERLANDS_TEST="http://mirror.nl.leaseweb.net/speedtest/10mb.bin"
-FRANCE_TEST="http://proof.ovh.net/files/10Mb.dat"
-UK_TEST="http://download.thinkbroadband.com/10MB.zip"
-GREECE_TEST="http://speedtest.ftp.otenet.gr/files/test10Mb.db"
-SCAN="http://www.urlvoid.com/scan/"
+CDN_TEST="cachefly.cachefly.net/10mb.test"
+SINGAPORE_TEST="phantom.starserverspeedtest.com/test10.zip"
+USA_TEST="mirror.us.leaseweb.net/speedtest/10mb.bin"
+AUSTRALIA_TEST="mirror.filearena.net/pub/speed/SpeedTest_16MB.dat"
+NETHERLANDS_TEST="mirror.nl.leaseweb.net/speedtest/10mb.bin"
+FRANCE_TEST="proof.ovh.net/files/10Mb.dat"
+UK_TEST="download.thinkbroadband.com/10MB.zip"
+GREECE_TEST="speedtest.ftp.otenet.gr/files/test10Mb.db"
+SCAN="urlvoid.com/scan/"
 
 ### Dialogs
 DIALOG_ALL="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬────┤${GREEN}IPV4${NORMAL}├─────┬─┬────────────────┤${GREEN}IPV6${NORMAL}├─────────────────┐"
@@ -50,6 +46,7 @@ DIALOG_INTERFACES_IPV4_CIDR="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──�
 DIALOG_INTERFACES_IPV6="┌─┤${GREEN}INTERFACE${NORMAL}├─┬─────────────────┤${GREEN}IPV6${NORMAL}├────────────────┐"
 DIALOG_INTERFACES_IPV6_CIDR="┌─┤${GREEN}INTERFACE${NORMAL}├─┬───────────────────┤${GREEN}IPV6${NORMAL}├──────────────────┐"
 DIALOG_IPV4="┌────┤${GREEN}IPV4${NORMAL}├─────┐"
+DIALOG_IPV4_IPV6="┌────┤${GREEN}IPV4${NORMAL}├─────┬─────────────────┤${GREEN}IPV6${NORMAL}├────────────────┐"
 DIALOG_IPV4_MAC="┌───┤${GREEN}IPV4${NORMAL}├──────┬─┬──────┤${GREEN}MAC${NORMAL}├──────┐"
 DIALOG_IPV4_MAC_STATE="┌───┤${GREEN}IPV4${NORMAL}├──────┬─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬─┤${GREEN}STATE${NORMAL}├──┐"
 DIALOG_IPV6="┌─────────────────┤${GREEN}IPV6${NORMAL}├────────────────┐"
@@ -83,8 +80,9 @@ function show_ipv4() {
 function show_ipv6() {
   
   declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
-declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))  
-	echo -e "${DIALOG_INTERFACES_IPV6}"
+  declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))  
+	
+  echo -e "${DIALOG_INTERFACES_IPV6}"
   for i in "${!INTERFACES_ARRAY[@]}"; do
     printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV6_ARRAY[i]}"
   done
@@ -105,6 +103,62 @@ function show_all() {
     MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | awk '{print $2}' | awk '{print toupper($0)}')
     printf " %-14s%-20s%-18s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
   done
+  exit
+}
+
+# Prints all IPv4 or IPv6 addresses extracted from a file.
+function show_ips_from_file() {
+    
+  if [[ -z "$1" ]]; then
+    error_exit "No file was specified. ${DIALOG_ABORTING}"
+  fi
+  
+  local FILENAME_IPV4
+  local FILENAME_IPV6
+  local SEG
+  local RE_IPV4
+  local RE_IPV6
+  local RE_URL
+
+  FILENAME_IPV4="IPV4_OF_FILE"
+  FILENAME_IPV6="IPV6_OF_FILE"
+  
+  check_directory_or_touch_file "${FILENAME_IPV4}"
+  check_directory_or_touch_file "${FILENAME_IPV6}"
+  
+  SEG="[0-9a-fA-F]{1,4}"
+  RE_IPV4="((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])"
+  RE_IPV6="([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|"                    # TEST: 1:2:3:4:5:6:7:8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,7}:|"                         # TEST: 1::                              1:2:3:4:5:6:7::
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|"         # TEST: 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|"  # TEST: 1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|"  # TEST: 1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|"  # TEST: 1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|"  # TEST: 1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8
+  RE_IPV6="${RE_IPV6}[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|"       # TEST: 1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8
+  RE_IPV6="${RE_IPV6}:((:[0-9a-fA-F]{1,4}){1,7}|:)|"                     # TEST: ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::     
+  RE_IPV6="${RE_IPV6}fe08:(:[0-9a-fA-F]{1,4}){2,2}%[0-9a-zA-Z]{1,}|"     # TEST: fe08::7:8%eth0      fe08::7:8%1                                      (link-local IPv6 addresses with zone index)
+  RE_IPV6="${RE_IPV6}::(ffff(:0{1,4}){0,1}:){0,1}${RE_IPV4}|"            # TEST: ::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255 (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,4}:${RE_IPV4}"                # TEST: 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33                        (IPv4-Embedded IPv6 Address)
+
+  if [[ ! -f "$1" ]]; then
+    error_exit "No such file. ${DIALOG_ABORTING}"
+  fi
+  
+  grep -E -o "${RE_IPV4}" "$1" | sort -V | uniq >> "${TMP}/${FILENAME_IPV4}"
+  grep -E -o "${RE_IPV6}" "$1" | sort -V | uniq >> "${TMP}/${FILENAME_IPV6}"
+  
+  if [[ ! -s "${TMP}/${FILENAME_IPV4}" && "${TMP}/${FILENAME_IPV6}" ]]; then
+    error_exit "No valid IPv4 or IPv6 addresses found. ${DIALOG_ABORTING}"
+  fi
+  
+  sed -i 's/^/ /' "${TMP}/${FILENAME_IPV4}"
+  sed -i 's/^/ /' "${TMP}/${FILENAME_IPV6}"
+  
+  echo -e "${DIALOG_IPV4_IPV6}"
+  paste "${TMP}/${FILENAME_IPV4}" "${TMP}/${FILENAME_IPV6}" | awk -F'\t' '{printf("%-16s%s\n", $1, $2)}'
+  
+  mr_proper
   exit
 }
 
@@ -131,6 +185,7 @@ function usage() {
 	echo -e "  ${GREEN}ship -4 ${NORMAL}, ${GREEN}--ipv4 ${NORMAL}          shows active interfaces with their IPv4 address"
 	echo -e "  ${GREEN}ship -6 ${NORMAL}, ${GREEN}--ipv6 ${NORMAL}          shows active interfaces with their IPv6 address"
 	echo -e "  ${GREEN}ship -a ${NORMAL}, ${GREEN}--all ${NORMAL}           shows all basic info"
+	echo -e "  ${GREEN}ship -f ${NORMAL}, ${GREEN}--file ${NORMAL}<>        shows all valid IPv4 and IPv6 addresses in a file"
 	echo -e "  ${GREEN}ship -g ${NORMAL}, ${GREEN}--gateway ${NORMAL}       shows the gateway of online interfaces"
 	echo -e "  ${GREEN}ship -h ${NORMAL}, ${GREEN}--help ${NORMAL}          shows this help message"
 	echo -e "  ${GREEN}ship -i ${NORMAL}, ${GREEN}--interfaces ${NORMAL}    shows active interfaces"
@@ -266,7 +321,7 @@ function show_bandwidth() {
   local DOWNLOAD
   
   echo -ne "Checking ${GREEN}${CDN_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${CDN_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${CDN_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${CDN_TEST}${NORMAL}..."
@@ -276,13 +331,12 @@ function show_bandwidth() {
   else
     clear_line
     print_network_host_down "${CDN_TEST}"
-	  error_exit
 	fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${UK_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${UK_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${UK_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${UK_TEST}${NORMAL}..."
@@ -292,13 +346,12 @@ function show_bandwidth() {
   else
     clear_line
     print_network_host_down "${UK_TEST}"
-	  error_exit
   fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${AUSTRALIA_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${AUSTRALIA_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${AUSTRALIA_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${AUSTRALIA_TEST}${NORMAL}..."
@@ -308,13 +361,12 @@ function show_bandwidth() {
   else
     clear_line
 	  print_network_host_down "${AUSTRALIA_TEST}"
-	  error_exit
 	fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${USA_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${USA_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${USA_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${USA_TEST}${NORMAL}..."
@@ -324,13 +376,12 @@ function show_bandwidth() {
   else
     clear_line
 	  print_network_host_down "${USA_TEST}"
-	  error_exit
 	fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${SINGAPORE_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${SINGAPORE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${SINGAPORE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${SINGAPORE_TEST}${NORMAL}..."
@@ -340,13 +391,12 @@ function show_bandwidth() {
   else
     clear_line
 	  print_network_host_down "${SINGAPORE_TEST}"
-	  error_exit
 	fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${NETHERLANDS_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${NETHERLANDS_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${NETHERLANDS_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${NETHERLANDS_TEST}${NORMAL}..."
@@ -356,13 +406,12 @@ function show_bandwidth() {
   else
     clear_line
 	  print_network_host_down "${NETHERLANDS_TEST}"
-	  error_exit
 	fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${FRANCE_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${FRANCE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FRANCE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${FRANCE_TEST}${NORMAL}..."
@@ -372,13 +421,12 @@ function show_bandwidth() {
   else
     clear_line
 	  print_network_host_down "${FRANCE_TEST}"
-	  error_exit
 	fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${GREECE_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${GREECE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${GREECE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${GREECE_TEST}${NORMAL}..."
@@ -388,7 +436,6 @@ function show_bandwidth() {
   else
     clear_line
 	  print_network_host_down "${GREECE_TEST}"
-	  error_exit
 	fi
   
   exit
@@ -403,7 +450,7 @@ function show_ip_from() {
   
   if [[ -z "$1" ]]; then
     echo -ne "Checking ${GREEN}${IPINFO}${NORMAL}..."
-    HTTP_CODE=$(wget --spider -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+    HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     if [[ "${HTTP_CODE}" -eq "200" ]]; then
       clear_line
       echo -ne "Grabbing IP..."
@@ -418,7 +465,7 @@ function show_ip_from() {
 	  fi
   else
     echo -ne "Checking ${GREEN}$1${NORMAL}..."
-    HTTP_CODE=$(wget --spider -S "$1" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+    HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "$1" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     if [[ "${HTTP_CODE}" -eq "200" ]]; then
       clear_line
       FILENAME="IPS_FROM"
@@ -459,7 +506,7 @@ function show_malicious_results() {
   FILTERED_URL=$(echo "$1" | sed 's/^http\(\|s\):\/\///g' | sed 's/www.//' | cut -f 1 -d "/")
   
   echo -ne "Checking ${GREEN}${FILTERED_URL}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     FILENAME="SCANNED_URL"
     check_directory_or_touch_file "${FILENAME}"
@@ -510,7 +557,7 @@ function show_location_info() {
   local LOC
   local ORG  
   
-  HTTP_CODE_IPINFO=$(wget --spider -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE_IPINFO=$(wget --spider -t 1 --timeout=600 -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   echo -ne "Checking ${GREEN}${IPINFO}${NORMAL}..."
   if [[ ! "${HTTP_CODE_IPINFO}" -eq "200" ]]; then
     clear_line
@@ -626,7 +673,7 @@ function show_next_hops() {
     case "$1" in
       "--ipv4")
         echo -ne "Checking ${GREEN}$2${NORMAL}..."
-        HTTP_CODE=$(wget --spider -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+        HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
         if [[ "${HTTP_CODE}" -eq "200" ]]; then
           clear_line
           echo -ne "Tracing path to ${GREEN}${FILTERED_INPUT}${NORMAL}..."
@@ -646,7 +693,7 @@ function show_next_hops() {
         HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
         if [[ "${HAS_IPV6}" ]]; then
           echo -ne "Checking ${GREEN}$2${NORMAL}..."
-          HTTP_CODE=$(wget --spider -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+          HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
           if [[ "${HTTP_CODE}" -eq "200" ]]; then
             clear_line
             echo -ne "Tracing path to ${FILTERED_INPUT}..."
@@ -736,7 +783,7 @@ function show_avg_ping() {
     esac
   else
     FILTERED_URL=$(echo "$2" | sed 's/^http\(\|s\):\/\///g' | sed 's/www.//' | cut -f 1 -d "/")
-    HTTP_CODE=$(wget --spider -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+    HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     if [[ "${HTTP_CODE}" -eq "200" ]]; then
       case "$1" in
         "--ipv4")
@@ -871,6 +918,7 @@ function clear_line() {
 function check_connectivity() {
   
   case "$1" in
+    "--local") cat < "/sys/class/net/$/carrier" 2>"${NULL}" || error_exit "${DIALOG_NO_LOCAL_CONNECTION}" ;;
     "--local") ip route | grep "^default" >"${NULL}" || error_exit "${DIALOG_NO_LOCAL_CONNECTION}" ;;
     "--internet") ping -q -c 1 -W 1 "${GOOGLE_DNS}" >"${NULL}" || error_exit "${DIALOG_NO_INTERNET}" ;;
   esac
@@ -1008,6 +1056,7 @@ function __init__() {
       "-a"|"--all") check_connectivity "--local"; show_all; break ;;
       "-B"|"--bandwidth") check_connectivity "--internet"; show_bandwidth; break ;;
       "-C"|"--check") check_connectivity "--internet"; show_malicious_results "$2"; shift 2; break ;;
+      "-f"|"--file") show_ips_from_file "$2"; shift 2; break ;;
       "-F"|"--find") check_connectivity "--internet"; show_ip_from "$2"; shift 2; break ;;
       "-g"|"--gateway") check_connectivity "--local"; show_gateway; break ;;
       "-H"|"--hosts") check_connectivity "--internet"; show_live_hosts --normal; break ;;
