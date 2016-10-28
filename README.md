@@ -41,6 +41,4 @@ This script is under GPLv3 (or later) License.<br/>
 
 #### Any kind of help is welcome.<br/>
 
-
-<div style="text-align:center"><img src="https://raw.githubusercontent.com/xtonousou/shIP/dev/imgs/pun.png" title="huehue"/></div>
-
+<img src="https://raw.githubusercontent.com/xtonousou/shIP/dev/imgs/pun.png" title="huehue"/>
