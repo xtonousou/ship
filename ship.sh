@@ -100,7 +100,7 @@ function show_all() {
   
 	echo -e "${DIALOG_ALL}"
   for i in "${!INTERFACES_ARRAY[@]}"; do
-    MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | awk '{print $2}' | awk '{print toupper($0)}')
+    MAC_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/address" | awk '{print toupper($0)}' 2>"${NULL}")
     printf " %-14s%-20s%-18s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
   done
   exit
@@ -233,7 +233,7 @@ function show_mac() {
   
 	echo -e "${DIALOG_INTERFACES_MAC}"
   for i in "${!INTERFACES_ARRAY[@]}"; do
-    MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | awk '{print $2}' | awk '{print toupper($0)}')
+    MAC_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/address" | awk '{print toupper($0)}' 2>"${NULL}")
     printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}"
   done
   exit
@@ -289,7 +289,7 @@ function show_all_cidr() {
   
 	echo -e "${DIALOG_ALL_CIDR}"
   for i in "${!INTERFACES_ARRAY[@]}"; do
-    MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | awk '{print $2}' | awk '{print toupper($0)}')
+    MAC_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/address" | awk '{print toupper($0)}' 2>"${NULL}")
     printf " %-14s%-20s%-21s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}" "${IPV4_CIDR_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
   done
   exit
