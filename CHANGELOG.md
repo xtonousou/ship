@@ -1,13 +1,27 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
+## [1.7] - 2016-10-29
+### Added
+- Method to print the driver used of each active network interface: `ship -d` , `ship --driver`.<br/>
+- Timeout while getting http code, in `wget` commands.<br/>
+- Extract IPv4 and IPv6 addresses from a file.<br/>
+- Bash version checking function.<br/>
+- **INT** and **SIGTSTP** trapping (exit confirmation).<br/>
+
+## Changed
+- Code is now completely clean. Using `shellcheck` tool.<br/>
+- Code improvements.<br/>
+- Method to store active network interfaces into arrays.<br/>
+- Some dialogs on bandwidth testing functions.<br/>
+
 ## [1.6] - 2016-10-25
 ### Added
 - More locations to test bandwidth.<br/>
 - Monitor **download** and **upload speed** of online network interface.<br/>
 - Increased performance by handling background tasks properly.<br/>
 - Show results of scans for **malicious activities** of a domain.<br/>
-- Show internet connection **bandwidth** to CDN and different locations *e.g. USA, Netherlands and France*.<br/>
+- Show internet connection **bandwidth** to CDN and different locations.<br/>
 - Show the path to a network host (IPv4 or IPv6).<br/>
 
 ## Changed
@@ -15,13 +29,13 @@ All notable changes to this project will be documented in this file.<br/>
 - Usage.<br/>
 - Some dialogs.<br/>
 - Uppercase MAC and IPv6 addresses.<br/>
-- ```ship -F {DOMAIN|IP}``` now shows multiple IPs (maximum 15).<br/>
+- `ship -F {DOMAIN|IP}` now shows multiple IPs (maximum 15).<br/>
 - **Fixed** issue [#17](https://github.com/xtonousou/shIP/issues/17).<br/>
-- **Fixed** when ```ship -L``` or ```ship -F``` input had a lot of suffixes with slashes, it showed user's info.<br/>
+- **Fixed** when `ship -L` or `ship -F` input had a lot of suffixes with slashes, it showed user's info.<br/>
 - **Fixed** some issues when IPv6 is used.<br/>
 
 ## Removed
-- Tools: ```lsmod``` now using ```cat /proc/modules```.<br/>
+- Tools: `lsmod` now using `cat /proc/modules`.<br/>
 
 ## [1.5] - 2016-10-09
 ### Added
@@ -31,15 +45,15 @@ All notable changes to this project will be documented in this file.<br/>
 - Usage.<br/>
 - Dialogs.<br/>
 - Increase performance.<br/>
-- Method to find active hosts on network. Multithreaded ```ping arping```.<br/>
+- Method to find active hosts on network. Multithreaded `ping arping`.<br/>
 - Method to find external IP or location.<br/>
 - Regex to extract IPv4 and MAC address in some functions.<br/>
-- **Fixed** Ubuntu cannot grab info with ```ip```.<br/>
+- **Fixed** Ubuntu cannot grab info with `ip`.<br/>
 - **Fixed** Ubuntu cannot parse domain to find location info.<br/>
-- **Fixed** Kali prints other info with ```arping```.<br/>
+- **Fixed** Kali prints other info with `arping`.<br/>
 
 ### Removed
-- Tools: ```nmap netstat netcat```.<br/>
+- Tools: `nmap netstat netcat`.<br/>
 
 ## [1.4] - 2016-10-07
 ### Added
@@ -48,8 +62,8 @@ All notable changes to this project will be documented in this file.<br/>
 
 ### Changed
 - Usage.<br/>
-- ```gawk``` to ```awk```
-- Method for grabbing IPv4 address of user, domain. Now using ```netcat```.<br/> 
+- `gawk` to `awk`
+- Method for grabbing IPv4 address of user, domain. Now using `netcat`.<br/> 
 - **Fixed** some user input 'bugs'.<br/> 
 - **Fixed** regex for domain and IP validation.<br/> 
 - Order of commands in functions.<br/> 
@@ -62,7 +76,7 @@ All notable changes to this project will be documented in this file.<br/>
 ### Added
 - Get the local IPv6 directly.<br/>
 - Get full location info of a domain or IP in same command.<br/>
-- Get the quantity of connections to a port per IP with ```netstat```.<br/>
+- Get the quantity of connections to a port per IP with `netstat`.<br/>
 
 ### Changed
 - Usage.<br/>
@@ -85,7 +99,7 @@ All notable changes to this project will be documented in this file.<br/>
 - Clean up code.<br/>
 
 ### Removed
-- Tools: ```curl route ```.<br/>
+- Tools: `curl route`.<br/>
 
 ## [1.1] - 2016-10-01
 ### Added

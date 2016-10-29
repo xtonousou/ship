@@ -1,11 +1,13 @@
 # shIP (aka. show IP)
-A simple, handy network multitool that shows the IPv4, IPv6, MAC addresses of your active network interfaces and many more.<br/>
+A simple, handy network multitool that shows network addresses of active network interfaces and many more. Using **coreutils iproute2 iputils**.<br/>
 <img src="https://raw.githubusercontent.com/xtonousou/shIP/master/imgs/head.png" title="SAIL!"/>
 
 ## Features
 
 ### Basic
 - Shows active network **interfaces**.<br/>
+- Shows the **driver** used of each active network interface.<br/>
+- Shows all IPv4 and IPv6 addresses extracted from **file**.<br/>
 - Shows **gateway** of online interfaces.<br/>
 - Shows **IPv4/IPv6** addresses of active network interfaces with or without **CIDR**.<br/>
 - Shows **MAC** addresses of active network interfaces.<br/>
@@ -24,7 +26,8 @@ A simple, handy network multitool that shows the IPv4, IPv6, MAC addresses of yo
 - Shows active **hosts** on current network with or without **MAC** address.<br/>
 
 ## Requirements
-Essential: **```bash coreutils iproute2 iputils```**<br/>
+**Bash 4.0** or later.<br/>
+**```coreutils iproute2 iputils```**<br/>
 
 Tested on Linux:<br/>
 
@@ -33,9 +36,6 @@ Tested on Linux:<br/>
 - Debian **7**, **8**.<br/>
 - Kali **2.0**, 2016.2.<br/>
 - Arch **4.7.5-1** - **4.8.4-1**.<br/>
-
-## Under Development
-- [ ] Fix when domain blocks ICMP packets. ```ship -R <DOMAIN>```.<br/> 
 
 ## LICENSE
 This script is under GPLv3 (or later) License.<br/>

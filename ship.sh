@@ -3,14 +3,12 @@
 #### Written by       : Sotirios Roussis (aka. xtonousou) - xtonousou@gmail.com on 10-2016
 #### Known limitations: ipinfo.io offers free 1,000 daily requests. (ship -F, -L)
 
-######################## Declarations  #################################
-
 ### INFO
 AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="https://github.com/${AUTHOR_NICKNAME}"
-VERSION="1.6"
+VERSION="1.7"
 
 ### Colors
 GREEN="\033[1;32m"
@@ -19,26 +17,27 @@ CYAN="\033[1;36m"
 ORANGE="\033[1;33m"
 NORMAL="\e[1;0m"
 
-### Directories, strings and domains
+### Locations
 TMP="/tmp/ship"
 NULL="/dev/null"
 GOOGLE_DNS="8.8.8.8"
-LOOPBACK="127.0.0.1"
+#LOOPBACK="127.0.0.1"
 IPINFO="ipinfo.io"
-CDN_TEST="http://cachefly.cachefly.net/10mb.test"
-SINGAPORE_TEST="http://phantom.starserverspeedtest.com/test10.zip"
-USA_TEST="http://mirror.us.leaseweb.net/speedtest/10mb.bin"
-AUSTRALIA_TEST="http://mirror.filearena.net/pub/speed/SpeedTest_16MB.dat"
-NETHERLANDS_TEST="http://mirror.nl.leaseweb.net/speedtest/10mb.bin"
-FRANCE_TEST="http://proof.ovh.net/files/10Mb.dat"
-UK_TEST="http://download.thinkbroadband.com/10MB.zip"
-GREECE_TEST="http://speedtest.ftp.otenet.gr/files/test10Mb.db"
-SCAN="http://www.urlvoid.com/scan/"
+CDN_TEST="cachefly.cachefly.net/10mb.test"
+SINGAPORE_TEST="phantom.starserverspeedtest.com/test10.zip"
+USA_TEST="mirror.us.leaseweb.net/speedtest/10mb.bin"
+AUSTRALIA_TEST="mirror.filearena.net/pub/speed/SpeedTest_16MB.dat"
+NETHERLANDS_TEST="mirror.nl.leaseweb.net/speedtest/10mb.bin"
+FRANCE_TEST="proof.ovh.net/files/10Mb.dat"
+UK_TEST="download.thinkbroadband.com/10MB.zip"
+GREECE_TEST="speedtest.ftp.otenet.gr/files/test10Mb.db"
+SCAN="urlvoid.com/scan/"
 
 ### Dialogs
 DIALOG_ALL="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬────┤${GREEN}IPV4${NORMAL}├─────┬─┬────────────────┤${GREEN}IPV6${NORMAL}├─────────────────┐"
 DIALOG_ALL_CIDR="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬────┤${GREEN}IPV4${NORMAL}├────────┬─┬──────────────────┤${GREEN}IPV6${NORMAL}├───────────────────┐"
 DIALOG_INTERFACES="┌─┤${GREEN}INTERFACE${NORMAL}├─┐"
+DIALOG_INTERFACES_DRIVER="┌─┤${GREEN}INTERFACE${NORMAL}├─┬────┤${GREEN}DRIVER${NORMAL}├────┐"
 DIALOG_INTERFACES_MAC="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┐"
 DIALOG_INTERFACES_GATEWAY="┌─┤${GREEN}INTERFACE${NORMAL}├─┬───┤${GREEN}GATEWAY${NORMAL}├───┐"
 DIALOG_INTERFACES_IPV4="┌─┤${GREEN}INTERFACE${NORMAL}├─┬───┤${GREEN}IPV4${NORMAL}├──────┐"
@@ -46,6 +45,7 @@ DIALOG_INTERFACES_IPV4_CIDR="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──�
 DIALOG_INTERFACES_IPV6="┌─┤${GREEN}INTERFACE${NORMAL}├─┬─────────────────┤${GREEN}IPV6${NORMAL}├────────────────┐"
 DIALOG_INTERFACES_IPV6_CIDR="┌─┤${GREEN}INTERFACE${NORMAL}├─┬───────────────────┤${GREEN}IPV6${NORMAL}├──────────────────┐"
 DIALOG_IPV4="┌────┤${GREEN}IPV4${NORMAL}├─────┐"
+DIALOG_IPV4_IPV6="┌────┤${GREEN}IPV4${NORMAL}├─────┬─────────────────┤${GREEN}IPV6${NORMAL}├────────────────┐"
 DIALOG_IPV4_MAC="┌───┤${GREEN}IPV4${NORMAL}├──────┬─┬──────┤${GREEN}MAC${NORMAL}├──────┐"
 DIALOG_IPV4_MAC_STATE="┌───┤${GREEN}IPV4${NORMAL}├──────┬─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬─┤${GREEN}STATE${NORMAL}├──┐"
 DIALOG_IPV6="┌─────────────────┤${GREEN}IPV6${NORMAL}├────────────────┐"
@@ -60,73 +60,18 @@ DIALOG_SERVER_IS_DOWN="Destination is unreachable. Server may be down or input w
 DIALOG_NOT_A_NUMBER="Option should be integer. ${DIALOG_ABORTING}"
 DIALOG_NO_ARGUMENTS="No arguments. ${DIALOG_ABORTING}"
 
-##################### Basic s Section  #########################
-
-# Prints active network interfaces with their IPv4 address.
-function show_ipv4() {
-  
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
-  declare -a IPV4_ARRAY=($(ip addr show | grep -w inet | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
-  
-	echo -e "${DIALOG_INTERFACES_IPV4}"
-  for i in "${!INTERFACES_ARRAY[@]}"; do
-    printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV4_ARRAY[i]}"
-  done
-  exit
-}
-
-# Prints active network interfaces with their IPv6 address.
-function show_ipv6() {
-  
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
-declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))  
-	echo -e "${DIALOG_INTERFACES_IPV6}"
-  for i in "${!INTERFACES_ARRAY[@]}"; do
-    printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV6_ARRAY[i]}"
-  done
-  exit
-}
-
-# Prints all "basic" info.
-function show_all() {
-  
-  local MAC_OF
-  
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
-  declare -a IPV4_ARRAY=($(ip addr show | grep -w inet  | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
-  declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))
-  
-	echo -e "${DIALOG_ALL}"
-  for i in "${!INTERFACES_ARRAY[@]}"; do
-    MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | awk '{print $2}' | awk '{print toupper($0)}')
-    printf " %-14s%-20s%-18s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
-  done
-  exit
-}
-
-# Prints active network interfaces and their gateway.
-function show_gateway() {
-  
-  local GATEWAY
-  
-  declare -a ONLINE_INTERFACES_ARRAY=($(ip route | grep default | awk '{print $5}'))
-  
-  echo -e "${DIALOG_INTERFACES_GATEWAY}"
-  for i in "${!ONLINE_INTERFACES_ARRAY[@]}"; do
-    GATEWAY=$(ip route | grep "${ONLINE_INTERFACES_ARRAY[i]}" | grep ^default | awk '{print $3}')
-    printf " %-14s%s\n" "${ONLINE_INTERFACES_ARRAY[i]}" "${GATEWAY}"
-  done
-  exit
-}
+########################## SOF MAIN FUNCTIONS ##########################
 
 # Prints help message.
-function usage() {
+function show_usage() {
   
 	echo    "usage: ship [OPTION] or ship [OPTION] <ARGUMENT>"
   echo    " basic operations:"
 	echo -e "  ${GREEN}ship -4 ${NORMAL}, ${GREEN}--ipv4 ${NORMAL}          shows active interfaces with their IPv4 address"
 	echo -e "  ${GREEN}ship -6 ${NORMAL}, ${GREEN}--ipv6 ${NORMAL}          shows active interfaces with their IPv6 address"
 	echo -e "  ${GREEN}ship -a ${NORMAL}, ${GREEN}--all ${NORMAL}           shows all basic info"
+	echo -e "  ${GREEN}ship -d ${NORMAL}, ${GREEN}--driver ${NORMAL}        shows the driver used of each active interface"
+	echo -e "  ${GREEN}ship -f ${NORMAL}, ${GREEN}--file ${NORMAL}<>        shows all valid IPv4 and IPv6 addresses in a file"
 	echo -e "  ${GREEN}ship -g ${NORMAL}, ${GREEN}--gateway ${NORMAL}       shows the gateway of online interfaces"
 	echo -e "  ${GREEN}ship -h ${NORMAL}, ${GREEN}--help ${NORMAL}          shows this help message"
 	echo -e "  ${GREEN}ship -i ${NORMAL}, ${GREEN}--interfaces ${NORMAL}    shows active interfaces"
@@ -155,10 +100,141 @@ function usage() {
   exit
 }
 
+# Prints active network interfaces with their IPv4 address.
+function show_ipv4() {
+  
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
+  declare -a IPV4_ARRAY=($(ip addr show | grep -w inet | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
+  
+	echo -e "${DIALOG_INTERFACES_IPV4}"
+  for i in "${!INTERFACES_ARRAY[@]}"; do
+    printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV4_ARRAY[i]}"
+  done
+  exit
+}
+
+# Prints active network interfaces with their IPv6 address.
+function show_ipv6() {
+  
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
+  declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))  
+	
+  echo -e "${DIALOG_INTERFACES_IPV6}"
+  for i in "${!INTERFACES_ARRAY[@]}"; do
+    printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV6_ARRAY[i]}"
+  done
+  exit
+}
+
+# Prints all "basic" info.
+function show_all() {
+  
+  local MAC_OF
+  
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
+  declare -a IPV4_ARRAY=($(ip addr show | grep -w inet  | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
+  declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))
+  
+	echo -e "${DIALOG_ALL}"
+  for i in "${!INTERFACES_ARRAY[@]}"; do
+    MAC_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/address" | awk '{print toupper($0)}' 2>"${NULL}")
+    printf " %-14s%-20s%-18s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
+  done
+  exit
+}
+
+# Prints the driver used of active interface.
+function show_driver() {
+  
+  local DRIVER_OF
+  
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
+
+  echo -e "${DIALOG_INTERFACES_DRIVER}"
+  for i in "${!INTERFACES_ARRAY[@]}"; do
+    if [[ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ]]; then
+      DRIVER_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" | grep ^"DRIVER" | awk -F '=' '{print $2}')
+    else
+      DRIVER_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent" | grep ^"DRIVER" | awk -F '=' '{print $2}')
+    fi
+    printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" 
+  done
+}
+
+# Prints all IPv4 or IPv6 addresses extracted from a file.
+function show_ips_from_file() {
+    
+  if [[ -z "$1" ]]; then
+    error_exit "No file was specified. ${DIALOG_ABORTING}"
+  fi
+  
+  local FILENAME_IPV4
+  local FILENAME_IPV6
+  #local SEG
+  local RE_IPV4
+  local RE_IPV6
+
+  FILENAME_IPV4="IPV4_OF_FILE"
+  FILENAME_IPV6="IPV6_OF_FILE"
+  
+  check_directory_or_touch_file "${FILENAME_IPV4}"
+  check_directory_or_touch_file "${FILENAME_IPV6}"
+  
+  #SEG="[0-9a-fA-F]{1,4}"
+  RE_IPV4="((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])"
+  RE_IPV6="([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|"                    # TEST: 1:2:3:4:5:6:7:8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,7}:|"                         # TEST: 1::                              1:2:3:4:5:6:7::
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|"         # TEST: 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|"  # TEST: 1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|"  # TEST: 1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|"  # TEST: 1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|"  # TEST: 1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8
+  RE_IPV6="${RE_IPV6}[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|"       # TEST: 1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8
+  RE_IPV6="${RE_IPV6}:((:[0-9a-fA-F]{1,4}){1,7}|:)|"                     # TEST: ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::     
+  RE_IPV6="${RE_IPV6}fe08:(:[0-9a-fA-F]{1,4}){2,2}%[0-9a-zA-Z]{1,}|"     # TEST: fe08::7:8%eth0      fe08::7:8%1                                      (link-local IPv6 addresses with zone index)
+  RE_IPV6="${RE_IPV6}::(ffff(:0{1,4}){0,1}:){0,1}${RE_IPV4}|"            # TEST: ::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255 (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,4}:${RE_IPV4}"                # TEST: 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33                        (IPv4-Embedded IPv6 Address)
+
+  if [[ ! -f "$1" ]]; then
+    error_exit "No such file. ${DIALOG_ABORTING}"
+  fi
+  
+  grep -E -o "${RE_IPV4}" "$1" | sort -V | uniq >> "${TMP}/${FILENAME_IPV4}"
+  grep -E -o "${RE_IPV6}" "$1" | sort -V | uniq >> "${TMP}/${FILENAME_IPV6}"
+  
+  if [[ ! -s "${TMP}/${FILENAME_IPV4}" ]] && [[ ! -s "${TMP}/${FILENAME_IPV6}" ]]; then
+    error_exit "No valid IPv4 or IPv6 addresses found. ${DIALOG_ABORTING}"
+  fi
+  
+  sed -i 's/^/ /' "${TMP}/${FILENAME_IPV4}"
+  sed -i 's/^/ /' "${TMP}/${FILENAME_IPV6}"
+  
+  echo -e "${DIALOG_IPV4_IPV6}"
+  paste "${TMP}/${FILENAME_IPV4}" "${TMP}/${FILENAME_IPV6}" | awk -F'\t' '{printf("%-16s%s\n", $1, $2)}'
+  
+  mr_proper
+  exit
+}
+
+# Prints active network interfaces and their gateway.
+function show_gateway() {
+  
+  local GATEWAY
+  
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
+  
+  echo -e "${DIALOG_INTERFACES_GATEWAY}"
+  for i in "${!INTERFACES_ARRAY[@]}"; do
+    GATEWAY=$(ip route | grep "${INTERFACES_ARRAY[i]}" | grep ^default | awk '{print $3}')
+    printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${GATEWAY}"
+  done
+  exit
+}
+
 # Prints active network interfaces.
 function show_interfaces() {
   
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
   
 	echo -e "${DIALOG_INTERFACES}"
   printf " %s\n" "${INTERFACES_ARRAY[@]}"
@@ -170,11 +246,11 @@ function show_mac() {
   
   local MAC_OF
   
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
   
 	echo -e "${DIALOG_INTERFACES_MAC}"
   for i in "${!INTERFACES_ARRAY[@]}"; do
-    MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | awk '{print $2}' | awk '{print toupper($0)}')
+    MAC_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/address" | awk '{print toupper($0)}' 2>"${NULL}")
     printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}"
   done
   exit
@@ -190,12 +266,13 @@ function show_version() {
 	echo -e "      ${ORANGE}_!__!__!_${NORMAL}		Github .: ${GREEN}${GITHUB}${NORMAL}"
 	echo -e "      ${ORANGE}\_______/${NORMAL}         Version : ${GREEN}${VERSION}${NORMAL}"
 	echo -e "  ${CYAN}~~~~~~~~~~~~~~~~~${NORMAL}"
+  exit
 }
 
 # Prints active network interfaces with their IPv4 address and CIDR suffix.
 function show_ipv4_cidr() {
 
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
   declare -a IPV4_CIDR_ARRAY=($(ip addr show | grep -w inet | awk '{print $2}' | tail -n +2))
   
 	echo -e "${DIALOG_INTERFACES_IPV4_CIDR}"
@@ -208,7 +285,7 @@ function show_ipv4_cidr() {
 # Prints active network interfaces with their IPv6 address and CIDR suffix.
 function show_ipv6_cidr() {
   
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
   declare -a IPV6_CIDR_ARRAY=($(ip -6 addr | grep inet6 | awk -F '[ \t]+|' '{print $3}' | grep -v ^::1 | grep -v ^fe80 | awk '{print toupper($0)}'))
   
 	echo -e "${DIALOG_INTERFACES_IPV6_CIDR}"
@@ -223,19 +300,17 @@ function show_all_cidr() {
   
   local MAC_OF
   
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
   declare -a IPV4_CIDR_ARRAY=($(ip addr show | grep -w inet  | awk '{print $2}' | tail -n +2))
   declare -a IPV6_CIDR_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | tail -n +2 | awk '{print toupper($0)}'))
   
 	echo -e "${DIALOG_ALL_CIDR}"
   for i in "${!INTERFACES_ARRAY[@]}"; do
-    MAC_OF=$(ip link show "${INTERFACES_ARRAY[i]}" | grep link | awk '{print $2}' | awk '{print toupper($0)}')
+    MAC_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/address" | awk '{print toupper($0)}' 2>"${NULL}")
     printf " %-14s%-20s%-21s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}" "${IPV4_CIDR_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
   done
   exit
 }
-
-################## Miscellaneous s Section  ####################
 
 # Shows arp cache table.
 function show_arp_cache() {
@@ -251,6 +326,7 @@ function show_arp_cache() {
   echo -e "${DIALOG_IPV4_MAC_STATE}"
   cat < "${TMP}/${FILENAME}" | sort -V
   mr_proper
+  exit
 }
 
 # Prints bandwidth from different locations
@@ -260,7 +336,7 @@ function show_bandwidth() {
   local DOWNLOAD
   
   echo -ne "Checking ${GREEN}${CDN_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${CDN_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${CDN_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${CDN_TEST}${NORMAL}..."
@@ -269,13 +345,13 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "Cachefly" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+    print_network_host_down "${CDN_TEST}"
 	fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${UK_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${UK_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${UK_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${UK_TEST}${NORMAL}..."
@@ -284,13 +360,13 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "UK" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
-	fi
+    print_network_host_down "${UK_TEST}"
+  fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${AUSTRALIA_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${AUSTRALIA_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${AUSTRALIA_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${AUSTRALIA_TEST}${NORMAL}..."
@@ -299,13 +375,13 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "Australia" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+	  print_network_host_down "${AUSTRALIA_TEST}"
 	fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${USA_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${USA_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${USA_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${USA_TEST}${NORMAL}..."
@@ -314,13 +390,13 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "USA" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+	  print_network_host_down "${USA_TEST}"
 	fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${SINGAPORE_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${SINGAPORE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${SINGAPORE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${SINGAPORE_TEST}${NORMAL}..."
@@ -329,13 +405,13 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "Singapore" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+	  print_network_host_down "${SINGAPORE_TEST}"
 	fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${NETHERLANDS_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${NETHERLANDS_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${NETHERLANDS_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${NETHERLANDS_TEST}${NORMAL}..."
@@ -344,13 +420,13 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "Netherlands" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+	  print_network_host_down "${NETHERLANDS_TEST}"
 	fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${FRANCE_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${FRANCE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FRANCE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${FRANCE_TEST}${NORMAL}..."
@@ -359,13 +435,13 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "France" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+	  print_network_host_down "${FRANCE_TEST}"
 	fi
   
   sleep 1.5
   
   echo -ne "Checking ${GREEN}${GREECE_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${GREECE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${GREECE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     clear_line
     echo -ne "Downloading from ${GREEN}${GREECE_TEST}${NORMAL}..."
@@ -374,8 +450,10 @@ function show_bandwidth() {
     printf " %-16s${GREEN}%s${NORMAL}\n" "Greece" "${DOWNLOAD}"
   else
     clear_line
-	  error_exit "${DIALOG_SERVER_IS_DOWN}"
+	  print_network_host_down "${GREECE_TEST}"
 	fi
+  
+  exit
 }
 
 # Prints the public IP address of a website or server. If $1 is empty prints user's public IP, if not, $1 should be example.com.
@@ -387,7 +465,7 @@ function show_ip_from() {
   
   if [[ -z "$1" ]]; then
     echo -ne "Checking ${GREEN}${IPINFO}${NORMAL}..."
-    HTTP_CODE=$(wget --spider -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+    HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     if [[ "${HTTP_CODE}" -eq "200" ]]; then
       clear_line
       echo -ne "Grabbing IP..."
@@ -402,7 +480,7 @@ function show_ip_from() {
 	  fi
   else
     echo -ne "Checking ${GREEN}$1${NORMAL}..."
-    HTTP_CODE=$(wget --spider -S "$1" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+    HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "$1" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     if [[ "${HTTP_CODE}" -eq "200" ]]; then
       clear_line
       FILENAME="IPS_FROM"
@@ -443,7 +521,7 @@ function show_malicious_results() {
   FILTERED_URL=$(echo "$1" | sed 's/^http\(\|s\):\/\///g' | sed 's/www.//' | cut -f 1 -d "/")
   
   echo -ne "Checking ${GREEN}${FILTERED_URL}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   if [[ "${HTTP_CODE}" -eq "200" ]]; then
     FILENAME="SCANNED_URL"
     check_directory_or_touch_file "${FILENAME}"
@@ -494,7 +572,7 @@ function show_location_info() {
   local LOC
   local ORG  
   
-  HTTP_CODE_IPINFO=$(wget --spider -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  HTTP_CODE_IPINFO=$(wget --spider -t 1 --timeout=600 -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
   echo -ne "Checking ${GREEN}${IPINFO}${NORMAL}..."
   if [[ ! "${HTTP_CODE_IPINFO}" -eq "200" ]]; then
     clear_line
@@ -610,7 +688,7 @@ function show_next_hops() {
     case "$1" in
       "--ipv4")
         echo -ne "Checking ${GREEN}$2${NORMAL}..."
-        HTTP_CODE=$(wget --spider -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+        HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
         if [[ "${HTTP_CODE}" -eq "200" ]]; then
           clear_line
           echo -ne "Tracing path to ${GREEN}${FILTERED_INPUT}${NORMAL}..."
@@ -630,7 +708,7 @@ function show_next_hops() {
         HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
         if [[ "${HAS_IPV6}" ]]; then
           echo -ne "Checking ${GREEN}$2${NORMAL}..."
-          HTTP_CODE=$(wget --spider -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+          HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
           if [[ "${HTTP_CODE}" -eq "200" ]]; then
             clear_line
             echo -ne "Tracing path to ${FILTERED_INPUT}..."
@@ -697,31 +775,79 @@ function show_avg_ping() {
   local HAS_IPV6
   
   if [[ -z "$2" ]]; then
-    case "$1" in
-      "--ipv4")
-        echo -ne "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
-        PING_4=$(ping -4 -i 0.5 -c 10 ${GOOGLE_DNS} | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
-        clear_line
-        echo -e "Average RTT: ${GREEN}${PING_4} ms${NORMAL}"
-        exit
-      ;;
-      "--ipv6")
-        HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
-        if [[ "${HAS_IPV6}" ]]; then
-          echo -ne " Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
-          PING_6=$(ping -6 -i 0.5 -c 10 "${GOOGLE_DNS}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+    if [[ ! $(hash ping6 2>"${NULL}") ]]; then
+      case "$1" in
+        "--ipv4")
+          echo -ne "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+          PING_4=$(ping -4 -i 0.5 -c 10 ${GOOGLE_DNS} | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
           clear_line
-          echo -e "Average RTT: ${GREEN}${PING_6} ms${NORMAL}"
+          echo -e "Average RTT: ${GREEN}${PING_4} ms${NORMAL}"
           exit
-        else
-          error_exit "IPv6 unavailable. ${DIALOG_ABORTING}"
-        fi
-      ;;
-    esac
+        ;;
+        "--ipv6")
+          HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
+          if [[ "${HAS_IPV6}" ]]; then
+            echo -ne " Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+            PING_6=$(ping -6 -i 0.5 -c 10 "${GOOGLE_DNS}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+            clear_line
+            echo -e "Average RTT: ${GREEN}${PING_6} ms${NORMAL}"
+            exit
+          else
+            error_exit "IPv6 unavailable. ${DIALOG_ABORTING}"
+          fi
+        ;;
+      esac
+    else
+      case "$1" in
+        "--ipv4")
+          echo -ne "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+          PING_4=$(ping -i 0.5 -c 10 ${GOOGLE_DNS} | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+          clear_line
+          echo -e "Average RTT: ${GREEN}${PING_4} ms${NORMAL}"
+          exit
+        ;;
+        "--ipv6")
+          HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
+          if [[ "${HAS_IPV6}" ]]; then
+            echo -ne " Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+            PING_6=$(ping6 -i 0.5 -c 10 "${GOOGLE_DNS}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+            clear_line
+            echo -e "Average RTT: ${GREEN}${PING_6} ms${NORMAL}"
+            exit
+          else
+            error_exit "IPv6 unavailable. ${DIALOG_ABORTING}"
+          fi
+        ;;
+      esac
+    fi
   else
     FILTERED_URL=$(echo "$2" | sed 's/^http\(\|s\):\/\///g' | sed 's/www.//' | cut -f 1 -d "/")
-    HTTP_CODE=$(wget --spider -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+    HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     if [[ "${HTTP_CODE}" -eq "200" ]]; then
+      if [[ ! $(hash ping6 2>"${NULL}") ]]; then
+        case "$1" in
+          "--ipv4")
+            echo -ne "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
+            PING_4=$(ping -4 -i 0.5 -c 10 "${FILTERED_URL}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+            clear_line
+            echo -e "Average response time: ${GREEN}${PING_4} ms${NORMAL}"
+            exit
+          ;;
+          "--ipv6")
+            HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
+            if [[ "${HAS_IPV6}" ]]; then
+              echo -ne "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
+              PING_6=$(ping -6 -i 0.5 -c 10 "${FILTERED_URL}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+              clear_line
+              echo -e "Average response time: ${GREEN}${PING_6} ms${NORMAL}"
+              exit
+            else
+              error_exit "IPv6 unavailable. ${DIALOG_ABORTING}"
+            fi
+          ;;
+        esac
+      fi
+    else
       case "$1" in
         "--ipv4")
           echo -ne "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
@@ -743,8 +869,8 @@ function show_avg_ping() {
           fi
         ;;
       esac
+      fi
     fi
-  fi
 }
 
 # Scans live hosts on network and prints their IPv4 address with or without MAC address. ICMP and ARP.
@@ -801,8 +927,7 @@ function show_live_hosts() {
   esac
 }
 
-################ In-function functions section ^-^ #####################
-###################### Printing functions ##############################
+########################## EOF MAIN FUNCTIONS ##########################
 
 # Prints show_location_info() data.
 function print_location_info() {
@@ -837,13 +962,17 @@ function print_port_protocol_list() {
   exit
 }
 
-# Clears previous line
+# Informs when a network host is down. Requires $1 as the host.
+function print_network_host_down() {
+  
+  echo -e "Unfortunately ${1} is down. ${DIALOG_ABORTING}"
+}
+
+# Clears previous line.
 function clear_line() {
   
   printf "\r\033[K"
 }
-
-############################ Handlers ##################################
 
 # Checks network connection (local or internet).
 function check_connectivity() {
@@ -852,15 +981,6 @@ function check_connectivity() {
     "--local") ip route | grep "^default" >"${NULL}" || error_exit "${DIALOG_NO_LOCAL_CONNECTION}" ;;
     "--internet") ping -q -c 1 -W 1 "${GOOGLE_DNS}" >"${NULL}" || error_exit "${DIALOG_NO_INTERNET}" ;;
   esac
-}
-
-# CURRENTLY NOT USED. Checks tool's existance in system.
-function check_for_missing_tool() {
-  
-  hash "$1" 2>"${NULL}" || {
-    
-    error_exit "Install ${ORANGE}$1${NORMAL} and then try again. ${DIALOG_ABORTING}"
-  }
 }
 
 # e.g.(-f example.com). Checks if "example.com" is empty. $1 is the option, $2 is the alternative option and $3 is the passed parameter.
@@ -877,7 +997,7 @@ function check_if_parameter_is_not_numerical() {
   esac
 }
 
-# Checks if /tmp/ship exists, if not creates the dir and touches a file given by user.
+# Checks if /tmp/ship exists, if not creates the dir and touches file/s given by functions.
 function check_directory_or_touch_file() {
   
   if [[ ! -d "${TMP}" ]]; then
@@ -900,10 +1020,44 @@ function check_root_permissions() {
   fi
 }
 
+# Checks Bash version. Minimum is version 4.
+function check_bash_version() {
+  
+  if [[ "${BASH_VERSINFO[0]}" -lt "4" ]]; then
+    error_exit "Sorry, you need at least bash-4.0 to set sail."
+  fi
+}
+
 # Deletes every file that is created by this script. Usually in /tmp
 function mr_proper() {
   
-  rm -rf "${TMP}" 2>"${NULL}"
+  rm -rf "${TMP}"
+}
+
+# Traps INT and SIGTSTP.
+function trap_handler() {
+  
+  local YESNO
+  
+  echo
+  YESNO=""
+	while [[ ! "${YESNO}" =~ ^[YyNn]$ ]]; do
+		echo -ne "Exit? [y/n] "
+    read -r YESNO 2>"${NULL}"
+	done
+
+	if [[ "${YESNO}" = "Y" ]]; then
+		YESNO="y"
+	elif [[ "${YESNO}" = "N" ]]; then
+		YESNO="n"
+	fi
+  
+	if [[ "${YESNO}" = "y" ]]; then
+    handle_jobs
+    clear_line
+    mr_proper
+    exit
+  fi
 }
 
 # Used with zero parameters: exit 1.
@@ -912,13 +1066,16 @@ function mr_proper() {
 function error_exit() {
   
   if [[ -z "$1" ]]; then
+    mr_proper
     exit 1
   elif [[ -z "$2" ]]; then
     echo -e  "$1"
+    mr_proper
     exit 1
   else
     echo -e  "${GREEN}ship${NORMAL}: invalid option -- '$2'" 
     echo -e  "$1"
+    mr_proper
     exit 1
   fi
 }
@@ -933,11 +1090,14 @@ function handle_jobs() {
   done
 }
 
-###################### Initializes script. #############################
-function __init__() {
+# Starts ship.
+function sail() {
   
   if [[ -z "$1" ]]; then error_exit "${DIALOG_ERROR}"; fi
   
+  trap trap_handler INT 2>"${NULL}"
+  trap trap_handler SIGTSTP 2>"${NULL}"
+  check_bash_version
   check_directory_or_touch_file
   
   while :
@@ -949,11 +1109,13 @@ function __init__() {
       "-a"|"--all") check_connectivity "--local"; show_all; break ;;
       "-B"|"--bandwidth") check_connectivity "--internet"; show_bandwidth; break ;;
       "-C"|"--check") check_connectivity "--internet"; show_malicious_results "$2"; shift 2; break ;;
+      "-d"|"--driver") check_connectivity "--local"; show_driver; break ;;
+      "-f"|"--file") show_ips_from_file "$2"; shift 2; break ;;
       "-F"|"--find") check_connectivity "--internet"; show_ip_from "$2"; shift 2; break ;;
       "-g"|"--gateway") check_connectivity "--local"; show_gateway; break ;;
       "-H"|"--hosts") check_connectivity "--internet"; show_live_hosts --normal; break ;;
       "-HM"|"--hosts-mac") check_root_permissions; check_connectivity "--internet"; show_live_hosts --mac; break ;;
-      "-h"|"--help") usage; break ;;
+      "-h"|"--help") show_usage; break ;;
       "-i"|"--interfaces") check_connectivity "--local"; show_interfaces; break ;;
       "-L"|"--location") check_connectivity "--internet"; show_location_info "$2"; shift 2; break ;;
       "-P"|"--port") check_root_permissions; check_connectivity "--internet"; show_port_connections "$2"; shift 2; break ;;
@@ -972,4 +1134,4 @@ function __init__() {
   done
 }
 
-__init__ "$1" "$2"
+sail "$1" "$2"
