@@ -40,5 +40,3 @@ Tested on Linux:<br/>
 This script is under GPLv3 (or later) License.<br/>
 
 #### Any kind of help is welcome.<br/>
-
-<img src="https://raw.githubusercontent.com/xtonousou/shIP/dev/imgs/pun.png" title="huehue"/>
