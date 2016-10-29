@@ -6,7 +6,8 @@ A simple, handy network multitool that shows network addresses of active network
 
 ### Basic
 - Shows active network **interfaces**.<br/>
-- Shows all IPv4 and IPv6 addresses extracted from a **file**.<br/>
+- Shows the **driver** used of each active network interface.<br/>
+- Shows all IPv4 and IPv6 addresses extracted from **file**.<br/>
 - Shows **gateway** of online interfaces.<br/>
 - Shows **IPv4/IPv6** addresses of active network interfaces with or without **CIDR**.<br/>
 - Shows **MAC** addresses of active network interfaces.<br/>

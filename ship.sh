@@ -3,8 +3,6 @@
 #### Written by       : Sotirios Roussis (aka. xtonousou) - xtonousou@gmail.com on 10-2016
 #### Known limitations: ipinfo.io offers free 1,000 daily requests. (ship -F, -L)
 
-######################## Declarations  #################################
-
 ### INFO
 AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
@@ -23,7 +21,7 @@ NORMAL="\e[1;0m"
 TMP="/tmp/ship"
 NULL="/dev/null"
 GOOGLE_DNS="8.8.8.8"
-LOOPBACK="127.0.0.1"
+#LOOPBACK="127.0.0.1"
 IPINFO="ipinfo.io"
 CDN_TEST="cachefly.cachefly.net/10mb.test"
 SINGAPORE_TEST="phantom.starserverspeedtest.com/test10.zip"
@@ -39,6 +37,7 @@ SCAN="urlvoid.com/scan/"
 DIALOG_ALL="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬────┤${GREEN}IPV4${NORMAL}├─────┬─┬────────────────┤${GREEN}IPV6${NORMAL}├─────────────────┐"
 DIALOG_ALL_CIDR="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┬─┬────┤${GREEN}IPV4${NORMAL}├────────┬─┬──────────────────┤${GREEN}IPV6${NORMAL}├───────────────────┐"
 DIALOG_INTERFACES="┌─┤${GREEN}INTERFACE${NORMAL}├─┐"
+DIALOG_INTERFACES_DRIVER="┌─┤${GREEN}INTERFACE${NORMAL}├─┬────┤${GREEN}DRIVER${NORMAL}├────┐"
 DIALOG_INTERFACES_MAC="┌─┤${GREEN}INTERFACE${NORMAL}├─┬──────┤${GREEN}MAC${NORMAL}├──────┐"
 DIALOG_INTERFACES_GATEWAY="┌─┤${GREEN}INTERFACE${NORMAL}├─┬───┤${GREEN}GATEWAY${NORMAL}├───┐"
 DIALOG_INTERFACES_IPV4="┌─┤${GREEN}INTERFACE${NORMAL}├─┬───┤${GREEN}IPV4${NORMAL}├──────┐"
@@ -61,130 +60,17 @@ DIALOG_SERVER_IS_DOWN="Destination is unreachable. Server may be down or input w
 DIALOG_NOT_A_NUMBER="Option should be integer. ${DIALOG_ABORTING}"
 DIALOG_NO_ARGUMENTS="No arguments. ${DIALOG_ABORTING}"
 
-##################### Basic s Section  #########################
-
-# Prints active network interfaces with their IPv4 address.
-function show_ipv4() {
-  
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
-  declare -a IPV4_ARRAY=($(ip addr show | grep -w inet | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
-  
-	echo -e "${DIALOG_INTERFACES_IPV4}"
-  for i in "${!INTERFACES_ARRAY[@]}"; do
-    printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV4_ARRAY[i]}"
-  done
-  exit
-}
-
-# Prints active network interfaces with their IPv6 address.
-function show_ipv6() {
-  
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
-  declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))  
-	
-  echo -e "${DIALOG_INTERFACES_IPV6}"
-  for i in "${!INTERFACES_ARRAY[@]}"; do
-    printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV6_ARRAY[i]}"
-  done
-  exit
-}
-
-# Prints all "basic" info.
-function show_all() {
-  
-  local MAC_OF
-  
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
-  declare -a IPV4_ARRAY=($(ip addr show | grep -w inet  | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
-  declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))
-  
-	echo -e "${DIALOG_ALL}"
-  for i in "${!INTERFACES_ARRAY[@]}"; do
-    MAC_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/address" | awk '{print toupper($0)}' 2>"${NULL}")
-    printf " %-14s%-20s%-18s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
-  done
-  exit
-}
-
-# Prints all IPv4 or IPv6 addresses extracted from a file.
-function show_ips_from_file() {
-    
-  if [[ -z "$1" ]]; then
-    error_exit "No file was specified. ${DIALOG_ABORTING}"
-  fi
-  
-  local FILENAME_IPV4
-  local FILENAME_IPV6
-  local SEG
-  local RE_IPV4
-  local RE_IPV6
-  local RE_URL
-
-  FILENAME_IPV4="IPV4_OF_FILE"
-  FILENAME_IPV6="IPV6_OF_FILE"
-  
-  check_directory_or_touch_file "${FILENAME_IPV4}"
-  check_directory_or_touch_file "${FILENAME_IPV6}"
-  
-  SEG="[0-9a-fA-F]{1,4}"
-  RE_IPV4="((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])"
-  RE_IPV6="([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|"                    # TEST: 1:2:3:4:5:6:7:8
-  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,7}:|"                         # TEST: 1::                              1:2:3:4:5:6:7::
-  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|"         # TEST: 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
-  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|"  # TEST: 1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8
-  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|"  # TEST: 1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8
-  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|"  # TEST: 1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8
-  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|"  # TEST: 1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8
-  RE_IPV6="${RE_IPV6}[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|"       # TEST: 1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8
-  RE_IPV6="${RE_IPV6}:((:[0-9a-fA-F]{1,4}){1,7}|:)|"                     # TEST: ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::     
-  RE_IPV6="${RE_IPV6}fe08:(:[0-9a-fA-F]{1,4}){2,2}%[0-9a-zA-Z]{1,}|"     # TEST: fe08::7:8%eth0      fe08::7:8%1                                      (link-local IPv6 addresses with zone index)
-  RE_IPV6="${RE_IPV6}::(ffff(:0{1,4}){0,1}:){0,1}${RE_IPV4}|"            # TEST: ::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255 (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
-  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,4}:${RE_IPV4}"                # TEST: 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33                        (IPv4-Embedded IPv6 Address)
-
-  if [[ ! -f "$1" ]]; then
-    error_exit "No such file. ${DIALOG_ABORTING}"
-  fi
-  
-  grep -E -o "${RE_IPV4}" "$1" | sort -V | uniq >> "${TMP}/${FILENAME_IPV4}"
-  grep -E -o "${RE_IPV6}" "$1" | sort -V | uniq >> "${TMP}/${FILENAME_IPV6}"
-  
-  if [[ ! -s "${TMP}/${FILENAME_IPV4}" && "${TMP}/${FILENAME_IPV6}" ]]; then
-    error_exit "No valid IPv4 or IPv6 addresses found. ${DIALOG_ABORTING}"
-  fi
-  
-  sed -i 's/^/ /' "${TMP}/${FILENAME_IPV4}"
-  sed -i 's/^/ /' "${TMP}/${FILENAME_IPV6}"
-  
-  echo -e "${DIALOG_IPV4_IPV6}"
-  paste "${TMP}/${FILENAME_IPV4}" "${TMP}/${FILENAME_IPV6}" | awk -F'\t' '{printf("%-16s%s\n", $1, $2)}'
-  
-  mr_proper
-  exit
-}
-
-# Prints active network interfaces and their gateway.
-function show_gateway() {
-  
-  local GATEWAY
-  
-  declare -a ONLINE_INTERFACES_ARRAY=($(ip route | grep default | awk '{print $5}'))
-  
-  echo -e "${DIALOG_INTERFACES_GATEWAY}"
-  for i in "${!ONLINE_INTERFACES_ARRAY[@]}"; do
-    GATEWAY=$(ip route | grep "${ONLINE_INTERFACES_ARRAY[i]}" | grep ^default | awk '{print $3}')
-    printf " %-14s%s\n" "${ONLINE_INTERFACES_ARRAY[i]}" "${GATEWAY}"
-  done
-  exit
-}
+########################## SOF MAIN FUNCTIONS ##########################
 
 # Prints help message.
-function usage() {
+function show_usage() {
   
 	echo    "usage: ship [OPTION] or ship [OPTION] <ARGUMENT>"
   echo    " basic operations:"
 	echo -e "  ${GREEN}ship -4 ${NORMAL}, ${GREEN}--ipv4 ${NORMAL}          shows active interfaces with their IPv4 address"
 	echo -e "  ${GREEN}ship -6 ${NORMAL}, ${GREEN}--ipv6 ${NORMAL}          shows active interfaces with their IPv6 address"
 	echo -e "  ${GREEN}ship -a ${NORMAL}, ${GREEN}--all ${NORMAL}           shows all basic info"
+	echo -e "  ${GREEN}ship -d ${NORMAL}, ${GREEN}--driver ${NORMAL}        shows the driver used of each active interface"
 	echo -e "  ${GREEN}ship -f ${NORMAL}, ${GREEN}--file ${NORMAL}<>        shows all valid IPv4 and IPv6 addresses in a file"
 	echo -e "  ${GREEN}ship -g ${NORMAL}, ${GREEN}--gateway ${NORMAL}       shows the gateway of online interfaces"
 	echo -e "  ${GREEN}ship -h ${NORMAL}, ${GREEN}--help ${NORMAL}          shows this help message"
@@ -214,10 +100,141 @@ function usage() {
   exit
 }
 
+# Prints active network interfaces with their IPv4 address.
+function show_ipv4() {
+  
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
+  declare -a IPV4_ARRAY=($(ip addr show | grep -w inet | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
+  
+	echo -e "${DIALOG_INTERFACES_IPV4}"
+  for i in "${!INTERFACES_ARRAY[@]}"; do
+    printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV4_ARRAY[i]}"
+  done
+  exit
+}
+
+# Prints active network interfaces with their IPv6 address.
+function show_ipv6() {
+  
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
+  declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))  
+	
+  echo -e "${DIALOG_INTERFACES_IPV6}"
+  for i in "${!INTERFACES_ARRAY[@]}"; do
+    printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV6_ARRAY[i]}"
+  done
+  exit
+}
+
+# Prints all "basic" info.
+function show_all() {
+  
+  local MAC_OF
+  
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
+  declare -a IPV4_ARRAY=($(ip addr show | grep -w inet  | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
+  declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))
+  
+	echo -e "${DIALOG_ALL}"
+  for i in "${!INTERFACES_ARRAY[@]}"; do
+    MAC_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/address" | awk '{print toupper($0)}' 2>"${NULL}")
+    printf " %-14s%-20s%-18s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
+  done
+  exit
+}
+
+# Prints the driver used of active interface.
+function show_driver() {
+  
+  local DRIVER_OF
+  
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
+
+  echo -e "${DIALOG_INTERFACES_DRIVER}"
+  for i in "${!INTERFACES_ARRAY[@]}"; do
+    if [[ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ]]; then
+      DRIVER_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" | grep ^"DRIVER" | awk -F '=' '{print $2}')
+    else
+      DRIVER_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent" | grep ^"DRIVER" | awk -F '=' '{print $2}')
+    fi
+    printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" 
+  done
+}
+
+# Prints all IPv4 or IPv6 addresses extracted from a file.
+function show_ips_from_file() {
+    
+  if [[ -z "$1" ]]; then
+    error_exit "No file was specified. ${DIALOG_ABORTING}"
+  fi
+  
+  local FILENAME_IPV4
+  local FILENAME_IPV6
+  #local SEG
+  local RE_IPV4
+  local RE_IPV6
+
+  FILENAME_IPV4="IPV4_OF_FILE"
+  FILENAME_IPV6="IPV6_OF_FILE"
+  
+  check_directory_or_touch_file "${FILENAME_IPV4}"
+  check_directory_or_touch_file "${FILENAME_IPV6}"
+  
+  #SEG="[0-9a-fA-F]{1,4}"
+  RE_IPV4="((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])"
+  RE_IPV6="([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|"                    # TEST: 1:2:3:4:5:6:7:8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,7}:|"                         # TEST: 1::                              1:2:3:4:5:6:7::
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|"         # TEST: 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|"  # TEST: 1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|"  # TEST: 1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|"  # TEST: 1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|"  # TEST: 1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8
+  RE_IPV6="${RE_IPV6}[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|"       # TEST: 1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8
+  RE_IPV6="${RE_IPV6}:((:[0-9a-fA-F]{1,4}){1,7}|:)|"                     # TEST: ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::     
+  RE_IPV6="${RE_IPV6}fe08:(:[0-9a-fA-F]{1,4}){2,2}%[0-9a-zA-Z]{1,}|"     # TEST: fe08::7:8%eth0      fe08::7:8%1                                      (link-local IPv6 addresses with zone index)
+  RE_IPV6="${RE_IPV6}::(ffff(:0{1,4}){0,1}:){0,1}${RE_IPV4}|"            # TEST: ::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255 (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
+  RE_IPV6="${RE_IPV6}([0-9a-fA-F]{1,4}:){1,4}:${RE_IPV4}"                # TEST: 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33                        (IPv4-Embedded IPv6 Address)
+
+  if [[ ! -f "$1" ]]; then
+    error_exit "No such file. ${DIALOG_ABORTING}"
+  fi
+  
+  grep -E -o "${RE_IPV4}" "$1" | sort -V | uniq >> "${TMP}/${FILENAME_IPV4}"
+  grep -E -o "${RE_IPV6}" "$1" | sort -V | uniq >> "${TMP}/${FILENAME_IPV6}"
+  
+  if [[ ! -s "${TMP}/${FILENAME_IPV4}" ]] && [[ ! -s "${TMP}/${FILENAME_IPV6}" ]]; then
+    error_exit "No valid IPv4 or IPv6 addresses found. ${DIALOG_ABORTING}"
+  fi
+  
+  sed -i 's/^/ /' "${TMP}/${FILENAME_IPV4}"
+  sed -i 's/^/ /' "${TMP}/${FILENAME_IPV6}"
+  
+  echo -e "${DIALOG_IPV4_IPV6}"
+  paste "${TMP}/${FILENAME_IPV4}" "${TMP}/${FILENAME_IPV6}" | awk -F'\t' '{printf("%-16s%s\n", $1, $2)}'
+  
+  mr_proper
+  exit
+}
+
+# Prints active network interfaces and their gateway.
+function show_gateway() {
+  
+  local GATEWAY
+  
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
+  
+  echo -e "${DIALOG_INTERFACES_GATEWAY}"
+  for i in "${!INTERFACES_ARRAY[@]}"; do
+    GATEWAY=$(ip route | grep "${INTERFACES_ARRAY[i]}" | grep ^default | awk '{print $3}')
+    printf " %-14s%s\n" "${INTERFACES_ARRAY[i]}" "${GATEWAY}"
+  done
+  exit
+}
+
 # Prints active network interfaces.
 function show_interfaces() {
   
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
   
 	echo -e "${DIALOG_INTERFACES}"
   printf " %s\n" "${INTERFACES_ARRAY[@]}"
@@ -229,7 +246,7 @@ function show_mac() {
   
   local MAC_OF
   
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
   
 	echo -e "${DIALOG_INTERFACES_MAC}"
   for i in "${!INTERFACES_ARRAY[@]}"; do
@@ -255,7 +272,7 @@ function show_version() {
 # Prints active network interfaces with their IPv4 address and CIDR suffix.
 function show_ipv4_cidr() {
 
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
   declare -a IPV4_CIDR_ARRAY=($(ip addr show | grep -w inet | awk '{print $2}' | tail -n +2))
   
 	echo -e "${DIALOG_INTERFACES_IPV4_CIDR}"
@@ -268,7 +285,7 @@ function show_ipv4_cidr() {
 # Prints active network interfaces with their IPv6 address and CIDR suffix.
 function show_ipv6_cidr() {
   
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
   declare -a IPV6_CIDR_ARRAY=($(ip -6 addr | grep inet6 | awk -F '[ \t]+|' '{print $3}' | grep -v ^::1 | grep -v ^fe80 | awk '{print toupper($0)}'))
   
 	echo -e "${DIALOG_INTERFACES_IPV6_CIDR}"
@@ -283,7 +300,7 @@ function show_all_cidr() {
   
   local MAC_OF
   
-  declare -a INTERFACES_ARRAY=($(ip addr show | grep -w inet | grep -v "${LOOPBACK}" | awk -F " " '{print $NF}'))
+  declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
   declare -a IPV4_CIDR_ARRAY=($(ip addr show | grep -w inet  | awk '{print $2}' | tail -n +2))
   declare -a IPV6_CIDR_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | tail -n +2 | awk '{print toupper($0)}'))
   
@@ -294,8 +311,6 @@ function show_all_cidr() {
   done
   exit
 }
-
-################## Miscellaneous s Section  ####################
 
 # Shows arp cache table.
 function show_arp_cache() {
@@ -912,8 +927,7 @@ function show_live_hosts() {
   esac
 }
 
-################ In-function functions section ^-^ #####################
-###################### Printing functions ##############################
+########################## EOF MAIN FUNCTIONS ##########################
 
 # Prints show_location_info() data.
 function print_location_info() {
@@ -960,8 +974,6 @@ function clear_line() {
   printf "\r\033[K"
 }
 
-############################ Handlers ##################################
-
 # Checks network connection (local or internet).
 function check_connectivity() {
   
@@ -985,7 +997,7 @@ function check_if_parameter_is_not_numerical() {
   esac
 }
 
-# Checks if /tmp/ship exists, if not creates the dir and touches a file given by user.
+# Checks if /tmp/ship exists, if not creates the dir and touches file/s given by functions.
 function check_directory_or_touch_file() {
   
   if [[ ! -d "${TMP}" ]]; then
@@ -1054,13 +1066,16 @@ function trap_handler() {
 function error_exit() {
   
   if [[ -z "$1" ]]; then
+    mr_proper
     exit 1
   elif [[ -z "$2" ]]; then
     echo -e  "$1"
+    mr_proper
     exit 1
   else
     echo -e  "${GREEN}ship${NORMAL}: invalid option -- '$2'" 
     echo -e  "$1"
+    mr_proper
     exit 1
   fi
 }
@@ -1075,8 +1090,8 @@ function handle_jobs() {
   done
 }
 
-###################### Initializes script. #############################
-function __init__() {
+# Starts ship.
+function sail() {
   
   if [[ -z "$1" ]]; then error_exit "${DIALOG_ERROR}"; fi
   
@@ -1094,12 +1109,13 @@ function __init__() {
       "-a"|"--all") check_connectivity "--local"; show_all; break ;;
       "-B"|"--bandwidth") check_connectivity "--internet"; show_bandwidth; break ;;
       "-C"|"--check") check_connectivity "--internet"; show_malicious_results "$2"; shift 2; break ;;
+      "-d"|"--driver") check_connectivity "--local"; show_driver; break ;;
       "-f"|"--file") show_ips_from_file "$2"; shift 2; break ;;
       "-F"|"--find") check_connectivity "--internet"; show_ip_from "$2"; shift 2; break ;;
       "-g"|"--gateway") check_connectivity "--local"; show_gateway; break ;;
       "-H"|"--hosts") check_connectivity "--internet"; show_live_hosts --normal; break ;;
       "-HM"|"--hosts-mac") check_root_permissions; check_connectivity "--internet"; show_live_hosts --mac; break ;;
-      "-h"|"--help") usage; break ;;
+      "-h"|"--help") show_usage; break ;;
       "-i"|"--interfaces") check_connectivity "--local"; show_interfaces; break ;;
       "-L"|"--location") check_connectivity "--internet"; show_location_info "$2"; shift 2; break ;;
       "-P"|"--port") check_root_permissions; check_connectivity "--internet"; show_port_connections "$2"; shift 2; break ;;
@@ -1118,4 +1134,4 @@ function __init__() {
   done
 }
 
-__init__ "$1" "$2"
+sail "$1" "$2"

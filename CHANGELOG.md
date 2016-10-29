@@ -3,13 +3,16 @@ All notable changes to this project will be documented in this file.<br/>
 
 ## [1.7] - 2016-10-26
 ### Added
+- Method to print the driver used of each active network interface: `ship -d` , `ship --driver`.<br/>
 - Timeout while getting http code, in `wget` commands.<br/>
 - Extract IPv4 and IPv6 addresses from a file.<br/>
 - Bash version checking function.<br/>
 - **INT** and **SIGTSTP** trapping (exit confirmation).<br/>
 
 ## Changed
+- Code is now completely clean. Using `shellcheck` tool.<br/>
 - Code improvements.<br/>
+- Method to store active network interfaces into arrays.<br/>
 - Some dialogs on bandwidth testing functions.<br/>
 
 ## [1.6] - 2016-10-25
@@ -18,7 +21,7 @@ All notable changes to this project will be documented in this file.<br/>
 - Monitor **download** and **upload speed** of online network interface.<br/>
 - Increased performance by handling background tasks properly.<br/>
 - Show results of scans for **malicious activities** of a domain.<br/>
-- Show internet connection **bandwidth** to CDN and different locations *e.g. USA, Netherlands and France*.<br/>
+- Show internet connection **bandwidth** to CDN and different locations.<br/>
 - Show the path to a network host (IPv4 or IPv6).<br/>
 
 ## Changed
