@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
-## [1.7] - 2016-10-26
+## [1.7] - 2016-10-29
 ### Added
 - Method to print the driver used of each active network interface: `ship -d` , `ship --driver`.<br/>
 - Timeout while getting http code, in `wget` commands.<br/>
