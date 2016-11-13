@@ -8,7 +8,7 @@ AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="https://github.com/${AUTHOR_NICKNAME}"
-VERSION="1.7"
+VERSION="1.8"
 
 ### Colors
 GREEN="\033[1;32m"
