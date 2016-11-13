@@ -1,4 +1,4 @@
-# shIP (aka. show IP) [![License](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg?style=flat-square)](https://github.com/xtonousou/shIP/master/LICENSE)
+# shIP (aka. show IP) [![License](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg?style=flat-square)](https://raw.githubusercontent.com/xtonousou/shIP/master/LICENSE)
 A simple, handy network multitool that shows network addresses of active network interfaces and many more. Using **coreutils iproute2 iputils**.<br/>
 <img src="https://raw.githubusercontent.com/xtonousou/shIP/master/imgs/head.png" title="SAIL!"/>
 
