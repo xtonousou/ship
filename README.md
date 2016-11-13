@@ -1,4 +1,4 @@
-# shIP (aka. show IP)
+# shIP (aka. show IP) [![License](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg?style=flat-square)](https://github.com/xtonousou/shIP/master/LICENSE)
 A simple, handy network multitool that shows network addresses of active network interfaces and many more. Using **coreutils iproute2 iputils**.<br/>
 <img src="https://raw.githubusercontent.com/xtonousou/shIP/master/imgs/head.png" title="SAIL!"/>
 
@@ -7,7 +7,7 @@ A simple, handy network multitool that shows network addresses of active network
 ### Basic
 - Shows active network **interfaces**.<br/>
 - Shows the **driver** used of each active network interface.<br/>
-- Shows all IPv4 and IPv6 addresses extracted from **file**.<br/>
+- Shows all valid **IPv4**, **IPv6** and **MAC** addresses extracted from **file**.<br/>
 - Shows **gateway** of online interfaces.<br/>
 - Shows **IPv4/IPv6** addresses of active network interfaces with or without **CIDR**.<br/>
 - Shows **MAC** addresses of active network interfaces.<br/>
@@ -19,6 +19,7 @@ A simple, handy network multitool that shows network addresses of active network
 - Shows location on **map**.<br/>
 - Shows internet connection **bandwidth** to CDN and different locations.<br/>
 - Shows **download** and **upload** speed of online interface.<br/>
+- Shows all valid **IPv4**, **IPv6** and **MAC** addresses extracted from a **URL**.<br/>
 - Shows results of scans for **malicious activities** of a URL.<br/>
 - Shows the connections to a **port** per IP basis.<br/>
 - Shows the path to a network host. IPv4/IPv6.<br/>
@@ -26,7 +27,7 @@ A simple, handy network multitool that shows network addresses of active network
 - Shows active **hosts** on current network with or without **MAC** address.<br/>
 
 ## Requirements
-**Bash 4.0** or later.<br/>
+**Bash 3.2** or later.<br/>
 **```coreutils iproute2 iputils```**<br/>
 
 Tested on Linux:<br/>
