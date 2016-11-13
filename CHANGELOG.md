@@ -1,6 +1,25 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
+## [1.8] - 2016-11-14
+### Added
+- Find valid IPv4, IPv6 and MAC addresses from a URL `ship -U <URL>` or `ship --url <URL>`.<br/>
+- Find valid IPv4, IPv6 and MAC addresses from a file `ship -f <file>` or `ship --find <file>`.<br/>
+- Comments to explain logic on complicated statements.<br/>
+
+### Changed
+- Usage.<br/>
+- Cleaning on exit function.<br/>
+- Some strings.<br/>
+- Appearance of `ship -S` or `ship --speed`.<br/>
+- Minimum bash requirement from `4.0` to `3.2`.<br/>
+- Minor code improvements e.g. `sort -V | uniq` to `sort -Vu`.<br/>
+
+### Removed
+- Ugly dialogs and the space on start of each line.<br/>
+- Root permission for scanning alive hosts with MAC `ship -HM` or `ship --hosts-mac`.<br/>
+- Tools: `arping`, `pr`.<br/>
+
 ## [1.7] - 2016-10-29
 ### Added
 - Method to print the driver used of each active network interface: `ship -d` , `ship --driver`.<br/>
