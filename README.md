@@ -36,7 +36,7 @@ Tested on Linux:<br/>
 - Ubuntu Mate **14.04.3**.<br/>
 - Debian **7**, **8**.<br/>
 - Kali **2.0**, 2016.2.<br/>
-- Arch **4.7.5-1** - **4.8.4-1**.<br/>
+- Arch **4.7.5-1** - **4.8.7-1**.<br/>
 
 ## LICENSE
 This script is under GPLv3 (or later) License.<br/>
