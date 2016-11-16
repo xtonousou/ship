@@ -32,11 +32,14 @@ A simple, handy network multitool that shows network addresses of active network
 
 Tested on Linux:<br/>
 
-- Ubuntu **16.04.1**, **14.04.5**.<br/>
-- Ubuntu Mate **14.04.3**.<br/>
+- Ubuntu, Ubuntu Mate **14.04.3**, **14.04.5** and **16.04.1**.<br/>
 - Debian **7**, **8**.<br/>
 - Kali **2.0**, 2016.2.<br/>
-- Arch **4.7.5-1** - **4.8.7-1**.<br/>
+- Arch **4.7.5-1** - **4.8.8-1**.<br/>
+
+## Under Development
+- Spinner for long running tasks.<br/>
+- File permissions.<br/>
 
 ## LICENSE
 This script is under GPLv3 (or later) License.<br/>
