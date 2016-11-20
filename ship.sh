@@ -1,6 +1,6 @@
 #!/bin/bash
-#### Description      : Show IPv4, IPv6 and MAC addresses, and many more.
-#### Written by       : Sotirios Roussis (aka. xtonousou) - xtonousou@gmail.com on 10-2016
+#### Description......: Show IPv4, IPv6 and MAC addresses, and many more.
+#### Written by.......: Sotirios Roussis (aka. xtonousou) - xtonousou@gmail.com on 10-2016
 #### Known limitations: ipinfo.io offers free 1,000 daily requests. (ship -F, -L)
 
 ### INFO
@@ -8,7 +8,7 @@ AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="https://github.com/${AUTHOR_NICKNAME}"
-VERSION="1.8"
+VERSION="1.9"
 
 ### Colors
 GREEN="\033[1;32m"
@@ -38,7 +38,7 @@ DIALOG_ERROR="Try ${GREEN}ship -h${NORMAL} or ${GREEN}ship --help${NORMAL} for m
 DIALOG_ABORTING="${RED}Aborting${NORMAL}."
 DIALOG_NO_INTERNET="Internet connection unavailable. ${DIALOG_ABORTING}"
 DIALOG_NO_LOCAL_CONNECTION="Local connection unavailable. ${DIALOG_ABORTING}"
-DIALOG_SERVER_IS_DOWN="Destination is unreachable. Server may be down or input was invalid. ${DIALOG_ABORTING}"
+DIALOG_SERVER_IS_DOWN="Destination is unreachable. Server may be down or has connection issues. ${DIALOG_ABORTING}"
 DIALOG_NOT_A_NUMBER="Option should be integer. ${DIALOG_ABORTING}"
 DIALOG_NO_ARGUMENTS="No arguments. ${DIALOG_ABORTING}"
 
@@ -63,23 +63,23 @@ REGEX_IPV6="${REGEX_IPV6}([0-9a-fA-F]{1,4}:){1,4}:${REGEX_IPV4}"         # (IPv4
 # Prints help message.
 function show_usage() {
   
-	echo    "usage: ship [OPTION] or ship [OPTION] <ARGUMENT>"
+  echo    "usage: ship [OPTION] or ship [OPTION] <ARGUMENT>"
   echo    " basic operations:"
-	echo -e "  ${GREEN}ship -4 ${NORMAL}, ${GREEN}--ipv4 ${NORMAL}          shows active interfaces with their IPv4 address"
-	echo -e "  ${GREEN}ship -6 ${NORMAL}, ${GREEN}--ipv6 ${NORMAL}          shows active interfaces with their IPv6 address"
-	echo -e "  ${GREEN}ship -a ${NORMAL}, ${GREEN}--all ${NORMAL}           shows all basic info"
-	echo -e "  ${GREEN}ship -d ${NORMAL}, ${GREEN}--driver ${NORMAL}        shows each active interface's driver"
-	echo -e "  ${GREEN}ship -f ${NORMAL}, ${GREEN}--find ${NORMAL}<>        shows all valid IPv4, IPv6 and MAC addresses in {FILE}"
-	echo -e "  ${GREEN}ship -g ${NORMAL}, ${GREEN}--gateway ${NORMAL}       shows the gateway of online interfaces"
-	echo -e "  ${GREEN}ship -h ${NORMAL}, ${GREEN}--help ${NORMAL}          shows this help message"
-	echo -e "  ${GREEN}ship -i ${NORMAL}, ${GREEN}--interfaces ${NORMAL}    shows active interfaces"
+  echo -e "  ${GREEN}ship -4 ${NORMAL}, ${GREEN}--ipv4 ${NORMAL}          shows active interfaces with their IPv4 address"
+  echo -e "  ${GREEN}ship -6 ${NORMAL}, ${GREEN}--ipv6 ${NORMAL}          shows active interfaces with their IPv6 address"
+  echo -e "  ${GREEN}ship -a ${NORMAL}, ${GREEN}--all ${NORMAL}           shows all basic info"
+  echo -e "  ${GREEN}ship -d ${NORMAL}, ${GREEN}--driver ${NORMAL}        shows each active interface's driver"
+  echo -e "  ${GREEN}ship -f ${NORMAL}, ${GREEN}--find ${NORMAL}<>        shows all valid IPv4, IPv6 and MAC addresses in {FILE}"
+  echo -e "  ${GREEN}ship -g ${NORMAL}, ${GREEN}--gateway ${NORMAL}       shows the gateway of online interfaces"
+  echo -e "  ${GREEN}ship -h ${NORMAL}, ${GREEN}--help ${NORMAL}          shows this help message"
+  echo -e "  ${GREEN}ship -i ${NORMAL}, ${GREEN}--interfaces ${NORMAL}    shows active interfaces"
   echo -e "  ${GREEN}ship -m ${NORMAL}, ${GREEN}--mac ${NORMAL}           shows active interfaces with their MAC address"
   echo -e "  ${GREEN}ship -v ${NORMAL}, ${GREEN}--version ${NORMAL}       shows the version of script"
-	echo -e "  ${GREEN}ship --cidr-4${NORMAL}, ${GREEN}--cidr-ipv4 ${NORMAL}shows active interfaces with their IPv4 address and CIDR"
-	echo -e "  ${GREEN}ship --cidr-6${NORMAL}, ${GREEN}--cidr-ipv6 ${NORMAL}shows active interfaces with their IPv6 address and CIDR"
-	echo -e "  ${GREEN}ship --cidr-a${NORMAL}, ${GREEN}--cidr-all ${NORMAL} shows all basic info and CIDR"
-	echo
-	echo    " miscellaneous operations:"
+  echo -e "  ${GREEN}ship --cidr-4${NORMAL}, ${GREEN}--cidr-ipv4 ${NORMAL}shows active interfaces with their IPv4 address and CIDR"
+  echo -e "  ${GREEN}ship --cidr-6${NORMAL}, ${GREEN}--cidr-ipv6 ${NORMAL}shows active interfaces with their IPv6 address and CIDR"
+  echo -e "  ${GREEN}ship --cidr-a${NORMAL}, ${GREEN}--cidr-all ${NORMAL} shows all basic info and CIDR"
+  echo
+  echo    " miscellaneous operations:"
   echo -e "  ${GREEN}ship -A ${NORMAL}, ${GREEN}--arp ${NORMAL}           shows ARP/neighbor cache"
   echo -e "  ${GREEN}ship -B ${NORMAL}, ${GREEN}--bandwidth ${NORMAL}     shows connection bandwidth to different locations"
   echo -e "  ${GREEN}ship -C ${NORMAL}, ${GREEN}--check ${NORMAL}<>       shows results of scans for malicious activities of {URL}"
@@ -90,10 +90,10 @@ function show_usage() {
   echo -e "  ${RED}ship -P ${NORMAL}, ${RED}--port ${NORMAL}<>        shows the quantity of connections to {PORT} per IP"
   echo -e "  ${GREEN}ship -R ${NORMAL}, ${GREEN}--route ${NORMAL}<>       shows the path to a network host {IPV4|DOMAIN}"
   echo -e "  ${GREEN}ship -R6${NORMAL}, ${GREEN}--route-ipv6 ${NORMAL}<>  shows the path to a network host {IPV6|DOMAIN}"
-	echo -e "  ${GREEN}ship -S ${NORMAL}, ${GREEN}--speed ${NORMAL}         shows the download and upload speed in kB/s"
-	echo -e "  ${GREEN}ship -T ${NORMAL}, ${GREEN}--time ${NORMAL}<>        shows the average RTT to {IPV4|DOMAIN}"
-	echo -e "  ${GREEN}ship -T6${NORMAL}, ${GREEN}--time-ipv6 ${NORMAL}<>   shows the average RTT to {IPV6|DOMAIN}"
-	echo -e "  ${GREEN}ship -U ${NORMAL}, ${GREEN}--url ${NORMAL}<>         shows all valid IPv4, IPv6 and MAC addresses of {URL}"
+  echo -e "  ${GREEN}ship -S ${NORMAL}, ${GREEN}--speed ${NORMAL}         shows the download and upload speed in kB/s"
+  echo -e "  ${GREEN}ship -T ${NORMAL}, ${GREEN}--time ${NORMAL}<>        shows the average RTT to {IPV4|DOMAIN}"
+  echo -e "  ${GREEN}ship -T6${NORMAL}, ${GREEN}--time-ipv6 ${NORMAL}<>   shows the average RTT to {IPV6|DOMAIN}"
+  echo -e "  ${GREEN}ship -U ${NORMAL}, ${GREEN}--url ${NORMAL}<>         shows all valid IPv4, IPv6 and MAC addresses of {URL}"
   echo
   echo -e "Commands shown in ${RED}RED${NORMAL} require root privileges"
   exit
@@ -256,12 +256,12 @@ function show_mac() {
 function show_version() {
   
   echo
-	echo    "         _~"
-	echo -e "      _~ )_)_~          Author .: ${GREEN}${AUTHOR}${NORMAL}"
-	echo -e "      )_))_))_)		Mail ...: ${GREEN}${GMAIL}${NORMAL}"
-	echo -e "      ${ORANGE}_!__!__!_${NORMAL}		Github .: ${GREEN}${GITHUB}${NORMAL}"
-	echo -e "      ${ORANGE}\_______/${NORMAL}         Version : ${GREEN}${VERSION}${NORMAL}"
-	echo -e "  ${CYAN}~~~~~~~~~~~~~~~~~${NORMAL}"
+  echo    "         _~"
+  echo -e "      _~ )_)_~          Author .: ${GREEN}${AUTHOR}${NORMAL}"
+  echo -e "      )_))_))_)		Mail ...: ${GREEN}${GMAIL}${NORMAL}"
+  echo -e "      ${ORANGE}_!__!__!_${NORMAL}		Github .: ${GREEN}${GITHUB}${NORMAL}"
+  echo -e "      ${ORANGE}\_______/${NORMAL}         Version : ${GREEN}${VERSION}${NORMAL}"
+  echo -e "  ${CYAN}~~~~~~~~~~~~~~~~~${NORMAL}"
   exit
 }
 
@@ -315,7 +315,7 @@ function show_arp_cache() {
   
   ip neigh | egrep -i 'permanent|noarp|stale|reachable|incomplete|delay|probe' | \
   grep -vi 'router' | \
-  awk '{printf ("%-18s%-20s%s\n", $1, $5, $6)}' | awk '{print toupper($0)}' >> "${TMP}/${FILENAME}"
+  awk '{printf ("%-18s%-20s%s\n", $1, toupper($5), $6)}' >> "${TMP}/${FILENAME}"
   cat < "${TMP}/${FILENAME}" | sort -V
   mr_proper
   exit
@@ -327,121 +327,161 @@ function show_bandwidth() {
   local HTTP_CODE
   local DOWNLOAD
   
-  echo -ne "Checking ${GREEN}${CDN_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${CDN_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-  if [[ "${HTTP_CODE}" -eq "200" ]]; then
+  start_spinner "Checking ${GREEN}${CDN_TEST}${NORMAL}..." 
+  sleep 2
+  HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${CDN_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  if [[ "${HTTP_CODE}" -eq 200 ]]; then
     clear_line
-    echo -ne "Downloading from ${GREEN}${CDN_TEST}${NORMAL}..."
+    stop_spinner $?
+    start_spinner "Downloading from ${GREEN}${CDN_TEST}${NORMAL}..." 
+    sleep 2
     DOWNLOAD=$(wget -O "${NULL}" --report-speed=bits "${CDN_TEST}" 2>&1 | grep -o "[0-9.]\+ [KMG]*b/s")
     clear_line
+    stop_spinner $?
     printf "%-16s${GREEN}%s${NORMAL}\n" "Cachefly" "${DOWNLOAD}"
   else
     clear_line
+    stop_spinner
     print_network_host_down "${CDN_TEST}"
 	fi
   
   sleep 1.5
   
-  echo -ne "Checking ${GREEN}${UK_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${UK_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-  if [[ "${HTTP_CODE}" -eq "200" ]]; then
+  start_spinner "Checking ${GREEN}${UK_TEST}${NORMAL}..."
+  sleep 2
+  HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${UK_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  if [[ "${HTTP_CODE}" -eq 200 ]]; then
     clear_line
-    echo -ne "Downloading from ${GREEN}${UK_TEST}${NORMAL}..."
+    stop_spinner $?
+    start_spinner "Downloading from ${GREEN}${UK_TEST}${NORMAL}..."
+    sleep 2
     DOWNLOAD=$(wget -O "${NULL}" --report-speed=bits "${UK_TEST}" 2>&1 | grep -o "[0-9.]\+ [KMG]*b/s")
     clear_line
+    stop_spinner $?
     printf "%-16s${GREEN}%s${NORMAL}\n" "UK" "${DOWNLOAD}"
   else
     clear_line
+    stop_spinner $?
     print_network_host_down "${UK_TEST}"
   fi
   
   sleep 1.5
   
-  echo -ne "Checking ${GREEN}${AUSTRALIA_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${AUSTRALIA_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-  if [[ "${HTTP_CODE}" -eq "200" ]]; then
+  start_spinner "Checking ${GREEN}${AUSTRALIA_TEST}${NORMAL}..."
+  sleep 2
+  HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${AUSTRALIA_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  if [[ "${HTTP_CODE}" -eq 200 ]]; then
     clear_line
-    echo -ne "Downloading from ${GREEN}${AUSTRALIA_TEST}${NORMAL}..."
+    stop_spinner $?
+    start_spinner "Downloading from ${GREEN}${AUSTRALIA_TEST}${NORMAL}..."
+    sleep 2
     DOWNLOAD=$(wget -O "${NULL}" --report-speed=bits "${AUSTRALIA_TEST}" 2>&1 | grep -o "[0-9.]\+ [KMG]*b/s")
     clear_line
+    stop_spinner $?
     printf "%-16s${GREEN}%s${NORMAL}\n" "Australia" "${DOWNLOAD}"
   else
     clear_line
+    stop_spinner $?
 	  print_network_host_down "${AUSTRALIA_TEST}"
 	fi
   
   sleep 1.5
   
-  echo -ne "Checking ${GREEN}${USA_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${USA_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-  if [[ "${HTTP_CODE}" -eq "200" ]]; then
+  start_spinner "Checking ${GREEN}${USA_TEST}${NORMAL}..."
+  sleep 2
+  HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${USA_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  if [[ "${HTTP_CODE}" -eq 200 ]]; then
     clear_line
-    echo -ne "Downloading from ${GREEN}${USA_TEST}${NORMAL}..."
+    stop_spinner $?
+    start_spinner "Downloading from ${GREEN}${USA_TEST}${NORMAL}..."
+    sleep 2
     DOWNLOAD=$(wget -O "${NULL}" --report-speed=bits "${USA_TEST}" 2>&1 | grep -o "[0-9.]\+ [KMG]*b/s")
     clear_line
+    stop_spinner $?
     printf "%-16s${GREEN}%s${NORMAL}\n" "USA" "${DOWNLOAD}"
   else
     clear_line
+    stop_spinner $?
 	  print_network_host_down "${USA_TEST}"
 	fi
   
   sleep 1.5
   
-  echo -ne "Checking ${GREEN}${SINGAPORE_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${SINGAPORE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-  if [[ "${HTTP_CODE}" -eq "200" ]]; then
+  start_spinner "Checking ${GREEN}${SINGAPORE_TEST}${NORMAL}..."
+  sleep 2
+  HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${SINGAPORE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  if [[ "${HTTP_CODE}" -eq 200 ]]; then
     clear_line
-    echo -ne "Downloading from ${GREEN}${SINGAPORE_TEST}${NORMAL}..."
+    stop_spinner $?
+    start_spinner "Downloading from ${GREEN}${SINGAPORE_TEST}${NORMAL}..."
+    sleep 2
     DOWNLOAD=$(wget -O "${NULL}" --report-speed=bits "${SINGAPORE_TEST}" 2>&1 | grep -o "[0-9.]\+ [KMG]*b/s")
     clear_line
+    stop_spinner $?
     printf "%-16s${GREEN}%s${NORMAL}\n" "Singapore" "${DOWNLOAD}"
   else
     clear_line
+    stop_spinner $?
 	  print_network_host_down "${SINGAPORE_TEST}"
 	fi
   
   sleep 1.5
   
-  echo -ne "Checking ${GREEN}${NETHERLANDS_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${NETHERLANDS_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-  if [[ "${HTTP_CODE}" -eq "200" ]]; then
+  start_spinner "Checking ${GREEN}${NETHERLANDS_TEST}${NORMAL}..."
+  sleep 2
+  HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${NETHERLANDS_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  if [[ "${HTTP_CODE}" -eq 200 ]]; then
     clear_line
-    echo -ne "Downloading from ${GREEN}${NETHERLANDS_TEST}${NORMAL}..."
+    stop_spinner $?
+    start_spinner "Downloading from ${GREEN}${NETHERLANDS_TEST}${NORMAL}..."
+    sleep 2
     DOWNLOAD=$(wget -O "${NULL}" --report-speed=bits "${NETHERLANDS_TEST}" 2>&1 | grep -o "[0-9.]\+ [KMG]*b/s")
     clear_line
+    stop_spinner $?
     printf "%-16s${GREEN}%s${NORMAL}\n" "Netherlands" "${DOWNLOAD}"
   else
     clear_line
+    stop_spinner $?
 	  print_network_host_down "${NETHERLANDS_TEST}"
 	fi
   
   sleep 1.5
   
-  echo -ne "Checking ${GREEN}${FRANCE_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FRANCE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-  if [[ "${HTTP_CODE}" -eq "200" ]]; then
+  start_spinner "Checking ${GREEN}${FRANCE_TEST}${NORMAL}..."
+  sleep 2
+  HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${FRANCE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  if [[ "${HTTP_CODE}" -eq 200 ]]; then
     clear_line
-    echo -ne "Downloading from ${GREEN}${FRANCE_TEST}${NORMAL}..."
+    stop_spinner $?
+    start_spinner "Downloading from ${GREEN}${FRANCE_TEST}${NORMAL}..."
+    sleep 2
     DOWNLOAD=$(wget -O "${NULL}" --report-speed=bits "${FRANCE_TEST}" 2>&1 | grep -o "[0-9.]\+ [KMG]*b/s")
     clear_line
+    stop_spinner $?
     printf "%-16s${GREEN}%s${NORMAL}\n" "France" "${DOWNLOAD}"
   else
     clear_line
+    stop_spinner $?
 	  print_network_host_down "${FRANCE_TEST}"
 	fi
   
   sleep 1.5
   
-  echo -ne "Checking ${GREEN}${GREECE_TEST}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${GREECE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-  if [[ "${HTTP_CODE}" -eq "200" ]]; then
+  start_spinner "Checking ${GREEN}${GREECE_TEST}${NORMAL}..."
+  sleep 2
+  HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${GREECE_TEST}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  if [[ "${HTTP_CODE}" -eq 200 ]]; then
     clear_line
-    echo -ne "Downloading from ${GREEN}${GREECE_TEST}${NORMAL}..."
+    stop_spinner $?
+    start_spinner "Downloading from ${GREEN}${GREECE_TEST}${NORMAL}..."
+    sleep 2
     DOWNLOAD=$(wget -O "${NULL}" --report-speed=bits "${GREECE_TEST}" 2>&1 | grep -o "[0-9.]\+ [KMG]*b/s")
     clear_line
+    stop_spinner $?
     printf "%-16s${GREEN}%s${NORMAL}\n" "Greece" "${DOWNLOAD}"
   else
     clear_line
+    stop_spinner $?
 	  print_network_host_down "${GREECE_TEST}"
 	fi
   
@@ -463,9 +503,14 @@ function show_malicious_results() {
   
   FILTERED_URL=$(echo "$1" | sed 's/^http\(\|s\):\/\///g' | sed 's/www.//' | cut -f 1 -d "/")
   
-  echo -ne "Checking ${GREEN}${FILTERED_URL}${NORMAL}..."
-  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-  if [[ "${HTTP_CODE}" -eq "200" ]]; then
+  start_spinner "Checking ${GREEN}${FILTERED_URL}${NORMAL}..."
+  sleep 2
+  HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  if [[ "${HTTP_CODE}" -eq 200 ]]; then
+    clear_line
+    stop_spinner $?
+    start_spinner "Scanning..."
+    sleep 2
     FILENAME="SCANNED_URL"
     check_directory_or_touch_file "${FILENAME}"
     wget --quiet "${SCAN}${FILTERED_URL}" -O "${TMP}/${FILENAME}"
@@ -474,25 +519,26 @@ function show_malicious_results() {
     sed -e 's/^[ \t]*//' > "${TMP}/PARSED_URL_DATA"
     RESULT=$(cat ${TMP}/PARSED_URL_DATA)
     clear_line
-    if [[ "${RESULT}" -eq "0" ]]; then
+    stop_spinner $?
+    if [[ "${RESULT}" -eq 0 ]]; then
     # if results are zero
       echo -e "${FILTERED_URL} is ${GREEN}clean${NORMAL}"
-    elif [[ "${RESULT}" -eq "1" ]]; then
+    elif [[ "${RESULT}" -eq 1 ]]; then
     # if one result ==> false positive or low severity
       echo -e "${FILTERED_URL} is identified by $(cat ${TMP}/PARSED_URL_DATA) scanning engine (it may be false positive)"
-      echo -e "${CYAN}${SCAN}${FILTERED_URL}${NORMAL}"
-    elif [[ "${RESULT}" -ge "2" ]] && [[ "${RESULT}" -le "4" ]]; then
+      echo -e "${SCAN}${FILTERED_URL}"
+    elif [[ "${RESULT}" -ge 2 ]] && [[ "${RESULT}" -le 4 ]]; then
     # if equal or greater than 2 and less or even that 4 ==> low severity
       echo -e "${FILTERED_URL} is identified by $(cat ${TMP}/PARSED_URL_DATA) scanning engines"
-      echo -e "${CYAN}${SCAN}${FILTERED_URL}${NORMAL}"
-    elif [[ "${RESULT}" -ge "5" ]] && [[ "${RESULT}" -le "13" ]]; then
+      echo -e "${SCAN}${FILTERED_URL}"
+    elif [[ "${RESULT}" -ge 5 ]] && [[ "${RESULT}" -le 13 ]]; then
     # if equal or greater than 5 and less or even that 13 ==> medium severity
       echo -e "${ORANGE}${FILTERED_URL}${NORMAL} is identified by $(cat ${TMP}/PARSED_URL_DATA) scanning engines${NORMAL}"
-      echo -e "${CYAN}${SCAN}${FILTERED_URL}${NORMAL}"
-    elif [[ "${RESULT}" -ge "14" ]]; then
+      echo -e "${SCAN}${FILTERED_URL}"
+    elif [[ "${RESULT}" -ge 14 ]]; then
     # if equal or greater than 14 ==> high severity
       echo -e "${RED}${FILTERED_URL}${NORMAL} is identified by $(cat ${TMP}/PARSED_URL_DATA) scanning engines${NORMAL}"
-      echo -e "${CYAN}${SCAN}${FILTERED_URL}${NORMAL}"
+      echo -e "${SCAN}${FILTERED_URL}"
     else
       error_exit
     fi
@@ -500,6 +546,7 @@ function show_malicious_results() {
     exit
   else
     clear_line
+    stop_spinner $?
     error_exit "${DIALOG_SERVER_IS_DOWN}"
   fi
 }
@@ -511,35 +558,51 @@ function show_ip_from() {
   local FILENAME
   
   if [[ -z "$1" ]]; then
-    echo -ne "Checking ${GREEN}${IPINFO}${NORMAL}..."
-    HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-    if [[ "${HTTP_CODE}" -eq "200" ]]; then
+    start_spinner "Checking ${GREEN}${IPINFO}${NORMAL}..."
+    sleep 2
+    HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+    if [[ "${HTTP_CODE}" -eq 200 ]]; then
       clear_line
-      wget "${IPINFO}/ip" -qO -
+      stop_spinner $?
+      FILENAME="IP_FROM_THIS"
+      check_directory_or_touch_file "${FILENAME}"
+      start_spinner "Grabbing ${GREEN}IP${NORMAL}..."
+      sleep 2
+      wget "${IPINFO}/ip" -q -O "${TMP}/${FILENAME}"
+      clear_line
+      stop_spinner $?
+      cat < "${TMP}/${FILENAME}"
+      mr_proper
       exit
 	  else
       clear_line
+      stop_spinner $?
 		  error_exit "${DIALOG_SERVER_IS_DOWN}"
 	  fi
   else
-    echo -ne "Checking ${GREEN}$1${NORMAL}..."
-    HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "$1" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-    if [[ "${HTTP_CODE}" -eq "200" ]]; then
+    start_spinner "Checking ${GREEN}$1${NORMAL}..."
+    sleep 2
+    HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "$1" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+    if [[ "${HTTP_CODE}" -eq 200 ]]; then
       clear_line
+      stop_spinner $?
       FILENAME="IPS_FROM"
       check_directory_or_touch_file "${FILENAME}"
       INPUT=$(echo "$1" | sed 's/^http\(\|s\):\/\///g' | cut -f 1 -d "/")
-      echo -ne "Pinging ${GREEN}$1${NORMAL}..."
+      start_spinner "Pinging ${GREEN}$1${NORMAL}..."
+      sleep 2
       for i in {1..15}; do
         ping -4 -c 1 -i 0.2 -w 5 "${INPUT}" 2>"${NULL}" | awk -F '[()]' '/PING/{print $2}' >> "${TMP}/${FILENAME}" &
       done
       handle_jobs
       clear_line
+      stop_spinner $?
       cat < "${TMP}/${FILENAME}" | sort -Vu
       mr_proper
       exit
     else
       clear_line
+      stop_spinner $?
 		  error_exit "${DIALOG_SERVER_IS_DOWN}"
 	  fi
   fi
@@ -563,22 +626,26 @@ function show_live_hosts() {
     "--normal")
       FILENAME="IPV4_OF_PING"
       check_directory_or_touch_file "${FILENAME}"
-      echo -ne "Pinging ${GREEN}${NETWORK_IP_CIDR}${NORMAL}, please wait..."
+      start_spinner "Pinging ${GREEN}${NETWORK_IP_CIDR}${NORMAL}, please wait..."
+      sleep 2
       for i in {1..254}; do
         ping "${FILTERED_IP}.${i}" -c 1 -w 5 >"${NULL}" &&
         echo "${FILTERED_IP}.${i}" >> "${TMP}/${FILENAME}" &
       done
       handle_jobs
       clear_line
+      stop_spinner $?
       cat < "${TMP}/${FILENAME}" | sort -Vu
     ;;
     "--mac")
-      echo -ne "Pinging ${GREEN}${NETWORK_IP_CIDR}${NORMAL}, please wait..."
+      start_spinner "Pinging ${GREEN}${NETWORK_IP_CIDR}${NORMAL}, please wait..."
+      sleep 2
       for i in {1..254}; do
         ping "${FILTERED_IP}.${i}" -c 1 -w 5 >"${NULL}" &
       done
       handle_jobs
       clear_line
+      stop_spinner $?
       ip neigh | egrep "${REGEX_MAC}" | grep -vi 'router' | awk '{printf ("%5s\t%s\n", $1, toupper($5))}' | sort -Vu
     ;;
   esac
@@ -602,37 +669,54 @@ function show_location_info() {
   local LOC
   local ORG  
   
-  HTTP_CODE_IPINFO=$(wget --spider -t 1 --timeout=600 -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-  echo -ne "Checking ${GREEN}${IPINFO}${NORMAL}..."
-  if [[ ! "${HTTP_CODE_IPINFO}" -eq "200" ]]; then
+  HTTP_CODE_IPINFO=$(wget --spider -t 1 --timeout=20 -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  start_spinner "Checking ${GREEN}${IPINFO}${NORMAL}..."
+  sleep 2
+  if [[ ! "${HTTP_CODE_IPINFO}" -eq 200 ]]; then
     clear_line
+    stop_spinner $?
     error_exit "${DIALOG_SERVER_IS_DOWN}"
   else
     clear_line
+    stop_spinner $?
     if [[ ! -z "$1" ]]; then
+      ZOOM="9"
       INPUT=$(echo "$1" | sed 's/^http\(\|s\):\/\///g' | cut -f 1 -d "/")
-      echo -ne "Pinging ${GREEN}${INPUT}${NORMAL}..."
+      start_spinner "Pinging ${GREEN}${INPUT}${NORMAL}..."
+      sleep 2
       IP=$(ping -4 -c 1 -w 5 "${INPUT}" 2>"${NULL}" | awk -F'[()]' '/PING/{print $2}' &)
       clear_line
-      ZOOM="9"
-      echo -ne "Grabbing ${GREEN}hostname${NORMAL}..."
+      stop_spinner $?
+      start_spinner "Grabbing ${GREEN}hostname${NORMAL}..."
+      sleep 2
       HOSTNAME=$(wget -qO - ${IPINFO}/"${IP}"/hostname &)
       clear_line
-      echo -ne "Grabbing ${GREEN}city${NORMAL}..."
+      stop_spinner $?
+      start_spinner "Grabbing ${GREEN}city${NORMAL}..."
+      sleep 2
       CITY=$(wget -qO - ${IPINFO}/"${IP}"/city &)
       clear_line
-      echo -ne "Grabbing ${GREEN}region${NORMAL}..."
+      stop_spinner $?
+      start_spinner "Grabbing ${GREEN}region${NORMAL}..."
+      sleep 2
       REGION=$(wget -qO - ${IPINFO}/"${IP}"/region &)
       clear_line
-      echo -ne "Grabbing ${GREEN}country${NORMAL}..."
+      stop_spinner $?
+      start_spinner "Grabbing ${GREEN}country${NORMAL}..."
+      sleep 2
       COUNTRY=$(wget -qO - ${IPINFO}/"${IP}"/country &)
       clear_line
-      echo -ne "Grabbing ${GREEN}location${NORMAL}..."
+      stop_spinner $?
+      start_spinner "Grabbing ${GREEN}location${NORMAL}..."
+      sleep 2
       LOC=$(wget -qO - ${IPINFO}/"${IP}"/loc &)
       clear_line
-      echo -ne "Grabbing ${GREEN}organization${NORMAL}..."
+      stop_spinner $?
+      start_spinner "Grabbing ${GREEN}organization${NORMAL}..."
+      sleep 2
       ORG=$(wget -qO - ${IPINFO}/"${IP}"/org &)
       clear_line
+      stop_spinner $?
       handle_jobs
       print_location_info "${IP}" "${HOSTNAME}" "${CITY}" "${REGION}" "${COUNTRY}" "${LOC}" "${ORG}"
       MAP_LOC="https://maps.googleapis.com/maps/api/staticmap?center=${LOC}&zoom=${ZOOM}&size=640x640&sensor=false"
@@ -641,27 +725,41 @@ function show_location_info() {
       exit
     else
       ZOOM="12"
-      echo -ne "Grabbing ${GREEN}IP${NORMAL}..."
+      start_spinner "Grabbing ${GREEN}IP${NORMAL}..."
+      sleep 2
       IP=$(wget -qO - ${IPINFO}/ip &)
       clear_line
-      echo -ne "Grabbing ${GREEN}hostname${NORMAL}..."
+      stop_spinner $?
+      start_spinner "Grabbing ${GREEN}hostname${NORMAL}..."
+      sleep 2
       HOSTNAME=$(wget -qO - ${IPINFO}/"${IP}"/hostname &)
       clear_line
-      echo -ne "Grabbing ${GREEN}city${NORMAL}..."
+      stop_spinner $?
+      start_spinner "Grabbing ${GREEN}city${NORMAL}..."
+      sleep 2
       CITY=$(wget -qO - ${IPINFO}/"${IP}"/city &)
       clear_line
-      echo -ne "Grabbing ${GREEN}region${NORMAL}..."
+      stop_spinner $?
+      start_spinner "Grabbing ${GREEN}region${NORMAL}..."
+      sleep 2
       REGION=$(wget -qO - ${IPINFO}/"${IP}"/region &)
       clear_line
-      echo -ne "Grabbing ${GREEN}country${NORMAL}..."
+      stop_spinner $?
+      start_spinner "Grabbing ${GREEN}country${NORMAL}..."
+      sleep 2
       COUNTRY=$(wget -qO - ${IPINFO}/"${IP}"/country &)
       clear_line
-      echo -ne "Grabbing ${GREEN}location${NORMAL}..."
+      stop_spinner $?
+      start_spinner "Grabbing ${GREEN}location${NORMAL}..."
+      sleep 2
       LOC=$(wget -qO - ${IPINFO}/"${IP}"/loc &)
       clear_line
-      echo -ne "Grabbing ${GREEN}organization${NORMAL}..."
+      stop_spinner $?
+      start_spinner "Grabbing ${GREEN}organization${NORMAL}..."
+      sleep 2
       ORG=$(wget -qO - ${IPINFO}/"${IP}"/org &)
       clear_line
+      stop_spinner $?
       handle_jobs
       print_location_info "${IP}" "${HOSTNAME}" "${CITY}" "${REGION}" "${COUNTRY}" "${LOC}" "${ORG}"
       MAP_LOC="https://maps.googleapis.com/maps/api/staticmap?center=${LOC}&zoom=${ZOOM}&size=640x640&sensor=false"
@@ -675,6 +773,8 @@ function show_location_info() {
 # Prints connections and the count of them per IP.
 function show_port_connections() {
   
+  local PORT
+  
   if [[ -z "$1" ]]; then
     print_port_protocol_list
     exit
@@ -683,12 +783,10 @@ function show_port_connections() {
   check_root_permissions
   check_if_parameter_is_not_numerical "$1"
   
-  local PORT
-  
   PORT="$1"
   
   clear
-  while true; do
+  while :; do
     clear
     echo -e "${DIALOG_PRESS_CTRL_C}"
     echo
@@ -716,36 +814,46 @@ function show_next_hops() {
     check_directory_or_touch_file "${FILENAME}"
     case "$1" in
       "--ipv4")
-        echo -ne "Checking ${GREEN}$2${NORMAL}..."
-        HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-        if [[ "${HTTP_CODE}" -eq "200" ]]; then
+        start_spinner "Checking ${GREEN}$2${NORMAL}..."
+        sleep 2
+        HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+        if [[ "${HTTP_CODE}" -eq 200 ]]; then
           clear_line
-          echo -ne "Tracing path to ${GREEN}${FILTERED_INPUT}${NORMAL}..."
+          stop_spinner $?
+          start_spinner "Tracing path to ${GREEN}${FILTERED_INPUT}${NORMAL}..."
+          sleep 2
           tracepath -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" >> "${TMP}/${FILENAME}"
           clear_line
+          stop_spinner $?
           cat < "${TMP}/${FILENAME}" | uniq
           mr_proper
           exit
         else
           clear_line
+          stop_spinner $?
 		      error_exit "${DIALOG_SERVER_IS_DOWN}"
         fi
       ;;
       "--ipv6")
         HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
         if [[ "${HAS_IPV6}" ]]; then
-          echo -ne "Checking ${GREEN}$2${NORMAL}..."
-          HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-          if [[ "${HTTP_CODE}" -eq "200" ]]; then
+          start_spinner "Checking ${GREEN}$2${NORMAL}..."
+          sleep 2
+          HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+          if [[ "${HTTP_CODE}" -eq 200 ]]; then
             clear_line
-            echo -ne "Tracing path to ${FILTERED_INPUT}..."
+            stop_spinner $?
+            start_spinner "Tracing path to ${FILTERED_INPUT}..."
+            sleep 2
             tracepath6 -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" >> "${TMP}/${FILENAME}"
             clear_line
+            stop_spinner $?
             cat < "${TMP}/${FILENAME}" | uniq
             mr_proper
             exit
           else
             clear_line
+            stop_spinner $?
             error_exit "${DIALOG_SERVER_IS_DOWN}"
           fi
           exit
@@ -775,7 +883,7 @@ function show_speed() {
   TKBPS="0.00"
   RKBPS="0.00"
   
-  while true; do
+  while :; do
     clear
     echo -e "${DIALOG_PRESS_CTRL_C}"
     echo
@@ -807,17 +915,22 @@ function show_avg_ping() {
     if [[ ! $(hash ping6 2>"${NULL}") ]]; then
       case "$1" in
         "--ipv4")
-          echo -ne "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+          start_spinner "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+          sleep 2
           PING_4=$(ping -4 -i 0.5 -c 10 ${GOOGLE_DNS} | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
           clear_line
+          stop_spinner $?
           echo -e "Average RTT: ${GREEN}${PING_4} ms${NORMAL}"
           exit
         ;;
         "--ipv6")
           HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
           if [[ "${HAS_IPV6}" ]]; then
-            echo -ne "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+            start_spinner "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+            sleep 2
             PING_6=$(ping -6 -i 0.5 -c 10 "${GOOGLE_DNS}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+            clear_line
+            stop_spinner $?
             clear_line
             echo -e "Average RTT: ${GREEN}${PING_6} ms${NORMAL}"
             exit
@@ -829,18 +942,22 @@ function show_avg_ping() {
     else
       case "$1" in
         "--ipv4")
-          echo -ne "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+          start_spinner "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+          sleep 2
           PING_4=$(ping -i 0.5 -c 10 ${GOOGLE_DNS} | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
           clear_line
+          stop_spinner $?
           echo -e "Average RTT: ${GREEN}${PING_4} ms${NORMAL}"
           exit
         ;;
         "--ipv6")
           HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
           if [[ "${HAS_IPV6}" ]]; then
-            echo -ne "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+            start_spinner "Playing ping pong with ${GREEN}Google${NORMAL}, please wait..."
+            sleep 2
             PING_6=$(ping6 -i 0.5 -c 10 "${GOOGLE_DNS}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
             clear_line
+            stop_spinner $?
             echo -e "Average RTT: ${GREEN}${PING_6} ms${NORMAL}"
             exit
           else
@@ -851,23 +968,31 @@ function show_avg_ping() {
     fi
   else
     FILTERED_URL=$(echo "$2" | sed 's/^http\(\|s\):\/\///g' | sed 's/www.//' | cut -f 1 -d "/")
-    HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-    if [[ "${HTTP_CODE}" -eq "200" ]]; then
+    start_spinner "Checking ${GREEN}${FILTERED_URL}${NORMAL}..."
+    sleep 2
+    HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "${FILTERED_URL}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+    if [[ "${HTTP_CODE}" -eq 200 ]]; then
+      clear_line
+      stop_spinner $?
       if [[ ! $(hash ping6 2>"${NULL}") ]]; then
         case "$1" in
           "--ipv4")
-            echo -ne "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
+            start_spinner "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
+            sleep 2
             PING_4=$(ping -4 -i 0.5 -c 10 "${FILTERED_URL}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
             clear_line
+            stop_spinner $?
             echo -e "Average response time: ${GREEN}${PING_4} ms${NORMAL}"
             exit
           ;;
           "--ipv6")
             HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
             if [[ "${HAS_IPV6}" ]]; then
-              echo -ne "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
+              start_spinner "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
+              sleep 2
               PING_6=$(ping -6 -i 0.5 -c 10 "${FILTERED_URL}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
               clear_line
+              stop_spinner $?
               echo -e "Average response time: ${GREEN}${PING_6} ms${NORMAL}"
               exit
             else
@@ -879,18 +1004,22 @@ function show_avg_ping() {
     else
       case "$1" in
         "--ipv4")
-          echo -ne "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
+          start_spinner "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
+          sleep 2
           PING_4=$(ping -4 -i 0.5 -c 10 "${FILTERED_URL}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
           clear_line
+          stop_spinner $?
           echo -e "Average response time: ${GREEN}${PING_4} ms${NORMAL}"
           exit
         ;;
         "--ipv6")
           HAS_IPV6=$(cat < /proc/modules | grep -o ipv6)
           if [[ "${HAS_IPV6}" ]]; then
-            echo -ne "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
+            start_spinner "Playing ping pong with ${GREEN}${FILTERED_URL}${NORMAL}, please wait..."
+            sleep 2
             PING_6=$(ping -6 -i 0.5 -c 10 "${FILTERED_URL}" | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
             clear_line
+            stop_spinner $?
             echo -e "Average response time: ${GREEN}${PING_6} ms${NORMAL}"
             exit
           else
@@ -898,8 +1027,8 @@ function show_avg_ping() {
           fi
         ;;
       esac
-      fi
     fi
+  fi
 }
 
 # Extracts valid IPv4, IPv6 and MAC addresses from a URL.
@@ -915,11 +1044,19 @@ function show_ips_from_url() {
   local FILENAME_IPV6
   local FILENAME_MAC
   
-  HTTP_CODE=$(wget --spider -t 1 --timeout=600 -S "$1" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-  if [[ ! "${HTTP_CODE}" -eq "200" ]]; then
-    print_network_host_down "$1"
+  start_spinner "Checking ${GREEN}$1${NORMAL}..."
+  sleep 2
+  HTTP_CODE=$(wget --spider -t 1 --timeout=20 -S "$1" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+  
+  if [[ ! "${HTTP_CODE}" -eq 200 ]]; then
+    clear_line
+    stop_spinner $?
+    echo -e "Destination is unreachable. Input was invalid or server is down or has connection issues. ${DIALOG_ABORTING}"
     error_exit
   fi
+  
+  clear_line
+  stop_spinner $?
 
   FILENAME_URL="DOWNLOADED_SITE_TO_EXTRACT_IPS"
   FILENAME_IPV4="IPV4_OF_FILE"
@@ -931,9 +1068,11 @@ function show_ips_from_url() {
   check_directory_or_touch_file "${FILENAME_IPV6}"
   check_directory_or_touch_file "${FILENAME_MAC}"
   
-  echo -ne "Downloading ${GREEN}${1}${NORMAL}..."
+  start_spinner "Downloading ${GREEN}${1}${NORMAL}..."
+  sleep 2
   wget -q "$1" -O "${TMP}/${FILENAME_URL}"
   clear_line
+  stop_spinner $?
 
   grep -E -o "${REGEX_IPV4}" "${TMP}/${FILENAME_URL}" | sort -Vu >> "${TMP}/${FILENAME_IPV4}" &
   grep -E -o "${REGEX_IPV6}" "${TMP}/${FILENAME_URL}" | sort -Vu >> "${TMP}/${FILENAME_IPV6}" &
@@ -970,6 +1109,65 @@ function show_ips_from_url() {
 }
 
 ########################## EOF MAIN FUNCTIONS ##########################
+
+# Spinner main function.
+function spinner() {
+  
+  # $1 start/stop
+  #
+  # on start: $2 display message
+  # on stop : $2 process exit status
+  #           $3 spinner function pid (supplied from stop_spinner)
+  
+  local STEP
+  local SPINNER_PARTS
+  local DELAY
+
+  case $1 in
+    start)
+      # calculate the column where spinner and status msg will be displayed
+      let COLUMN=$(tput cols)-${#2}-8
+      # display message and position the cursor in $COLUMN column
+      echo -ne "${2}"
+      printf "%${COLUMN}s"
+
+      # start spinner
+      STEP=1
+      SPINNER_PARTS='\|/-'
+      DELAY=${SPINNER_DELAY:-0.15}
+
+      while :; do
+        printf "\b%s" "${SPINNER_PARTS:STEP++%${#SPINNER_PARTS}:1}"
+        sleep "${DELAY}"
+      done
+    ;;
+    stop)
+      kill "$3" > /dev/null 2>&1
+    ;;
+    *)
+      echo "Invalid argument!"
+      exit 1
+    ;;
+  esac
+}
+
+# Start spinner with $1 as message.
+function start_spinner {
+  
+  # $1 : msg to display
+  spinner "start" "${1}" &
+  # set global spinner pid
+  SPINNER_ID=$!
+  disown
+}
+
+# Stops spinner.
+function stop_spinner {
+  
+  # $1 : command exit status
+  spinner "stop" "$1" "${SPINNER_ID}"
+  unset SPINNER_ID
+}
 
 # Prints show_location_info() data.
 function print_location_info() {
@@ -1042,13 +1240,10 @@ function check_if_parameter_is_not_numerical() {
 function check_directory_or_touch_file() {
   
   if [[ ! -d "${TMP}" ]]; then
-      mkdir "${TMP}"
-      if [[ ! -z "$1" ]]; then
-        touch "${TMP}/$1" 2>"${NULL}"
-      fi
+    mkdir "${TMP}"
+    if [[ ! -z "$1" ]]; then touch "${TMP}/$1" 2>"${NULL}"; fi
   fi
-  
-  if [[ "$(id -u)" -eq "0" ]]; then chmod -R a+w "${TMP}"; fi
+
 }
 
 # Checks for root privileges.
@@ -1062,7 +1257,7 @@ function check_root_permissions() {
 # Checks Bash version. Minimum is version 3.2.
 function check_bash_version() {
   
-  if [[ "${BASH_VERSINFO[0]}" -lt "3" ]] || [[ "${BASH_VERSINFO[1]}" -lt "2" ]]; then
+  if [[ "${BASH_VERSINFO[0]}" -lt 3 ]] || [[ "${BASH_VERSINFO[1]}" -lt 2 ]]; then
     error_exit "Sorry, you need at least bash-3.2 to set sail."
   fi
 }

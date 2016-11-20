@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.<br/>
 
+## [1.9] - 2016-11-20
+### Added
+- Spinner on long running tasks (requires `kill` from `util-linux`).<br/>
+- More tested *Arch Linux* versions.<br/>
+
+### Changed
+- *README.md*.<br/>
+- Minor code improvements.<br/>
+- Shortened timeout to *20sec* while checking with `wget --spider`.<br/>
+- **Fixed** file permissions.<br/>
+
 ## [1.8] - 2016-11-14
 ### Added
 - Find valid IPv4, IPv6 and MAC addresses from a URL `ship -U <URL>` or `ship --url <URL>`.<br/>
