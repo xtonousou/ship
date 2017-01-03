@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.<br/>
 ## [2.0] - 2017-01-03
 ### Added
 * Created issue template `.github/ISSUE_TEMPLATE.md` (thanks @v1s1t0r1sh3r3 for the tip).<br/>
+* Created pr template `.github/PULL_REQUEST_TEMPLATE.md`.<br/>
 
 ### Changed
 * Usage.<br/>
