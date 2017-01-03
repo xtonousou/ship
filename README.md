@@ -1,5 +1,5 @@
 # shIP (aka. show IP) [![License](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg?style=flat-square)](https://raw.githubusercontent.com/xtonousou/shIP/master/LICENSE)
-A simple, handy network multitool that shows network addresses of active network interfaces and many more. Using **coreutils iproute2 iputils**.<br/>
+A simple, handy network addressing multitool with plenty features.<br/>
 <img src="https://raw.githubusercontent.com/xtonousou/shIP/master/imgs/head.png" title="SAIL!"/>
 
 ## Features
@@ -13,12 +13,15 @@ A simple, handy network multitool that shows network addresses of active network
 * Show active **hosts** on current network with or without **MAC** address.<br/>
 * Show all valid **IPv4**, **IPv6** and **MAC** addresses extracted from a **file**.<br/>
 * Show all valid **IPv4**, **IPv6** and **MAC** addresses extracted from a **website**.<br/>
-* Show the path (all IPs) to a network host. IPv4/IPv6.<br/>
+* Show the network **path** to a host. IPv4/IPv6.<br/>
 
 ## Requirements
 
-**Bash 3.2** or later.<br/>
-**```coreutils iproute2 iputils```**<br/>
+* Bash **3.2** or later.<br/>
+* Packages.<br/>
+  * `coreutils`<br/>
+  * `iproute2`<br/>
+  * `iputils`<br/>
 
 Tested on Linux:<br/>
 
@@ -37,5 +40,3 @@ You can send an email to `xtonousou@gmail.com` or submit a pull request.<br/>
 
 ## LICENSE
 This script is under GPLv3 (or later) License.<br/>
-
-#### Any kind of help is welcome.<br/>
