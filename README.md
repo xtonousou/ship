@@ -1,6 +1,4 @@
-# shIP (aka. show IP)
-
-[![License](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg?style=flat-square)](https://raw.githubusercontent.com/xtonousou/shIP/master/LICENSE)
+# shIP (aka. show IP)[![License](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg?style=flat-square)](https://raw.githubusercontent.com/xtonousou/shIP/master/LICENSE)
 A simple, handy network addressing multitool with plenty features.
 ![alt text](https://raw.githubusercontent.com/xtonousou/shIP/master/imgs/head.png "SAIL!")
 
@@ -43,23 +41,23 @@ A simple, handy network addressing multitool with plenty features.
 
 ## :scroll: Changelog
 
-Be sure to check out [this](https://github.com/xtonousou/shIP/blob/master/CHANGELOG.md)
+Be sure to check out [this](https://github.com/xtonousou/shIP/blob/master/CHANGELOG.md).
 
 ## Getting Started
 
 * Method one (**recommended**)
-  1. `wget -q https://raw.githubusercontent.com/xtonousou/shIP/master/ship.sh`
-  2. `bash ship.sh`
+  * `wget -q https://raw.githubusercontent.com/xtonousou/shIP/master/ship.sh`
+  * `bash ship.sh`
 * Method two (for the lazy ones)
-  1. `wget -q https://raw.githubusercontent.com/xtonousou/shIP/master/ship.sh && bash ship.sh`
+  * `wget -q https://raw.githubusercontent.com/xtonousou/shIP/master/ship.sh && bash ship.sh`
 * Method three
-  1. `wget -q https://raw.githubusercontent.com/xtonousou/shIP/master/ship.sh`
-  2. `chmod +x ship.sh` need root privileges
-  3. `./ship.sh`
+  * `wget -q https://raw.githubusercontent.com/xtonousou/shIP/master/ship.sh`
+  * `chmod +x ship.sh` need root privileges
+  * `./ship.sh`
 * Method four (clone repository)
-  1. `git clone https://github.com/xtonousou/shIP.git`
-  2. `cd /path/to/shIP`
-  3. `bash ship.sh`
+  * `git clone https://github.com/xtonousou/shIP.git`
+  * `cd /path/to/shIP`
+  * `bash ship.sh`
 
 ## :octocat: Contribution
 
@@ -68,7 +66,8 @@ Be sure to check out [this](https://github.com/xtonousou/shIP/blob/master/CHANGE
 * Testing and feedback.
 
 You can send an email to `xtonousou@gmail.com` or submit a pull request.
-If you chose to submit a pull request, make sure you read all needed [information](https://github.com/xtonousou/shIP/blob/master/.github/PULL_REQUEST_TEMPLATE.md).
+
+If you choose to submit a pull request, make sure you read all needed [information](https://github.com/xtonousou/shIP/blob/master/.github/PULL_REQUEST_TEMPLATE.md) first.
 
 ## LICENSE
 This script is under GPLv3 (or later) License.
