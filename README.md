@@ -19,18 +19,16 @@ A simple, handy network addressing multitool with plenty features.
 <!--- should change URL below after merge with master -->
 Bash [3.2](http://www.tldp.org/LDP/abs/html/bashver3.html#AEN20987 "View changelog.") or later.
 
-`
-Possible package name   Tools
-├── awk gawk            ├── awk  
-├── coreutils           ├── cat cut echo id paste printf rm sort split tail timeout touch uniq
-├── grep                ├── grep
-├── iproute2            ├── ip ss
-├── mtr                 ├── mtr
-├── iputils             ├── ping tracepath
-├── sed                 ├── sed
-├── traceroute          ├── traceroute
-└── wget                └── wget
-`
+    Possible package name   Tools
+    ├── awk gawk            ├── awk  
+    ├── coreutils           ├── cat cut echo id paste printf rm sort split tail timeout touch uniq
+    ├── grep                ├── grep
+    ├── iproute2            ├── ip ss
+    ├── mtr                 ├── mtr
+    ├── iputils             ├── ping tracepath
+    ├── sed                 ├── sed
+    ├── traceroute          ├── traceroute
+    └── wget                └── wget
 
 ## Tested
 
