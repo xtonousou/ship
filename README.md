@@ -19,35 +19,21 @@ A simple, handy network addressing multitool with plenty features.
 
 Bash **3.2** or later.<br/>
 
-| Tool       | Possible package name |
-|------------|-----------------------|
-| awk        | awk / gawk            |
-| cat        | coreutils             |
-| cut        | coreutils             |
-| echo       | coreutils             |
-| grep       | grep                  |
-| id         | coreutils             |
-| ip         | iproute2              |
-| mtr        | mtr                   |
-| paste      | coreutils             |
-| ping       | iputils               |
-| printf     | coreutils             |
-| rm         | coreutils             |
-| sed        | sed                   |
-| sort       | coreutils             |
-| split      | coreutils             |
-| ss         | iproute2              |
-| tail       | coreutils             |
-| timeout    | coreutils             |
-| touch      | coreutils             |
-| tracepath  | iputils               |
-| traceroute | traceroute            |
-| uniq       | coreutils             |
-| wget       | wget                  |
+| Possible package name | Tool/s                                                             |
+|-----------------------|--------------------------------------------------------------------|
+| awk, gawk             | awk                                                                |
+| coreutils             | cat cut echo id paste printf rm sort split tail timeout touch uniq |
+| grep                  | grep                                                               |
+| iproute2              | ip ss                                                              |
+| mtr                   | mtr                                                                |
+| iputils               | ping tracepath                                                     |
+| sed                   | sed                                                                |
+| traceroute            | traceroute                                                         |
+| wget                  | wget                                                               |
 
 Tested on Linux:
 
-| Distribution | Version |
+| Distribution | Version               |
 |--------------|-----------------------|
 | Ubuntu       | 14.04.3 - 16.04.1     |
 | Debian       | 7 - 8                 |
