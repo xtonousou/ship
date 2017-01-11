@@ -17,28 +17,28 @@ A simple, handy network addressing multitool with plenty features.
 
 ## Requirements
 
-Bash **3.2** or later.<br/>
+![](http://dev-random.net/wp-content/uploads/2014/04/bin-bash-extended.sh-600x600.png =25x25)[3.2](http://www.tldp.org/LDP/abs/html/bashver3.html#AEN20987 "View changelog.") or later.
 
-| Possible package name | Tool/s                                                             |
-|-----------------------|--------------------------------------------------------------------|
-| awk, gawk             | awk                                                                |
-| coreutils             | cat cut echo id paste printf rm sort split tail timeout touch uniq |
-| grep                  | grep                                                               |
-| iproute2              | ip ss                                                              |
-| mtr                   | mtr                                                                |
-| iputils               | ping tracepath                                                     |
-| sed                   | sed                                                                |
-| traceroute            | traceroute                                                         |
-| wget                  | wget                                                               |
+| Possible package name  | Tools                                                              |
+|-----------------------:|--------------------------------------------------------------------|
+| awk gawk               | awk                                                                |
+| coreutils              | cat cut echo id paste printf rm sort split tail timeout touch uniq |
+| grep                   | grep                                                               |
+| iproute2               | ip ss                                                              |
+| mtr                    | mtr                                                                |
+| iputils                | ping tracepath                                                     |
+| sed                    | sed                                                                |
+| traceroute             | traceroute                                                         |
+| wget                   | wget                                                               |
 
 Tested on Linux:
 
-| Distribution | Version               |
-|--------------|-----------------------|
-| Ubuntu       | 14.04.3 - 16.04.1     |
-| Debian       | 7 - 8                 |
-| Kali         | 2016.2                |
-| Arch         | 4.7.5-1 - 4.8.13-1    |
+| Distribution | Version            |
+|-------------:|--------------------|
+| Ubuntu       | 14.04.3 - 16.04.1  |
+| Debian       | 7 - 8              |
+| Kali         | 2016.2             |
+| Arch         | 4.7.5-1 - 4.8.13-1 |
 
 ## Contribution
 
