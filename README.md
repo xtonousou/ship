@@ -17,7 +17,7 @@ A simple, handy network addressing multitool with plenty features.
 
 ## Requirements
 <!--- should change URL below after merge with master -->
-![alt text](https://raw.githubusercontent.com/xtonousou/shIP/dev/imgs/bash.png "#shebang")[3.2](http://www.tldp.org/LDP/abs/html/bashver3.html#AEN20987 "View changelog.") or later.
+![alt text](https://raw.githubusercontent.com/xtonousou/shIP/dev/imgs/bash.png "#shebang") [3.2](http://www.tldp.org/LDP/abs/html/bashver3.html#AEN20987 "View changelog.") or later.
 
 | Possible package name  | Tools                                                              |
 |------------------------|--------------------------------------------------------------------|
