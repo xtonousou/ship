@@ -8,7 +8,7 @@ AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="https://github.com/${AUTHOR_NICKNAME}"
-VERSION="2.0"
+VERSION="2.1"
 
 ### Colors
 GREEN="\033[1;32m"
@@ -31,6 +31,7 @@ DIALOG_NO_LOCAL_CONNECTION="Local connection unavailable. ${DIALOG_ABORTING}"
 DIALOG_SERVER_IS_DOWN="Destination is unreachable. Server may be down or has connection issues. ${DIALOG_ABORTING}"
 DIALOG_NOT_A_NUMBER="Option should be integer. ${DIALOG_ABORTING}"
 DIALOG_NO_ARGUMENTS="No arguments. ${DIALOG_ABORTING}"
+DIALOG_NO_TRACE_COMMAND="You need at least one of the following tools to run this command: ${ORANGE}tracepath${NORMAL}, ${ORANGE}traceroute${NORMAL}, ${ORANGE}mtr${NORMAL}. ${DIALOG_ABORTING}"
 
 ### Regexes
 REGEX_MAC="([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}"
@@ -49,7 +50,9 @@ REGEX_IPV6="${REGEX_IPV6}::(ffff(:0{1,4}){0,1}:){0,1}${REGEX_IPV4}|"     # (IPv4
 REGEX_IPV6="${REGEX_IPV6}([0-9a-fA-F]{1,4}:){1,4}:${REGEX_IPV4}"         # (IPv4-Embedded IPv6 Address)
 
 ### Other Values
+SHORT_TIMEOUT="2"
 TIMEOUT="5"
+LONG_TIMEOUT="15"
 FILENAME_PREFIX="${TEMP}/ship-"
 
 ########################################################################
@@ -151,7 +154,7 @@ function show_ip_from() {
       
       echo -ne "Pinging ${GREEN}$1${NORMAL} ..."
       for i in {1..15}; do
-        ping -4 -c 1 -i 0.2 -w "${TIMEOUT}" "${INPUT}" 2> /dev/null | awk -F '[()]' '/PING/{print $2}' >> "${FILENAME_PREFIX}${FILENAME}" &
+        ping -4 -c 1 -i 0.2 -w "${LONG_TIMEOUT}" "${INPUT}" 2> /dev/null | awk -F '[()]' '/PING/{print $2}' >> "${FILENAME_PREFIX}${FILENAME}" &
       done
       handle_jobs
       
@@ -262,7 +265,7 @@ function show_live_hosts() {
   
   echo -ne "Pinging ${GREEN}${NETWORK_IP_CIDR}${NORMAL}, please wait ..."
   for i in {1..254}; do
-    ping "${FILTERED_IP}.${i}" -c 1 -w "${TIMEOUT}" > /dev/null &
+    ping "${FILTERED_IP}.${i}" -c 1 -w "${LONG_TIMEOUT}" > /dev/null &
   done
   handle_jobs
   
@@ -322,6 +325,14 @@ function show_next_hops() {
   local HTTP_CODE
   local FILTERED_INPUT
   local FILENAME
+  local PROTOCOL
+  local __TRACEPATH__
+  local __TRACEROUTE__
+  local __MTR__
+  
+  if hash tracepath 2> /dev/null; then __TRACEPATH__=1; else __TRACEPATH__=0; fi
+  if hash traceroute 2> /dev/null; then __TRACEROUTE__=1; else __TRACEROUTE__=0; fi
+  if hash mtr 2> /dev/null; then __MTR__=1; else __MTR__=0; fi
   
   if [[ -z "$2" ]]; then
     error_exit "${DIALOG_NO_ARGUMENTS}"
@@ -329,45 +340,66 @@ function show_next_hops() {
     FILTERED_INPUT=$(echo "$2" | sed 's/^http\(\|s\):\/\///g' | cut -f 1 -d "/")
     FILENAME="next_hops_for_${FILTERED_INPUT}"
     check_and_touch "${FILENAME}"
-    
+
     case "$1" in
-      "--ipv4")
-        print_check "$2"
-        HTTP_CODE=$(wget --spider -t 1 --timeout="${TIMEOUT}" -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-        
-        if [[ "${HTTP_CODE}" -eq 200 ]]; then
-          clear_line
-          echo -ne "Tracing path to ${GREEN}${FILTERED_INPUT}${NORMAL} ..."
-          tracepath -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" >> "${FILENAME_PREFIX}${FILENAME}"
-          
-          clear_line
-          cat < "${FILENAME_PREFIX}${FILENAME}" | uniq
-          
-          mr_proper
-        else
-          error_exit "${DIALOG_SERVER_IS_DOWN}"
-        fi
-      ;;
-      "--ipv6")
-        check_ipv6
-        
-        print_check "$2"
-        HTTP_CODE=$(wget --spider -t 1 --timeout="${TIMEOUT}" -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-        if [[ "${HTTP_CODE}" -eq 200 ]]; then
-          clear_line
-          echo -ne "Tracing path to ${FILTERED_INPUT} ..."
-          tracepath6 -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" >> "${FILENAME_PREFIX}${FILENAME}"
-          
-          clear_line
-          cat < "${FILENAME_PREFIX}${FILENAME}" | uniq
-          
-          mr_proper
-          exit 0
-        else
-          error_exit "${DIALOG_SERVER_IS_DOWN}"
-        fi
-      ;;
+      "--ipv4") PROTOCOL=4; ;;
+      "--ipv6") check_ipv6; PROTOCOL=6; ;;
     esac
+
+    print_check "$2"
+    HTTP_CODE=$(wget --spider -t 1 --timeout="${TIMEOUT}" -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
+        
+    if [[ "${HTTP_CODE}" -eq 200 ]]; then
+      clear_line
+      echo -ne "Tracing path to ${GREEN}${FILTERED_INPUT}${NORMAL} ..."
+
+      # traceroute is deprecated, nevertheless it is preferred over tracepath
+      # treroute is preferred over all
+      case "${__TRACEPATH__}:${__TRACEROUTE__}:${__MTR__}" in
+        # If none of the tools (tracepath, traceroute, mtr) is installed
+        0:0:0)
+          echo -e "${DIALOG_NO_TRACE_COMMAND}"
+        ;;
+        # If it is installed 'mtr' only
+        0:0:1)
+          mtr -"${PROTOCOL}" -c 2 -n --report "${FILTERED_INPUT}" | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+        ;;
+        # If it is installed 'traceroute' only
+        0:1:0)
+          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+        ;;
+        # If it is installed 'traceroute' and 'mtr' only
+        0:1:1)
+          mtr -"${PROTOCOL}" -c 2 -n --report "${FILTERED_INPUT}" | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+        ;;
+        # If it is installed 'tracepath' only
+        1:0:0)
+          # tracepath6 workaround: Many linux distributions do not have tracepath6 (it is included in manpages tho :/)
+          if hash tracepath6 2> /dev/null; then PROTOCOL=6; else PROTOCOL=""; fi
+          
+          timeout "${SHORT_TIMEOUT}" tracepath"${PROTOCOL}" -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+        ;;
+        # If it is installed 'tracepath' and 'mtr' only
+        1:0:1)
+          mtr -"${PROTOCOL}" -c 2 -n --report "${FILTERED_INPUT}" | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+        ;;
+        # If it is installed 'tracepath' and 'traceroute' only
+        1:1:0)
+          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+        ;;
+        # If it is installed 'tracepath', 'traceroute' and 'mtr'
+        1:1:1)
+          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+        ;;
+      esac
+          
+      clear_line
+      cat < "${FILENAME_PREFIX}${FILENAME}" | uniq
+
+      mr_proper
+    else
+      error_exit "${DIALOG_SERVER_IS_DOWN}"
+    fi
   fi  
 }
 
@@ -592,7 +624,7 @@ function check_connectivity() {
   
   case "$1" in
     "--local") ip route | grep "^default" > /dev/null || error_exit "${DIALOG_NO_LOCAL_CONNECTION}" ;;
-    "--internet") ping -q -c 1 -W "${TIMEOUT}" "${GOOGLE_DNS}" > /dev/null || error_exit "${DIALOG_NO_INTERNET}" ;;
+    "--internet") ping -q -c 1 -W "${LONG_TIMEOUT}" "${GOOGLE_DNS}" > /dev/null || error_exit "${DIALOG_NO_INTERNET}" ;;
   esac
 }
 

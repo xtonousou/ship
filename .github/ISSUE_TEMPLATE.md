@@ -29,6 +29,7 @@
 ## Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 * Script's version used:
-* Linux Distribution (e.g. Arch, Gentoo, Ubuntu):
+* Linux Distribution:
+* `uname -a` output:
 * Link to your project (if appropriate):
 
