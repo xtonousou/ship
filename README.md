@@ -17,21 +17,22 @@ A simple, handy network addressing multitool with plenty features.
 
 ## Requirements
 <!--- should change URL below after merge with master -->
-![alt text](https://raw.githubusercontent.com/xtonousou/shIP/dev/imgs/bash.png "#shebang") [3.2](http://www.tldp.org/LDP/abs/html/bashver3.html#AEN20987 "View changelog.") or later.
+Bash [3.2](http://www.tldp.org/LDP/abs/html/bashver3.html#AEN20987 "View changelog.") or later.
 
-| Possible package name  | Tools                                                              |
-|------------------------|--------------------------------------------------------------------|
-| awk gawk               | awk                                                                |
-| coreutils              | cat cut echo id paste printf rm sort split tail timeout touch uniq |
-| grep                   | grep                                                               |
-| iproute2               | ip ss                                                              |
-| mtr                    | mtr                                                                |
-| iputils                | ping tracepath                                                     |
-| sed                    | sed                                                                |
-| traceroute             | traceroute                                                         |
-| wget                   | wget                                                               |
+`
+Possible package name   Tools
+├── awk gawk            ├── awk  
+├── coreutils           ├── cat cut echo id paste printf rm sort split tail timeout touch uniq
+├── grep                ├── grep
+├── iproute2            ├── ip ss
+├── mtr                 ├── mtr
+├── iputils             ├── ping tracepath
+├── sed                 ├── sed
+├── traceroute          ├── traceroute
+└── wget                └── wget
+`
 
-Tested on Linux:
+## Tested
 
 | Distribution | Version            |
 |--------------|--------------------|
@@ -46,7 +47,7 @@ Tested on Linux:
 * Suggestions, new features.
 * Testing and feedback.
 
-You can send an email to `xtonousou@gmail.com` or submit a pull request.
+You can send an email to `xtonousou@gmail.com` or submit a [pull request](https://github.com/xtonousou/shIP/compare).
 
 ## LICENSE
 This script is under GPLv3 (or later) License.
