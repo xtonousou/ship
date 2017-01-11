@@ -1,6 +1,6 @@
 # shIP (aka. show IP) [![License](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg?style=flat-square)](https://raw.githubusercontent.com/xtonousou/shIP/master/LICENSE)
 A simple, handy network addressing multitool with plenty features.
-<img src="https://raw.githubusercontent.com/xtonousou/shIP/master/imgs/head.png" title="SAIL!"/>
+![alt text](https://raw.githubusercontent.com/xtonousou/shIP/master/imgs/head.png "SAIL!")
 
 ## Features
 
@@ -16,11 +16,11 @@ A simple, handy network addressing multitool with plenty features.
 * Show the network **path** to a host. IPv4/IPv6.
 
 ## Requirements
-
-![](http://dev-random.net/wp-content/uploads/2014/04/bin-bash-extended.sh-600x600.png =25x25)[3.2](http://www.tldp.org/LDP/abs/html/bashver3.html#AEN20987 "View changelog.") or later.
+<!--- should change URL below after merge with master -->
+![alt text](https://raw.githubusercontent.com/xtonousou/shIP/dev/imgs/bash.png "#shebang")[3.2](http://www.tldp.org/LDP/abs/html/bashver3.html#AEN20987 "View changelog.") or later.
 
 | Possible package name  | Tools                                                              |
-|-----------------------:|--------------------------------------------------------------------|
+|------------------------|--------------------------------------------------------------------|
 | awk gawk               | awk                                                                |
 | coreutils              | cat cut echo id paste printf rm sort split tail timeout touch uniq |
 | grep                   | grep                                                               |
@@ -34,7 +34,7 @@ A simple, handy network addressing multitool with plenty features.
 Tested on Linux:
 
 | Distribution | Version            |
-|-------------:|--------------------|
+|--------------|--------------------|
 | Ubuntu       | 14.04.3 - 16.04.1  |
 | Debian       | 7 - 8              |
 | Kali         | 2016.2             |
