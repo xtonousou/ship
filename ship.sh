@@ -8,7 +8,7 @@ AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="https://github.com/${AUTHOR_NICKNAME}"
-VERSION="2.0"
+VERSION="2.1"
 
 ### Colors
 GREEN="\033[1;32m"
@@ -28,9 +28,11 @@ DIALOG_ERROR="Try ${GREEN}ship --help${NORMAL} for more information."
 DIALOG_ABORTING="${_RED_}Aborting${NORMAL}."
 DIALOG_NO_INTERNET="Internet connection unavailable. ${DIALOG_ABORTING}"
 DIALOG_NO_LOCAL_CONNECTION="Local connection unavailable. ${DIALOG_ABORTING}"
+DIALOG_DESTINATION_UNREACHABLE="Destination is unreachable. ${DIALOG_ABORTING}"
 DIALOG_SERVER_IS_DOWN="Destination is unreachable. Server may be down or has connection issues. ${DIALOG_ABORTING}"
 DIALOG_NOT_A_NUMBER="Option should be integer. ${DIALOG_ABORTING}"
 DIALOG_NO_ARGUMENTS="No arguments. ${DIALOG_ABORTING}"
+DIALOG_NO_TRACE_COMMAND="You need at least one of the following tools to run this command: ${ORANGE}tracepath${NORMAL}, ${ORANGE}traceroute${NORMAL}, ${ORANGE}mtr${NORMAL}. ${DIALOG_ABORTING}"
 
 ### Regexes
 REGEX_MAC="([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}"
@@ -49,7 +51,9 @@ REGEX_IPV6="${REGEX_IPV6}::(ffff(:0{1,4}){0,1}:){0,1}${REGEX_IPV4}|"     # (IPv4
 REGEX_IPV6="${REGEX_IPV6}([0-9a-fA-F]{1,4}:){1,4}:${REGEX_IPV4}"         # (IPv4-Embedded IPv6 Address)
 
 ### Other Values
+SHORT_TIMEOUT="2"
 TIMEOUT="5"
+LONG_TIMEOUT="15"
 FILENAME_PREFIX="${TEMP}/ship-"
 
 ########################################################################
@@ -124,44 +128,40 @@ function show_ip_from() {
     print_check "${IPINFO}"
     HTTP_CODE=$(wget --spider -t 1 --timeout="${TIMEOUT}" -S "${IPINFO}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     
-    if [[ "${HTTP_CODE}" -eq 200 ]]; then
-      clear_line
-      FILENAME="external_ip"
-      check_and_touch "${FILENAME}"
-      
-      echo -ne "Grabbing ${GREEN}IP${NORMAL} ..."
-      wget "${IPINFO}/ip" -q -O "${FILENAME_PREFIX}${FILENAME}"
-      
-      clear_line
-      cat < "${FILENAME_PREFIX}${FILENAME}"
-      
-      mr_proper
-	  else
-		  error_exit "${DIALOG_SERVER_IS_DOWN}"
-	  fi
+    if [[ ! "${HTTP_CODE}" -eq 200 ]]; then error_exit "${DIALOG_SERVER_IS_DOWN}"; fi
+
+    clear_line
+    FILENAME="external_ip"
+    check_and_touch "${FILENAME}"
+    
+    echo -ne "Grabbing ${GREEN}IP${NORMAL} ..."
+    wget "${IPINFO}/ip" -q -O "${FILENAME_PREFIX}${FILENAME}"
+    
+    clear_line
+    cat < "${FILENAME_PREFIX}${FILENAME}"
+    
+    mr_proper
   else
     print_check "$1"
     HTTP_CODE=$(wget --spider -t 1 --timeout="${TIMEOUT}" -S "$1" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
     
-    if [[ "${HTTP_CODE}" -eq 200 ]]; then
-      clear_line
-      FILENAME="ips_from_$1"
-      check_and_touch "${FILENAME}"
-      INPUT=$(echo "$1" | sed 's/^http\(\|s\):\/\///g' | cut -f 1 -d "/")
-      
-      echo -ne "Pinging ${GREEN}$1${NORMAL} ..."
-      for i in {1..15}; do
-        ping -4 -c 1 -i 0.2 -w "${TIMEOUT}" "${INPUT}" 2> /dev/null | awk -F '[()]' '/PING/{print $2}' >> "${FILENAME_PREFIX}${FILENAME}" &
-      done
-      handle_jobs
-      
-      clear_line
-      cat < "${FILENAME_PREFIX}${FILENAME}" | sort -Vu
-      
-      mr_proper
-    else
-		  error_exit "${DIALOG_SERVER_IS_DOWN}"
-	  fi
+    if [[ ! "${HTTP_CODE}" -eq 200 ]]; then error_exit "${DIALOG_SERVER_IS_DOWN}"; fi
+
+    clear_line
+    FILENAME="ips_from_$1"
+    check_and_touch "${FILENAME}"
+    INPUT=$(echo "$1" | sed 's/^http\(\|s\):\/\///g' | cut -f 1 -d "/")
+  
+    echo -ne "Pinging ${GREEN}$1${NORMAL} ..."
+    for i in {1..15}; do
+      ping -4 -c 1 -i 0.2 -w "${LONG_TIMEOUT}" "${INPUT}" 2> /dev/null | awk -F '[()]' '/PING/{print $2}' >> "${FILENAME_PREFIX}${FILENAME}" &
+    done
+    handle_jobs
+  
+    clear_line
+    cat < "${FILENAME_PREFIX}${FILENAME}" | sort -Vu
+    
+    mr_proper
   fi
 }
 
@@ -184,12 +184,7 @@ function show_ips_from_file() {
   check_and_touch "${FILENAME_IPV6}"
   check_and_touch "${FILENAME_MAC}"
   
-  if [[ ! -f "$1" ]]; then
-    error_exit "No such file. ${DIALOG_ABORTING}"
-  fi
-  
-  # maybe add a function to check if it is a huge file
-  # if it is huge (heh xD), use & on each grep
+  if [[ ! -f "$1" ]]; then error_exit "No such file. ${DIALOG_ABORTING}"; fi
   
   grep -E -o "${REGEX_IPV4}" "$1" | sort -Vu >> "${FILENAME_PREFIX}${FILENAME_IPV4}"
   grep -E -o "${REGEX_IPV6}" "$1" | sort -Vu >> "${FILENAME_PREFIX}${FILENAME_IPV6}"
@@ -255,14 +250,13 @@ function show_live_hosts() {
   NETWORK_IP_CIDR=$(ip route | grep "${ONLINE_INTERFACE}" | grep src | awk '{print $1}')
   FILTERED_IP=$(echo "${NETWORK_IP}" | awk 'BEGIN{FS=OFS="."} NF--')
 
-  # maybe in next updates, I will be more gentle ...
   # user might not want to flush arp cache for various reasons
   # maybe I could add another option or find a better solution
-  ip -s -s neigh flush all > /dev/null
+  ip -s -s neigh flush all &>/dev/null
   
   echo -ne "Pinging ${GREEN}${NETWORK_IP_CIDR}${NORMAL}, please wait ..."
   for i in {1..254}; do
-    ping "${FILTERED_IP}.${i}" -c 1 -w "${TIMEOUT}" > /dev/null &
+    ping "${FILTERED_IP}.${i}" -c 1 -w "${LONG_TIMEOUT}" &>/dev/null &
   done
   handle_jobs
   
@@ -293,10 +287,7 @@ function show_port_connections() {
   
   local PORT
   
-  if [[ -z "$1" ]]; then
-    print_port_protocol_list
-    exit 0
-  fi
+  if [[ -z "$1" ]]; then print_port_protocol_list; exit 0; fi
   
   check_root_permissions
   check_if_parameter_is_not_numerical "$1"
@@ -316,59 +307,81 @@ function show_port_connections() {
   done
 }
 
-# Prints hops to a destination. $1=--ipv4|--ipv6, $2=destination.
+# Prints hops to a destination. $1=--ipv4|--ipv6, $2=network destination.
 function show_next_hops() {
   
   local HTTP_CODE
   local FILTERED_INPUT
   local FILENAME
+  local PROTOCOL
+  local __TRACEPATH__
+  local __TRACEROUTE__
+  local __MTR__
   
-  if [[ -z "$2" ]]; then
-    error_exit "${DIALOG_NO_ARGUMENTS}"
-  else
-    FILTERED_INPUT=$(echo "$2" | sed 's/^http\(\|s\):\/\///g' | cut -f 1 -d "/")
-    FILENAME="next_hops_for_${FILTERED_INPUT}"
-    check_and_touch "${FILENAME}"
-    
-    case "$1" in
-      "--ipv4")
-        print_check "$2"
-        HTTP_CODE=$(wget --spider -t 1 --timeout="${TIMEOUT}" -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-        
-        if [[ "${HTTP_CODE}" -eq 200 ]]; then
-          clear_line
-          echo -ne "Tracing path to ${GREEN}${FILTERED_INPUT}${NORMAL} ..."
-          tracepath -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" >> "${FILENAME_PREFIX}${FILENAME}"
-          
-          clear_line
-          cat < "${FILENAME_PREFIX}${FILENAME}" | uniq
-          
-          mr_proper
-        else
-          error_exit "${DIALOG_SERVER_IS_DOWN}"
-        fi
-      ;;
-      "--ipv6")
-        check_ipv6
-        
-        print_check "$2"
-        HTTP_CODE=$(wget --spider -t 1 --timeout="${TIMEOUT}" -S "${FILTERED_INPUT}" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-        if [[ "${HTTP_CODE}" -eq 200 ]]; then
-          clear_line
-          echo -ne "Tracing path to ${FILTERED_INPUT} ..."
-          tracepath6 -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" >> "${FILENAME_PREFIX}${FILENAME}"
-          
-          clear_line
-          cat < "${FILENAME_PREFIX}${FILENAME}" | uniq
-          
-          mr_proper
-          exit 0
-        else
-          error_exit "${DIALOG_SERVER_IS_DOWN}"
-        fi
-      ;;
-    esac
-  fi  
+  hash tracepath &>/dev/null && __TRACEPATH__=1 || __TRACEPATH__=0
+  hash traceroute &>/dev/null && __TRACEROUTE__=1 || __TRACEROUTE__=0
+  hash mtr &>/dev/null && __MTR__=1 || __MTR__=0
+
+  check_for_missing_args "${DIALOG_NO_ARGUMENTS}" "$2"
+  
+  FILTERED_INPUT=$(echo "$2" | sed 's/^http\(\|s\):\/\///g' | cut -f 1 -d "/")
+  FILENAME="next_hops_for_${FILTERED_INPUT}"
+  check_and_touch "${FILENAME}"
+
+  case "$1" in
+    "--ipv4") PROTOCOL=4; ;;
+    "--ipv6") check_ipv6; PROTOCOL=6; ;;
+  esac
+
+  print_check "$2"
+
+  timeout "${SHORT_TIMEOUT}" ping -q -c 1 "${FILTERED_INPUT}" &>/dev/null || error_exit "${DIALOG_DESTINATION_UNREACHABLE}"
+
+  clear_line
+  echo -ne "Tracing path to ${GREEN}${FILTERED_INPUT}${NORMAL} ..."
+  # traceroute is deprecated, nevertheless it is preferred over all
+  case "${__TRACEPATH__}:${__TRACEROUTE__}:${__MTR__}" in
+    # If none of the tools (tracepath, traceroute, mtr) is installed
+    0:0:0)
+      echo -e "${DIALOG_NO_TRACE_COMMAND}"
+    ;;
+    # If it is installed 'mtr' only
+    0:0:1)
+      mtr -"${PROTOCOL}" -c 2 -n --report "${FILTERED_INPUT}" | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+    ;;
+    # If it is installed 'traceroute' only
+    0:1:0)
+      timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+    ;;
+    # If it is installed 'traceroute' and 'mtr' only
+    0:1:1)
+      mtr -"${PROTOCOL}" -c 2 -n --report "${FILTERED_INPUT}" | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+    ;;
+    # If it is installed 'tracepath' only
+    1:0:0)
+      # tracepath6 workaround: Many linux distributions do not have tracepath6 (it is included in manpages tho :/)
+      hash tracepath6 &>/dev/null && PROTOCOL=6 || PROTOCOL=""
+      
+      timeout "${SHORT_TIMEOUT}" tracepath"${PROTOCOL}" -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+    ;;
+    # If it is installed 'tracepath' and 'mtr' only
+    1:0:1)
+      mtr -"${PROTOCOL}" -c 2 -n --report "${FILTERED_INPUT}" | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+    ;;
+    # If it is installed 'tracepath' and 'traceroute' only
+    1:1:0)
+      timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+    ;;
+    # If it is installed 'tracepath', 'traceroute' and 'mtr'
+    1:1:1)
+      timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" | awk '{print $2}' | egrep -o "${REGEX_IPV4}" >> "${FILENAME_PREFIX}${FILENAME}"
+    ;;
+  esac
+  
+  clear_line
+  cat < "${FILENAME_PREFIX}${FILENAME}" | uniq
+
+  mr_proper
 }
 
 # Prints active network interfaces with their MAC address.
@@ -402,10 +415,8 @@ function show_neighbor_cache() {
 
 # Extracts valid IPv4, IPv6 and MAC addresses from a URL.
 function show_ips_from_url() {
-  
-  if [[ -z "$1" ]]; then 
-    error_exit "No URL was specified. ${DIALOG_ABORTING}"
-  fi
+
+  check_for_missing_args "No URL was specified. ${DIALOG_ABORTING}" "$1"
   
   local HTTP_CODE
   local FILENAME_HTML
@@ -496,7 +507,7 @@ function show_ipv4_cidr() {
 function show_ipv6_cidr() {
   
   declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
-  declare -a IPV6_CIDR_ARRAY=($(ip -6 addr | grep inet6 | awk -F '[ \t]+|' '{print $3}' | grep -v ^::1 | grep -v ^fe80 | awk '{print toupper($0)}'))
+  declare -a IPV6_CIDR_ARRAY=($(ip -6 addr | grep inet6 | awk -F '[ \t]+|' '{print $3}' | grep -v ^::1 | grep -v ^fe80 | awk '{print toupper($0)}' 2> /dev/null))
 
   for i in "${!IPV6_CIDR_ARRAY[@]}"; do
     printf "%-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
@@ -591,15 +602,22 @@ function clear_line() {
 function check_connectivity() {
   
   case "$1" in
-    "--local") ip route | grep "^default" > /dev/null || error_exit "${DIALOG_NO_LOCAL_CONNECTION}" ;;
-    "--internet") ping -q -c 1 -W "${TIMEOUT}" "${GOOGLE_DNS}" > /dev/null || error_exit "${DIALOG_NO_INTERNET}" ;;
+    "--local") ip route | grep "^default" &>/dev/null || error_exit "${DIALOG_NO_LOCAL_CONNECTION}" ;;
+    "--internet") ping -q -c 1 -W "${LONG_TIMEOUT}" "${GOOGLE_DNS}" &>/dev/null || error_exit "${DIALOG_NO_INTERNET}" ;;
   esac
 }
 
 # Checks if ipv6 module is loaded.
 function check_ipv6() {
   
-  cat < /proc/modules | grep -io ipv6 > /dev/null || error_exit "${_RED_}IPv6 ${NORMAL}unavailable. ${DIALOG_ABORTING}"
+  cat < /proc/modules | grep -io ipv6 &>/dev/null || error_exit "${_RED_}IPv6 ${NORMAL}unavailable. ${DIALOG_ABORTING}"
+}
+
+# Checks if an argument is passed, if not exit.
+# $1=error message, $2=argument
+function check_for_missing_args() {
+
+  if [[ -z "$2" ]]; then error_exit "$1"; fi
 }
 
 # e.g.(-f example.com). Checks if "example.com" is empty. $1 is the option, $2 is the alternative option and $3 is the passed parameter.
@@ -611,9 +629,7 @@ function check_command() {
 # Verifies parameter to be number.
 function check_if_parameter_is_not_numerical() {
   
-  case "$1" in
-    ''|*[!0-9]*) error_exit "${DIALOG_NOT_A_NUMBER}" "$1";;
-  esac
+  case "$1" in ''|*[!0-9]*) error_exit "${DIALOG_NOT_A_NUMBER}" "$1";; esac
 }
 
 # Handle file creation.
@@ -623,7 +639,7 @@ function check_and_touch() {
   
   FILENAME_SUFFIX="$1"
   
-  if [[ ! -f "$1" ]]; then touch "${FILENAME_PREFIX}${FILENAME_SUFFIX}" 2> /dev/null; fi
+  if [[ ! -f "$1" ]]; then touch "${FILENAME_PREFIX}${FILENAME_SUFFIX}" &>/dev/null; fi
 }
 
 # Checks for root privileges.
@@ -645,7 +661,7 @@ function check_bash_version() {
 # Deletes every file that is created by this script. Usually in /tmp.
 function mr_proper() {
   
-  rm -rf ${FILENAME_PREFIX}* 2> /dev/null
+  rm -rf ${FILENAME_PREFIX}* &>/dev/null
 }
 
 # Traps INT and SIGTSTP.
@@ -659,7 +675,7 @@ function trap_handler() {
   
 	while [[ ! "${YESNO}" =~ ^[YyNn]$ ]]; do
 		echo -ne "Exit? [y/n] "
-    read -r YESNO 2> /dev/null
+    read -r YESNO &>/dev/null
 	done
 
 	if [[ "${YESNO}" = "Y" ]]; then
@@ -669,9 +685,9 @@ function trap_handler() {
 	fi
   
 	if [[ "${YESNO}" = "y" ]]; then
+    clear
     handle_jobs
     mr_proper
-    clear
     
     exit 0
   fi
@@ -716,8 +732,8 @@ function sail() {
   
   if [[ -z "$1" ]]; then error_exit "${DIALOG_ERROR}"; fi
   
-  trap trap_handler INT 2> /dev/null
-  trap trap_handler SIGTSTP 2> /dev/null
+  trap trap_handler INT &>/dev/null
+  trap trap_handler SIGTSTP &>/dev/null
   check_bash_version
   
   while :; do
