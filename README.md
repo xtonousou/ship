@@ -1,4 +1,4 @@
-# shIP (aka. show IP)[![License](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg?style=flat-square)](https://raw.githubusercontent.com/xtonousou/shIP/master/LICENSE)
+# shIP (aka. show IP) [![License](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg?style=flat-square)](https://raw.githubusercontent.com/xtonousou/shIP/master/LICENSE)
 A simple, handy network addressing multitool with plenty features.
 ![alt text](https://raw.githubusercontent.com/xtonousou/shIP/master/imgs/head.png "SAIL!")
 
