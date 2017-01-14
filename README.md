@@ -42,7 +42,7 @@ A simple, handy network addressing multitool with plenty features.
 
 Be sure to check out [this](https://github.com/xtonousou/shIP/blob/master/CHANGELOG.md).
 
-## Getting Started
+## :computer: Getting Started
 
 * Method one (**recommended**)
   * `wget -q https://raw.githubusercontent.com/xtonousou/shIP/master/ship.sh`
@@ -56,15 +56,15 @@ Be sure to check out [this](https://github.com/xtonousou/shIP/blob/master/CHANGE
   * `cd /path/to/shIP`
   * `bash ship.sh`
 
-## Contribution
+## :octocat: Contribution
 
-More distributions support compatibility.
-Suggestions, new features.
-Testing and feedback.
+More distributions support compatibility.<br/>
+Suggestions, new features.<br/>
+Testing and feedback.<br/>
 
 * Choices
   * Send an :e-mail: to `xtonousou@gmail.com`.
-  * Submit a pull request. :octocat:
+  * Submit a pull request.
 
 If you choose to submit a pull request, make sure you read all needed [information](https://github.com/xtonousou/shIP/blob/master/.github/PULL_REQUEST_TEMPLATE.md) first. :books:
 
