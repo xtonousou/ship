@@ -1,11 +1,21 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.2] - 2017-01-14
+### Added
+* Driver info on `ship --all` and `ship --cidr-a`.
+
+### Changed
+* Fixed `ship --external`.
+* Replaced `printf` with `echo` on some options for better quality and external use.
+* Usage for better readability.
+* README.
+
 ## [2.1] - 2017-01-11
 ### Changed
 * Code flow a bit.
 * Issue template `.github/ISSUE_TEMPLATE.md`.
-* Fixed #26.
+* Fixed [#26](https://github.com/xtonousou/shIP/issues/26).
 * Compressed head.png for less usage.
 * README.
 
