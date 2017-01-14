@@ -19,7 +19,7 @@ A simple, handy network addressing multitool with plenty features.
 **Bash [3.2](http://www.tldp.org/LDP/abs/html/bashver3.html#AEN20987 "View changelog.") or later.**
 
 | Tool                                                               | Possible package name |
-| ------------------------------------------------------------------ | --------------------- |
+|--------------------------------------------------------------------|-----------------------|
 | awk                                                                | awk / gawk            |
 | cat cut echo id paste printf rm sort split tail timeout touch uniq | coreutils             |
 | grep                                                               | grep                  |
@@ -40,7 +40,7 @@ A simple, handy network addressing multitool with plenty features.
 
 ## :scroll: Changelog
 
-Be sure to check out [this](https://github.com/xtonousou/shIP/blob/master/CHANGELOG.md).
+Be sure to check out [this](CHANGELOG.md).
 
 ## :computer: Getting Started
 
@@ -71,4 +71,4 @@ Testing and feedback.<br/>
 If you choose to submit a pull request, make sure you read all needed [information](.github/PULL_REQUEST_TEMPLATE.md) first. :books:
 
 ## LICENSE
-This script is under GPLv3 (or later) [License](LICENSE.md).
+This script is under GPLv3 (or later) [License](LICENSE.md). :page_with_curl:
