@@ -1,4 +1,4 @@
-# shIP (aka. show IP) [![License](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg?style=flat-square)](https://raw.githubusercontent.com/xtonousou/shIP/master/LICENSE)
+# shIP (aka. show IP) [![License](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg?style=flat-square)](LICENSE.md)
 A simple, handy network addressing multitool with plenty features.
 ![alt text](https://raw.githubusercontent.com/xtonousou/shIP/master/imgs/head.png "SAIL!")
 
@@ -30,14 +30,13 @@ A simple, handy network addressing multitool with plenty features.
     ├── traceroute          ├── traceroute
     └── wget                └── wget
 
-## Tested On
+Tested on:
 
-| Distribution | Version            |
-|--------------|--------------------|
-| Ubuntu       | 14.04.3 - 16.04.1  |
-| Debian       | 7 - 8              |
-| Kali         | 2016.2             |
-| Arch         | 4.7.5-1 - 4.8.13-1 |
+    Distribution    Version
+    ├── Ubuntu      ├── 14.04.3 - 16.04.1
+    ├── Debian      ├── 7 - 8
+    ├── Kali        ├── 2016.2
+    └── Arch        ├── 4.7.5-1 - 4.8.13-1
 
 ## :scroll: Changelog
 
@@ -48,13 +47,11 @@ Be sure to check out [this](https://github.com/xtonousou/shIP/blob/master/CHANGE
 * Method one (**recommended**)
   * `wget -q https://raw.githubusercontent.com/xtonousou/shIP/master/ship.sh`
   * `bash ship.sh`
-* Method two (for the lazy ones)
-  * `wget -q https://raw.githubusercontent.com/xtonousou/shIP/master/ship.sh && bash ship.sh`
-* Method three
+* Method two
   * `wget -q https://raw.githubusercontent.com/xtonousou/shIP/master/ship.sh`
   * `chmod +x ship.sh` need root privileges
   * `./ship.sh`
-* Method four (clone repository)
+* Method three (clone repository)
   * `git clone https://github.com/xtonousou/shIP.git`
   * `cd /path/to/shIP`
   * `bash ship.sh`
@@ -65,9 +62,11 @@ Be sure to check out [this](https://github.com/xtonousou/shIP/blob/master/CHANGE
 * Suggestions, new features.
 * Testing and feedback.
 
-You can send an email to `xtonousou@gmail.com` or submit a pull request.
+* Choices
+  * :e-mail: Send an email to `xtonousou@gmail.com`.
+  * /play pushit Submit a pull request.
 
 If you choose to submit a pull request, make sure you read all needed [information](https://github.com/xtonousou/shIP/blob/master/.github/PULL_REQUEST_TEMPLATE.md) first.
 
 ## LICENSE
-This script is under GPLv3 (or later) License.
+This script is under GPLv3 (or later) [License](LICENSE.md).
