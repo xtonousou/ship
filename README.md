@@ -38,7 +38,7 @@ A simple, handy network addressing multitool with plenty features.
     ├── Kali        ├── 2016.2
     └── Arch        └── 4.7.5-1 - 4.8.13-1
 
-## :scroll: Changelog
+## :page_with_curl: Changelog
 
 Be sure to check out [this](CHANGELOG.md).
 
@@ -56,7 +56,7 @@ Be sure to check out [this](CHANGELOG.md).
   * `cd /path/to/shIP`
   * `bash ship.sh`
 
-#### Replace "master", on URL, with the preferred branch.
+Replace `master` on URL with the preferred branch.
 
 ## :octocat: Contribution
 
@@ -70,5 +70,5 @@ Testing and feedback.<br/>
 
 If you choose to submit a pull request, make sure you read all needed [information](.github/PULL_REQUEST_TEMPLATE.md) first. :books:
 
-## LICENSE
-This script is under GPLv3 (or later) [License](LICENSE.md). :page_with_curl:
+## :scroll: LICENSE
+This script is under GPLv3 (or later) [License](LICENSE.md).
