@@ -1,6 +1,6 @@
 # :ship: shIP (aka. show IP) [![License](https://img.shields.io/badge/License-GPL%20v3%2B-blue.svg?style=flat-square)](LICENSE.md)
 A simple, handy network addressing multitool with plenty features.
-![alt text](https://raw.githubusercontent.com/xtonousou/shIP/master/imgs/head.png "SAIL!")
+![alt text](imgs/head.png "SAIL!")
 
 ## :anchor: Features
 
