@@ -56,6 +56,8 @@ Be sure to check out [this](https://github.com/xtonousou/shIP/blob/master/CHANGE
   * `cd /path/to/shIP`
   * `bash ship.sh`
 
+#### Replace "master", on URL, with the preferred branch.
+
 ## :octocat: Contribution
 
 More distributions support compatibility.<br/>
@@ -66,7 +68,7 @@ Testing and feedback.<br/>
   * Send an :e-mail: to `xtonousou@gmail.com`.
   * Submit a pull request.
 
-If you choose to submit a pull request, make sure you read all needed [information](https://github.com/xtonousou/shIP/blob/master/.github/PULL_REQUEST_TEMPLATE.md) first. :books:
+If you choose to submit a pull request, make sure you read all needed [information](.github/PULL_REQUEST_TEMPLATE.md) first. :books:
 
 ## LICENSE
 This script is under GPLv3 (or later) [License](LICENSE.md).
