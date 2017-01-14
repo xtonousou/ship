@@ -8,7 +8,7 @@ AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="https://github.com/${AUTHOR_NICKNAME}"
-VERSION="2.1"
+VERSION="2.2"
 
 ### Colors
 GREEN="\033[1;32m"
@@ -24,7 +24,7 @@ IPINFO="ipinfo.io"
 
 ### Dialogs
 DIALOG_PRESS_CTRL_C="Press [CTRL+C] to stop"
-DIALOG_ERROR="Try ${GREEN}ship --help${NORMAL} for more information."
+DIALOG_ERROR="Try ship ${GREEN}-h${NORMAL} or ship ${GREEN}--help${NORMAL} for more information."
 DIALOG_ABORTING="${_RED_}Aborting${NORMAL}."
 DIALOG_NO_INTERNET="Internet connection unavailable. ${DIALOG_ABORTING}"
 DIALOG_NO_LOCAL_CONNECTION="Local connection unavailable. ${DIALOG_ABORTING}"
@@ -69,7 +69,7 @@ function show_ipv4() {
   declare -a IPV4_ARRAY=($(ip addr show | grep -w inet | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
 
   for i in "${!INTERFACES_ARRAY[@]}"; do
-    printf "%-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV4_ARRAY[i]}"
+    echo "${INTERFACES_ARRAY[i]}" "${IPV4_ARRAY[i]}"
   done
 }
 
@@ -82,7 +82,7 @@ function show_ipv6() {
   declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))  
 
   for i in "${!INTERFACES_ARRAY[@]}"; do
-    printf "%-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV6_ARRAY[i]}"
+    echo "${INTERFACES_ARRAY[i]}" "${IPV6_ARRAY[i]}"
   done
 }
 
@@ -90,14 +90,24 @@ function show_ipv6() {
 function show_all() {
   
   local MAC_OF
+  local DRIVER_OF
   
   declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
   declare -a IPV4_ARRAY=($(ip addr show | grep -w inet  | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2))
   declare -a IPV6_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | cut -d "/" -f 1 | tail -n +2 | awk '{print toupper($0)}'))
   
   for i in "${!INTERFACES_ARRAY[@]}"; do
+    if [[ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ]]; then
+      DRIVER_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" | grep ^"DRIVER" | awk -F '=' '{print $2}')
+    else
+      DRIVER_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent" | grep ^"DRIVER" | awk -F '=' '{print $2}')
+    fi
     MAC_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/address" | awk '{print toupper($0)}' 2> /dev/null)
-    printf "%-14s%-20s%-18s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
+    if cat < /proc/modules | grep -io ipv6 &>/dev/null; then
+      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
+    else
+      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${IPV4_ARRAY[i]}"
+    fi
   done
 }
 
@@ -114,11 +124,11 @@ function show_driver() {
     else
       DRIVER_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent" | grep ^"DRIVER" | awk -F '=' '{print $2}')
     fi
-    printf "%-14s%s\n" "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" 
+    echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" 
   done
 }
 
-# Prints the public IP address of a website or server. If $1 is empty prints user's public IP, if not, $1 should be example.com.
+# Prints the external IP address/es. If $1 is empty prints user's public IP, if not, $1 should be like example.com.
 function show_ip_from() {
   
   local HTTP_CODE
@@ -139,13 +149,9 @@ function show_ip_from() {
     
     clear_line
     cat < "${FILENAME_PREFIX}${FILENAME}"
-    
-    mr_proper
   else
     print_check "$1"
-    HTTP_CODE=$(wget --spider -t 1 --timeout="${TIMEOUT}" -S "$1" 2>&1 | grep "HTTP/" | awk '{print $2}' | tail -n1)
-    
-    if [[ ! "${HTTP_CODE}" -eq 200 ]]; then error_exit "${DIALOG_SERVER_IS_DOWN}"; fi
+    check_destination "$1"
 
     clear_line
     FILENAME="ips_from_$1"
@@ -160,8 +166,6 @@ function show_ip_from() {
   
     clear_line
     cat < "${FILENAME_PREFIX}${FILENAME}" | sort -Vu
-    
-    mr_proper
   fi
 }
 
@@ -176,19 +180,20 @@ function show_ips_from_file() {
   local FILENAME_IPV6
   local FILENAME_MAC
 
-  FILENAME_IPV4="ipv4s_from_$1"
-  FILENAME_IPV6="ipv6s_from_$1"
-  FILENAME_MAC="macs_from_$1"
+  FILENAME_IPV4="ipv4s_from_file"
+  FILENAME_IPV6="ipv6s_from_file"
+  FILENAME_MAC="macs_from_file"
   
   check_and_touch "${FILENAME_IPV4}"
   check_and_touch "${FILENAME_IPV6}"
   check_and_touch "${FILENAME_MAC}"
   
   if [[ ! -f "$1" ]]; then error_exit "No such file. ${DIALOG_ABORTING}"; fi
-  
-  grep -E -o "${REGEX_IPV4}" "$1" | sort -Vu >> "${FILENAME_PREFIX}${FILENAME_IPV4}"
-  grep -E -o "${REGEX_IPV6}" "$1" | sort -Vu >> "${FILENAME_PREFIX}${FILENAME_IPV6}"
-  grep -E -o "${REGEX_MAC}"  "$1" | sort -Vu >> "${FILENAME_PREFIX}${FILENAME_MAC}" 
+
+  # &>/dev/null is used to exclude non-text files (Binary file "bla bla" matches)
+  grep -E -o "${REGEX_IPV4}" "$1" &>/dev/null | sort -Vu >> "${FILENAME_PREFIX}${FILENAME_IPV4}"
+  grep -E -o "${REGEX_IPV6}" "$1" &>/dev/null | sort -Vu >> "${FILENAME_PREFIX}${FILENAME_IPV6}"
+  grep -E -o "${REGEX_MAC}"  "$1" &>/dev/null | sort -Vu >> "${FILENAME_PREFIX}${FILENAME_MAC}"
   
   handle_jobs
   
@@ -217,8 +222,6 @@ function show_ips_from_file() {
   # if there are only                                                                                           ^^^addresses...
     paste "${FILENAME_PREFIX}${FILENAME_MAC}" | awk -F '\t' '{printf("%s\n", $1)}'
   fi
-  
-  mr_proper
 }
 
 # Prints active network interfaces and their gateway.
@@ -230,7 +233,7 @@ function show_gateway() {
 
   for i in "${!INTERFACES_ARRAY[@]}"; do
     GATEWAY=$(ip route | grep "${INTERFACES_ARRAY[i]}" | grep ^default | awk '{print $3}')
-    printf "%-14s%s\n" "${INTERFACES_ARRAY[i]}" "${GATEWAY}"
+    echo "${INTERFACES_ARRAY[i]}" "${GATEWAY}"
   done
 }
 
@@ -270,8 +273,6 @@ function show_live_hosts() {
       ip neigh | egrep "${REGEX_MAC}" | egrep -i "reachable|stale|delay|probe" | awk '{printf ("%5s\t%s\n", $1, toupper($5))}' | sort -Vu
     ;;
   esac
-  
-  mr_proper
 }
 
 # Prints active network interfaces.
@@ -279,7 +280,7 @@ function show_interfaces() {
   
   declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
 
-  printf "%s\n" "${INTERFACES_ARRAY[@]}"
+  echo "${INTERFACES_ARRAY[@]}"
 }
 
 # Prints connections and the count of them per IP.
@@ -335,7 +336,7 @@ function show_next_hops() {
 
   print_check "$2"
 
-  timeout "${SHORT_TIMEOUT}" ping -q -c 1 "${FILTERED_INPUT}" &>/dev/null || error_exit "${DIALOG_DESTINATION_UNREACHABLE}"
+  check_destination "${FILTERED_INPUT}"
 
   clear_line
   echo -ne "Tracing path to ${GREEN}${FILTERED_INPUT}${NORMAL} ..."
@@ -380,8 +381,6 @@ function show_next_hops() {
   
   clear_line
   cat < "${FILENAME_PREFIX}${FILENAME}" | uniq
-
-  mr_proper
 }
 
 # Prints active network interfaces with their MAC address.
@@ -393,7 +392,7 @@ function show_mac() {
   
   for i in "${!INTERFACES_ARRAY[@]}"; do
     MAC_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/address" | awk '{print toupper($0)}' 2> /dev/null)
-    printf "%-14s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}"
+    echo "${INTERFACES_ARRAY[i]}" "${MAC_OF}"
   done
 }
 
@@ -409,8 +408,6 @@ function show_neighbor_cache() {
   grep -vi 'router' | \
   awk '{printf ("%-16s%-20s%s\n", $1, toupper($5), $6)}' >> "${FILENAME_PREFIX}${FILENAME}"
   cat < "${FILENAME_PREFIX}${FILENAME}" | sort -V
-  
-  mr_proper
 }
 
 # Extracts valid IPv4, IPv6 and MAC addresses from a URL.
@@ -476,8 +473,6 @@ function show_ips_from_url() {
   # if there are only                                                                                                                            ^^^addresses...
     paste "${FILENAME_PREFIX}${FILENAME_MAC}" | awk -F '\t' '{printf("%s\n", toupper($1))}'
   fi
-  
-  mr_proper
 }
 
 # Prints script's version and author's info.
@@ -499,7 +494,7 @@ function show_ipv4_cidr() {
   declare -a IPV4_CIDR_ARRAY=($(ip addr show | grep -w inet | awk '{print $2}' | tail -n +2))
   
   for i in "${!IPV4_CIDR_ARRAY[@]}"; do
-    printf "%-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV4_CIDR_ARRAY[i]}"
+    echo "${INTERFACES_ARRAY[i]}" "${IPV4_CIDR_ARRAY[i]}"
   done
 }
 
@@ -510,7 +505,7 @@ function show_ipv6_cidr() {
   declare -a IPV6_CIDR_ARRAY=($(ip -6 addr | grep inet6 | awk -F '[ \t]+|' '{print $3}' | grep -v ^::1 | grep -v ^fe80 | awk '{print toupper($0)}' 2> /dev/null))
 
   for i in "${!IPV6_CIDR_ARRAY[@]}"; do
-    printf "%-14s%s\n" "${INTERFACES_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
+    echo "${INTERFACES_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
   done
 }
 
@@ -518,14 +513,24 @@ function show_ipv6_cidr() {
 function show_all_cidr() {
   
   local MAC_OF
+  local DRIVER_OF
   
   declare -a INTERFACES_ARRAY=($(ip route | grep "default" | awk '{print $5}'))
   declare -a IPV4_CIDR_ARRAY=($(ip addr show | grep -w inet  | awk '{print $2}' | tail -n +2))
   declare -a IPV6_CIDR_ARRAY=($(ip addr show | grep -w inet6 | awk '{print $2}' | tail -n +2 | awk '{print toupper($0)}'))
   
   for i in "${!INTERFACES_ARRAY[@]}"; do
+    if [[ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ]]; then
+      DRIVER_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" | grep ^"DRIVER" | awk -F '=' '{print $2}')
+    else
+      DRIVER_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent" | grep ^"DRIVER" | awk -F '=' '{print $2}')
+    fi
     MAC_OF=$(cat < "/sys/class/net/${INTERFACES_ARRAY[i]}/address" | awk '{print toupper($0)}' 2> /dev/null)
-    printf "%-14s%-20s%-21s%s\n" "${INTERFACES_ARRAY[i]}" "${MAC_OF}" "${IPV4_CIDR_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
+    if cat < /proc/modules | grep -io ipv6 &>/dev/null; then
+      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${IPV4_CIDR_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
+    else
+      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${IPV4_CIDR_ARRAY[i]}"
+    fi
   done
 }
 
@@ -533,27 +538,28 @@ function show_all_cidr() {
 function show_usage() {
   
   echo    " usage: ship [OPTION] <ARGUMENT>"
-  echo -e "  ${GREEN}ship -4 ${NORMAL}, ${GREEN}--ipv4 ${NORMAL}          shows active interfaces with their IPv4 address"
-  echo -e "  ${GREEN}ship -6 ${NORMAL}, ${GREEN}--ipv6 ${NORMAL}          shows active interfaces with their IPv6 address"
-  echo -e "  ${GREEN}ship -a ${NORMAL}, ${GREEN}--all ${NORMAL}           shows basic info"
-  echo -e "  ${GREEN}ship -d ${NORMAL}, ${GREEN}--driver ${NORMAL}        shows each active interface's driver"
-  echo -e "  ${GREEN}ship -e ${NORMAL}, ${GREEN}--external ${NORMAL}<>    shows external IP addresses"
-  echo -e "  ${GREEN}ship -f ${NORMAL}, ${GREEN}--find ${NORMAL}<>        shows valid IP and MAC addresses found on a file"
-  echo -e "  ${GREEN}ship -g ${NORMAL}, ${GREEN}--gateway ${NORMAL}       shows gateway of online interfaces"
-  echo -e "  ${CYAN}ship -H ${NORMAL}, ${CYAN}--help${NORMAL}, ${CYAN}help ${NORMAL}    shows this help message"
-  echo -e "  ${_RED_}ship -h ${NORMAL}, ${_RED_}--hosts ${NORMAL}         shows active hosts on network"
-  echo -e "  ${_RED_}ship -hm${NORMAL}, ${_RED_}--hosts-mac ${NORMAL}     shows active hosts on network with their MAC address"
-  echo -e "  ${GREEN}ship -i ${NORMAL}, ${GREEN}--interfaces ${NORMAL}    shows active interfaces"
-  echo -e "  ${GREEN}ship -m ${NORMAL}, ${GREEN}--mac ${NORMAL}           shows active interfaces with their MAC address"
-  echo -e "  ${GREEN}ship -n ${NORMAL}, ${GREEN}--neighbor ${NORMAL}      shows neighbor cache"
-  echo -e "  ${_RED_}ship -p ${NORMAL}, ${_RED_}--port ${NORMAL}<>        shows connections to a port per IP"
-  echo -e "  ${GREEN}ship -r ${NORMAL}, ${GREEN}--route-ipv4 ${NORMAL}<>  shows the path to a network host using IPv4"
-  echo -e "  ${GREEN}ship -r6${NORMAL}, ${GREEN}--route-ipv6 ${NORMAL}<>  shows the path to a network host using IPv6"
-  echo -e "  ${GREEN}ship -u ${NORMAL}, ${GREEN}--url ${NORMAL}<>         shows valid IP and MAC addresses found on a website"
-  echo -e "  ${GREEN}ship -v ${NORMAL}, ${GREEN}--version ${NORMAL}       shows the version of script"
-  echo -e "  ${GREEN}ship --cidr-4${NORMAL}, ${GREEN}--cidr-ipv4 ${NORMAL}shows active interfaces with their IPv4 address and CIDR"
-  echo -e "  ${GREEN}ship --cidr-6${NORMAL}, ${GREEN}--cidr-ipv6 ${NORMAL}shows active interfaces with their IPv6 address and CIDR"
-  echo -e "  ${GREEN}ship --cidr-a${NORMAL}, ${GREEN}--cidr-all ${NORMAL} shows basic info with CIDR"
+  echo -e "  ship ${GREEN}-4 ${NORMAL}, ${GREEN}--ipv4 ${NORMAL}          shows active interfaces with their IPv4 address"
+  echo -e "  ship ${GREEN}-6 ${NORMAL}, ${GREEN}--ipv6 ${NORMAL}          shows active interfaces with their IPv6 address"
+  echo -e "  ship ${GREEN}-a ${NORMAL}, ${GREEN}--all ${NORMAL}           shows all basic info"
+  echo -e "  ship ${GREEN}-d ${NORMAL}, ${GREEN}--driver ${NORMAL}        shows each active interface's driver"
+  echo -e "  ship ${GREEN}-e ${NORMAL}, ${GREEN}--external ${NORMAL}<>    shows external IP addresses (pass no argument to show yours)"
+  echo -e "  ship ${GREEN}-f ${NORMAL}, ${GREEN}--find ${NORMAL}<>        shows valid IP and MAC addresses found on a file"
+  echo -e "  ship ${GREEN}-g ${NORMAL}, ${GREEN}--gateway ${NORMAL}       shows gateway of online interfaces"
+  echo -e "  ship ${GREEN}-h ${NORMAL}, ${GREEN}--help${NORMAL}           shows this help message"
+  echo -e "  ship ${_RED_}-H ${NORMAL}, ${_RED_}--hosts ${NORMAL}         shows active hosts on network"
+  echo -e "  ship ${_RED_}-HM${NORMAL}, ${_RED_}--hosts-mac ${NORMAL}     shows active hosts on network with their MAC address"
+  echo -e "  ship ${GREEN}-i ${NORMAL}, ${GREEN}--interfaces ${NORMAL}    shows active interfaces"
+  echo -e "  ship ${GREEN}-m ${NORMAL}, ${GREEN}--mac ${NORMAL}           shows active interfaces with their MAC address"
+  echo -e "  ship ${GREEN}-n ${NORMAL}, ${GREEN}--neighbor ${NORMAL}      shows neighbor cache"
+  echo -e "  ship ${_RED_}-P ${NORMAL}, ${_RED_}--port ${NORMAL}<>        shows connections to a port per IP (pass no argument to show common ports)"
+  echo -e "  ship ${GREEN}-r ${NORMAL}, ${GREEN}--route-ipv4 ${NORMAL}<>  shows the path to a network host using IPv4"
+  echo -e "  ship ${GREEN}-r6${NORMAL}, ${GREEN}--route-ipv6 ${NORMAL}<>  shows the path to a network host using IPv6"
+  echo -e "  ship ${GREEN}-u ${NORMAL}, ${GREEN}--url ${NORMAL}<>         shows valid IP and MAC addresses found on a website"
+  echo -e "  ship ${GREEN}-v ${NORMAL}, ${GREEN}--version ${NORMAL}       shows the version of script"
+  echo -e "  ship ${GREEN}--cidr-4${NORMAL}, ${GREEN}--cidr-ipv4 ${NORMAL}shows active interfaces with their IPv4 address and CIDR"
+  echo -e "  ship ${GREEN}--cidr-6${NORMAL}, ${GREEN}--cidr-ipv6 ${NORMAL}shows active interfaces with their IPv6 address and CIDR"
+  echo -e "  ship ${GREEN}--cidr-a${NORMAL}, ${GREEN}--cidr-all ${NORMAL} shows all basic info with CIDR"
+  echo -e " options in ${_RED_}red${NORMAL} require root privileges"
 }
 
 ########################################################################
@@ -605,6 +611,12 @@ function check_connectivity() {
     "--local") ip route | grep "^default" &>/dev/null || error_exit "${DIALOG_NO_LOCAL_CONNECTION}" ;;
     "--internet") ping -q -c 1 -W "${LONG_TIMEOUT}" "${GOOGLE_DNS}" &>/dev/null || error_exit "${DIALOG_NO_INTERNET}" ;;
   esac
+}
+
+# Exits ship, if ping fails to reach $1 in an mount of time.
+function check_destination() {
+
+  timeout "${SHORT_TIMEOUT}" ping -q -c 1 "$1" &>/dev/null || error_exit "${DIALOG_DESTINATION_UNREACHABLE}"
 }
 
 # Checks if ipv6 module is loaded.
@@ -711,7 +723,7 @@ function error_exit() {
     exit 1
   else
     clear_line
-    echo -e  "${GREEN}ship${NORMAL}: invalid option '$2'" 
+    echo -e  "ship: invalid option '$2'" 
     echo -e  "$1"
 
     mr_proper
@@ -745,10 +757,11 @@ function sail() {
             "-e"|"--external") check_connectivity "--internet"; show_ip_from "$2"; shift 2; break ;;
             "-f"|"--find") show_ips_from_file "$2"; shift 2; break ;;
             "-g"|"--gateway") check_connectivity "--local"; show_gateway; break ;;
-            "-h"|"--hosts") check_connectivity "--internet"; show_live_hosts --normal; break ;;
-           "-hm"|"--hosts-mac") check_connectivity "--internet"; show_live_hosts --mac; break ;;
+            "-h"|"--help") show_usage; break ;;
+            "-H"|"--hosts") check_connectivity "--internet"; show_live_hosts --normal; break ;;
+           "-HM"|"--hosts-mac") check_connectivity "--internet"; show_live_hosts --mac; break ;;
             "-i"|"--interfaces") check_connectivity "--local"; show_interfaces; break ;;
-            "-p"|"--port") check_connectivity "--internet"; show_port_connections "$2"; shift 2; break ;;
+            "-P"|"--port") check_connectivity "--internet"; show_port_connections "$2"; shift 2; break ;;
             "-r"|"--route-ipv4") check_connectivity "--internet"; show_next_hops --ipv4 "$2"; shift 2; break ;;
            "-r6"|"--route-ipv6") check_connectivity "--internet"; show_next_hops --ipv6 "$2"; shift 2; break ;;
             "-m"|"--mac") check_connectivity "--local"; show_mac; break ;;
@@ -758,11 +771,11 @@ function sail() {
       "--cidr-4"|"--cidr-ipv4") check_connectivity "--local"; show_ipv4_cidr; break ;;
       "--cidr-6"|"--cidr-ipv6") check_connectivity "--local"; show_ipv6_cidr; break ;;
       "--cidr-a"|"--cidr-all") check_connectivity "--local"; show_all_cidr; break ;;
-            "-H"|"--help"|"help") show_usage; break ;;
       *) error_exit "${DIALOG_ERROR}" "$1"; break ;;
     esac
   done
-  
+
+  mr_proper
   exit 0
 }
 
