@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.3] - 2017-01-18
+### Changed
+* Concatenation methods.
+* README.
+
+### Removed
+* Unused functions.
+
 ## [2.2] - 2017-01-14
 ### Added
 * Driver info on `ship --all` and `ship --cidr-a`.
@@ -22,7 +30,7 @@ All notable changes to this project will be documented in this file.
 ## [2.0] - 2017-01-03
 ### Added
 * Created issue template `.github/ISSUE_TEMPLATE.md` (thanks v1s1t0r1sh3r3 for the tip).
-* Created pr template `.github/PULL_REQUEST_TEMPLATE.md`.
+* Created pull request template `.github/PULL_REQUEST_TEMPLATE.md`.
 
 ### Changed
 * Usage.

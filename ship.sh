@@ -8,7 +8,7 @@ AUTHOR="Sotirios Roussis"
 AUTHOR_NICKNAME="xtonousou"
 GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 GITHUB="https://github.com/${AUTHOR_NICKNAME}"
-VERSION="2.2"
+VERSION="2.3"
 
 ### Colors
 GREEN="\033[1;32m"
@@ -37,18 +37,18 @@ DIALOG_NO_TRACE_COMMAND="You need at least one of the following tools to run thi
 ### Regexes
 REGEX_MAC="([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}"
 REGEX_IPV4="((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])"
-REGEX_IPV6="([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|"
-REGEX_IPV6="${REGEX_IPV6}([0-9a-fA-F]{1,4}:){1,7}:|"
-REGEX_IPV6="${REGEX_IPV6}([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|"
-REGEX_IPV6="${REGEX_IPV6}([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|"
-REGEX_IPV6="${REGEX_IPV6}([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|"
-REGEX_IPV6="${REGEX_IPV6}([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|"
-REGEX_IPV6="${REGEX_IPV6}([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|"
-REGEX_IPV6="${REGEX_IPV6}[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|"     
-REGEX_IPV6="${REGEX_IPV6}:((:[0-9a-fA-F]{1,4}){1,7}|:)|"
-REGEX_IPV6="${REGEX_IPV6}fe08:(:[0-9a-fA-F]{1,4}){2,2}%[0-9a-zA-Z]{1,}|" # (link-local IPv6 addresses with zone index)
-REGEX_IPV6="${REGEX_IPV6}::(ffff(:0{1,4}){0,1}:){0,1}${REGEX_IPV4}|"     # (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
-REGEX_IPV6="${REGEX_IPV6}([0-9a-fA-F]{1,4}:){1,4}:${REGEX_IPV4}"         # (IPv4-Embedded IPv6 Address)
+REGEX_IPV6+="([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|"
+REGEX_IPV6+="([0-9a-fA-F]{1,4}:){1,7}:|"
+REGEX_IPV6+="([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|"
+REGEX_IPV6+="([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|"
+REGEX_IPV6+="([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|"
+REGEX_IPV6+="([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|"
+REGEX_IPV6+="([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|"
+REGEX_IPV6+="[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|"     
+REGEX_IPV6+=":((:[0-9a-fA-F]{1,4}){1,7}|:)|"
+REGEX_IPV6+="fe08:(:[0-9a-fA-F]{1,4}){2,2}%[0-9a-zA-Z]{1,}|" # (link-local IPv6 addresses with zone index)
+REGEX_IPV6+="::(ffff(:0{1,4}){0,1}:){0,1}${REGEX_IPV4}|"     # (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
+REGEX_IPV6+="([0-9a-fA-F]{1,4}:){1,4}:${REGEX_IPV4}"         # (IPv4-Embedded IPv6 Address)
 
 ### Other Values
 SHORT_TIMEOUT="2"
@@ -577,25 +577,17 @@ function print_check() {
 # Prints a list of most common ports with protocols.
 function print_port_protocol_list() {
 
-  declare -a PORTS_ARRAY=("20-21" "22" "23" "25" "53" "67-68" "69" "80" "110" \
-               "123" "137-139" "143" "161-162" "179" "389" "443" "636" \
-               "989-990")
-  declare -a PORTS_TCP_UDP_ARRAY=("TCP" "TCP" "TCP" "TCP" "TCP/UDP" "UDP" "UDP" \
-                       "TCP" "TCP" "UDP" "TCP/UDP" "TCP" "TCP/UDP" "TCP"\
-                       "TCP/UDP" "TCP" "TCP/UDP" "TCP")
-  declare -a PORTS_PROTOCOL_ARRAY=("FTP" "SSH" "Telnet" "SMTP" "DNS" "DHCP" "TFTP" \
-                        "HTTP" "POPv3" "NTP" "NetBIOS" "IMAP" "SNMP" \
-                        "BGP" "LDAP" "HTTPS" "LDAPS" "FTP over TLS/SSL")
+  declare -a PORTS_ARRAY
+  declare -a PORTS_TCP_UDP_ARRAY
+  declare -a PORTS_PROTOCOL_ARRAY
+  
+  PORTS_ARRAY=("20-21" "22" "23" "25" "53" "67-68" "69" "80" "110" "123" "137-139" "143" "161-162" "179" "389" "443" "636" "989-990")
+  PORTS_TCP_UDP_ARRAY=("TCP" "TCP" "TCP" "TCP" "TCP/UDP" "UDP" "UDP" "TCP" "TCP" "UDP" "TCP/UDP" "TCP" "TCP/UDP" "TCP" "TCP/UDP" "TCP" "TCP/UDP" "TCP")
+  PORTS_PROTOCOL_ARRAY=("FTP" "SSH" "Telnet" "SMTP" "DNS" "DHCP" "TFTP" "HTTP" "POPv3" "NTP" "NetBIOS" "IMAP" "SNMP" "BGP" "LDAP" "HTTPS" "LDAPS" "FTP over TLS/SSL")
 
   for i in "${!PORTS_ARRAY[@]}"; do
     printf "%-17s%-8s%s\n" "${PORTS_PROTOCOL_ARRAY[i]}" "${PORTS_TCP_UDP_ARRAY[i]}" "${PORTS_ARRAY[i]}"
   done
-}
-
-# Informs when a network host is down. Requires $1 as the host.
-function print_network_host_down() {
-  
-  echo -e "${DIALOG_SERVER_IS_DOWN}"
 }
 
 # Clears previous line.
@@ -608,7 +600,7 @@ function clear_line() {
 function check_connectivity() {
   
   case "$1" in
-    "--local") ip route | grep "^default" &>/dev/null || error_exit "${DIALOG_NO_LOCAL_CONNECTION}" ;;
+    "--local") ip route | grep ^default &>/dev/null || error_exit "${DIALOG_NO_LOCAL_CONNECTION}" ;;
     "--internet") ping -q -c 1 -W "${LONG_TIMEOUT}" "${GOOGLE_DNS}" &>/dev/null || error_exit "${DIALOG_NO_INTERNET}" ;;
   esac
 }
@@ -622,7 +614,7 @@ function check_destination() {
 # Checks if ipv6 module is loaded.
 function check_ipv6() {
   
-  cat < /proc/modules | grep -io ipv6 &>/dev/null || error_exit "${_RED_}IPv6 ${NORMAL}unavailable. ${DIALOG_ABORTING}"
+  cat < /proc/modules | grep -io "ipv6" &>/dev/null || error_exit "${_RED_}IPv6 ${NORMAL}unavailable. ${DIALOG_ABORTING}"
 }
 
 # Checks if an argument is passed, if not exit.
@@ -630,12 +622,6 @@ function check_ipv6() {
 function check_for_missing_args() {
 
   if [[ -z "$2" ]]; then error_exit "$1"; fi
-}
-
-# e.g.(-f example.com). Checks if "example.com" is empty. $1 is the option, $2 is the alternative option and $3 is the passed parameter.
-function check_command() {
-
-  error_exit "${GREEN}ship $1 ${NORMAL}or ${GREEN}ship $2 ${NORMAL}$3"
 }
 
 # Verifies parameter to be number.
