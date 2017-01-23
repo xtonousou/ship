@@ -25,7 +25,7 @@ A simple, handy network addressing multitool with plenty features.
  * **IPv6** (*if possible*)
 * Compatible with most of the common linux distributions
 * Drag and drop URLs or file paths on console window
-* Cleaning temp files and handling tasks on exit
+* Cleaning temp files and handling remaining tasks on exit
 * Exit needs confirmation on long running tasks
 
 ## :anchor: Requirements
@@ -39,7 +39,7 @@ A simple, handy network addressing multitool with plenty features.
 | ip ss          | iproute2              | traceroute     | traceroute            |
 | mtr            | mtr                   | wget           | wget                  |
 
-The script also uses standard commands included in `coreutils` so they are not checked, <br/>
+The script also uses standard tools included in `coreutils` so they are not checked, <br/>
 e.g. (cat cut echo id paste printf rm sort split tail timeout touch uniq).
 
 ## :penguin: Compatibility
@@ -50,6 +50,11 @@ e.g. (cat cut echo id paste printf rm sort split tail timeout touch uniq).
 | Debian              | 7 - 8              |
 | Kali                | 2016.2             |
 | Ubuntu              | 14.04.3 - 16.04.1  |
+
+The script uses `ping` to check, test and validate connection and network hosts, it requires **CAP_NET_RAW** capability to be executed.
+
+* Kernel must support non-raw ICMP sockets
+* User must be allowed to create ICMPs echo sockets
 
 ## :page_with_curl: Changelog
 
@@ -76,7 +81,7 @@ Replace `master` on URL with the preferred branch.
 I welcome pull requests, issues, suggestions, testing and feedback.
 
 * Fork it
-* Create your feature branch (git checkout -b my-new-feature)
+* Create your feature branch
  * `git checkout -b my-new-feature`
 * Commit your changes
  * `git commit -am 'Added some feature'`

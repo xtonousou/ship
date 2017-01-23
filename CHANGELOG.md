@@ -1,8 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.3] - 2017-01-18
+## [2.3] - 2017-01-23
 ### Changed
+* **Fixed** issues when pinging a network host who does not accept ICMP packets.
+* Avoid piping `grep` to `awk`.
+* Variable groups to arrays.
 * Concatenation methods.
 * README.
 
@@ -23,7 +26,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 * Code flow a bit.
 * Issue template `.github/ISSUE_TEMPLATE.md`.
-* Fixed [#26](https://github.com/xtonousou/shIP/issues/26).
+* **Fixed** [#26](https://github.com/xtonousou/shIP/issues/26).
 * Compressed head.png for less usage.
 * README.
 
