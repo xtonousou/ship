@@ -32,29 +32,25 @@ A simple, handy network addressing multitool with plenty features.
 
 ![](imgs/bash.gif)
 
-| Tool           | Possible package name | Tool           | Possible package name |
-|:---------------|:----------------------|:---------------|:----------------------|
-| awk            | awk / gawk            | ping tracepath | iputils               |
-| grep           | grep                  | sed            | sed                   |
-| ip ss          | iproute2              | traceroute     | traceroute            |
-| mtr            | mtr                   | wget           | wget                  |
+| Tool           | Possible package name | ~ | Tool           | Possible package name |
+|:---------------|:----------------------|---|:---------------|:----------------------|
+| awk            | awk / gawk            | ~ | ping tracepath | iputils               |
+| grep           | grep                  | ~ | sed            | sed                   |
+| ip ss          | iproute2              | ~ | traceroute     | traceroute            |
+| mtr            | mtr                   | ~ | wget           | wget                  |
 
-The script also uses standard tools included in `coreutils` so they are not checked, <br/>
-e.g. (cat cut echo id paste printf rm sort split tail timeout touch uniq).
-
-## :penguin: Compatibility
-
-| Distribution        | Version            |
-|:--------------------|:-------------------|
-| Arch                | 4.7.5-1 - 4.8.13-1 |
-| Debian              | 7 - 8              |
-| Kali                | 2016.2             |
-| Ubuntu              | 14.04.3 - 16.04.1  |
-
-The script uses `ping` to check, test and validate connection and network hosts, it requires **CAP_NET_RAW** capability to be executed.
+The script uses standard commands included in `coreutils` so they are not checked.
+It also uses `ping` to check, test and validate connection and network hosts, it requires **CAP_NET_RAW** capability to be executed.
 
 * Kernel must support non-raw ICMP sockets
 * User must be allowed to create ICMPs echo sockets
+
+## :penguin: Compatibility
+
+| Distribution        | Version            | ~ | Distribution        | Version            |
+|:--------------------|:-------------------|:-:|:--------------------|:-------------------|
+| Arch                | 4.7.5-1 - 4.8.13-1 | ~ | Kali                | 2016.2             |
+| Debian              | 7 - 8              | ~ | Ubuntu              | 14.04.3 - 16.04.1  |
 
 ## :page_with_curl: Changelog
 

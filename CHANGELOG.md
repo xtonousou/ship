@@ -1,9 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.3] - 2017-01-23
+## [2.3] - 2017-01-26
+### Added
+* Functionality to pass as many as user wants `ship` parameters (for future usage).
+* `set -o xtrace` for debugging.
+
 ### Changed
-* **Fixed** issues when pinging a network host who does not accept ICMP packets.
+* **Fixed** issues when 'pinging' a network host who does not accept ICMP packets.
+* Shebang for better portability.
+* Commands' parameters to long ones for better readability.
+* Static references to dynamic ones (e.g. script's name).
 * Avoid piping `grep` to `awk`.
 * Variable groups to arrays.
 * Concatenation methods.
