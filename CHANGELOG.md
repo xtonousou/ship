@@ -7,7 +7,11 @@ All notable changes to this project will be documented in this file.
 * `set -o xtrace` for debugging.
 
 ### Changed
+* **Fixed** issues when 'pinging' the host from complex URL (stream edit).
 * **Fixed** issues when 'pinging' a network host who does not accept ICMP packets.
+* **Fixed** issues when 'pinging' an invalid network host.
+* Speed and performance improvements.
+* Code improvements.
 * Shebang for better portability.
 * Commands' parameters to long ones for better readability.
 * Static references to dynamic ones (e.g. script's name).
