@@ -1,6 +1,35 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.3] - 2017-01-27
+### Added
+* Functionality to pass multiple arguments at the same time.
+ * `ship -f file1 file2 fileN` or drag and drop each file.
+ * `ship -u url1 url2 urlN`.
+* `set -o xtrace` for debugging.
+* `trap` for cleaning temp files.
+
+### Changed
+* **Fixed** issues when 'pinging' the host from complex URL (stream edit).
+* **Fixed** issues when 'pinging' a network host who does not accept ICMP packets.
+* **Fixed** issues when 'pinging' an invalid network host.
+* **Fixed** weird behavior when showing wireless driver used.
+* **Fixed** wrong IPv6 checking.
+* Timeout values to match slow connections.
+* Speed and performance improvements.
+* Code improvements.
+* Shebang for better portability.
+* Commands' parameters to long ones for better readability.
+* Static references to dynamic ones (e.g. script's name).
+* Avoid piping `grep` to `awk`.
+* Variable groups to arrays.
+* Concatenation methods.
+* README.
+
+### Removed
+* Errors and warnings using `shellcheck`.
+* Unused functions.
+
 ## [2.2] - 2017-01-14
 ### Added
 * Driver info on `ship --all` and `ship --cidr-a`.
@@ -15,14 +44,14 @@ All notable changes to this project will be documented in this file.
 ### Changed
 * Code flow a bit.
 * Issue template `.github/ISSUE_TEMPLATE.md`.
-* Fixed [#26](https://github.com/xtonousou/shIP/issues/26).
+* **Fixed** [#26](https://github.com/xtonousou/shIP/issues/26).
 * Compressed head.png for less usage.
 * README.
 
 ## [2.0] - 2017-01-03
 ### Added
 * Created issue template `.github/ISSUE_TEMPLATE.md` (thanks v1s1t0r1sh3r3 for the tip).
-* Created pr template `.github/PULL_REQUEST_TEMPLATE.md`.
+* Created pull request template `.github/PULL_REQUEST_TEMPLATE.md`.
 
 ### Changed
 * Usage.
