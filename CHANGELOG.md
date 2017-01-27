@@ -1,11 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.3] - 2017-01-26
+## [2.3] - 2017-01-27
 ### Added
-* Functionality to pass as many as user wants `ship` parameters.
+* Functionality to pass multiple arguments at the same time.
  * `ship -f file1 file2 fileN` or drag and drop each file.
+ * `ship -u url1 url2 urlN`.
 * `set -o xtrace` for debugging.
+* `trap` for cleaning temp files.
 
 ### Changed
 * **Fixed** issues when 'pinging' the host from complex URL (stream edit).
@@ -25,6 +27,7 @@ All notable changes to this project will be documented in this file.
 * README.
 
 ### Removed
+* Errors and warnings using `shellcheck`.
 * Unused functions.
 
 ## [2.2] - 2017-01-14

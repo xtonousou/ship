@@ -17,10 +17,10 @@ A simple, handy network addressing multitool with plenty features.
  * of user
  * of website / domain
 * Show **active hosts** on current network with or without MAC address
-* Show all valid addresses (IPv4, IPv6, MAC)
- * from a **file**
- * from a **website**
-* Show the **route** to a network host
+* Show all valid addresses (IPv4, IPv6, MAC) extracted
+ * from **file** or multiple **files** at once
+ * from **website** or multiple **websites** at once
+* Show the **route** to a network host using three most common tools. `ship` checks which are installed and decides to run the fastest one for each case scenario
  * **IPv4**
  * **IPv6** (*if possible*)
 * Compatible with most of the common linux distributions
@@ -40,7 +40,7 @@ A simple, handy network addressing multitool with plenty features.
 | mtr            | mtr                   | ~ | wget           | wget                  |
 
 It is required to have at least one of the following tools: `mtr tracepath traceroute`.
-The script uses standard commands included in `coreutils` so they are not checked.
+The script uses standard commands included in `coreutils` and shell builtins so they are not checked.
 It also uses `ping` to check, test and validate connection and network hosts, it requires **CAP_NET_RAW** capability to be executed.
 
 * Kernel must support non-raw ICMP sockets

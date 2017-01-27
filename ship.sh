@@ -43,11 +43,11 @@ DIALOG_NO_INTERNET="Internet connection unavailable. ${DIALOG_ABORTING}"
 DIALOG_NO_LOCAL_CONNECTION="Local connection unavailable. ${DIALOG_ABORTING}"
 DIALOG_DESTINATION_UNREACHABLE="Destination is unreachable. ${DIALOG_ABORTING}"
 DIALOG_SERVER_IS_DOWN="Destination is unreachable. Server may be down or has connection issues. ${DIALOG_ABORTING}"
+DIALOG_NO_VALID_ADDRESSES="No valid IPv4, IPv6 or MAC addresses found. ${DIALOG_ABORTING}"
 DIALOG_NOT_A_NUMBER="Option should be integer. ${DIALOG_ABORTING}"
 DIALOG_NO_ARGUMENTS="No arguments. ${DIALOG_ABORTING}"
 DIALOG_NO_TRACEPATH6="${COLORS[3]}tracepath6${COLORS[0]} is missing, will use ${COLORS[3]}tracepath${COLORS[0]} with no IPv6 compatibility"
 DIALOG_NO_TRACE_COMMAND="You must install at least one of the following tools to perform this action: ${COLORS[3]}tracepath${COLORS[0]}, ${COLORS[3]}traceroute${COLORS[0]}, ${COLORS[3]}mtr${COLORS[0]}. ${DIALOG_ABORTING}"
-DIALOG_NO_IPTABLES="You must install ${COLORS[3]}iptables${COLORS[0]} to perform this action. ${DIALOG_ABORTING}"
 
 ########################################################################
 #                                                                      #
@@ -205,8 +205,9 @@ function check_bash_version() {
 
 # Deletes every file that is created by this script. Usually in /tmp.
 function mr_proper() {
-  
-  rm --recursive --force "${TEMP}/${SCRIPT_NAME}"* &>/dev/null
+
+  # "${TEMP:?}" to ensure this never expands to /*
+  rm --recursive --force "${TEMP:?}/${SCRIPT_NAME}"* &>/dev/null
 }
 
 # Traps INT and SIGTSTP.
@@ -232,7 +233,6 @@ function trap_handler() {
 	if [[ "${YESNO}" = "y" ]]; then
     clear
     handle_jobs
-    mr_proper
     
     exit 0
   fi
@@ -245,21 +245,15 @@ function error_exit() {
   
   if [[ -z "${1}" ]]; then
     clear_line
-    
-    mr_proper
     exit 1
   elif [[ -z "${2}" ]]; then
     clear_line
     echo -e  "${1}"
-    
-    mr_proper
     exit 1
   else
     clear_line
     echo -e  "${SCRIPT_NAME}: invalid option '${2}'" 
     echo -e  "${1}"
-
-    mr_proper
     exit 1
   fi
 }
@@ -281,7 +275,7 @@ function handle_jobs() {
 # Prints active network interfaces with their IPv4 address.
 function show_ipv4() {
   
-  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /^[DdEeFfAaUuLlTt]/ {print $5}'))
+  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV4_ARRAY=($(ip address show | awk '/inet/ {print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2))
 
   for i in "${!INTERFACES_ARRAY[@]}"; do
@@ -294,7 +288,7 @@ function show_ipv6() {
   
   check_ipv6
   
-  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /^[DdEeFfAaUuLlTt]/ {print $5}'))
+  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV6_ARRAY=($(ip address show | awk 'tolower($0) ~ /inet6/{print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2 | awk '{print toupper($0)}'))
 
   for i in "${!INTERFACES_ARRAY[@]}"; do
@@ -307,8 +301,9 @@ function show_all() {
   
   local MAC_OF
   local DRIVER_OF
+  local GATEWAY
   
-  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /^[DdEeFfAaUuLlTt]/ {print $5}'))
+  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV4_ARRAY=($(ip address show | awk '/inet/ {print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2))
   declare IPV6_ARRAY=($(ip address show | awk 'tolower($0) ~ /inet6/{print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2 | awk '{print toupper($0)}'))
   
@@ -319,10 +314,11 @@ function show_all() {
       DRIVER_OF=$(awk --field-separator="=" 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent")
     fi
     MAC_OF=$(awk '{print toupper($0)}' "/sys/class/net/${INTERFACES_ARRAY[i]}/address" 2> /dev/null)
+    GATEWAY=$(ip route | awk "/${INTERFACES_ARRAY[i]}/ && tolower(\$0) ~ /default/ {print \$3}")
     if grep --ignore-case "ipv6" "/proc/modules" &>/dev/null; then
-      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
+      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${GATEWAY}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
     else
-      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${IPV4_ARRAY[i]}"
+      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${GATEWAY}" "${IPV4_ARRAY[i]}"
     fi
   done
 }
@@ -332,7 +328,7 @@ function show_driver() {
   
   local DRIVER_OF
   
-  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /^[DdEeFfAaUuLlTt]/ {print $5}'))
+  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
 
   for i in "${!INTERFACES_ARRAY[@]}"; do
     if [[ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ]]; then
@@ -370,7 +366,7 @@ function show_ip_from() {
 
     clear_line
     TEMP_FILE=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
-    INPUT=$(echo "${1}" | sed 's/^http\(\|s\):\/\///g' | cut --fields=1 --delimiter="/")
+    INPUT=$(echo "${1}" | sed --expression='s/^http\(\|s\):\/\///g' --expression='s/^`//' --expression='s/`//' --expression='s/`$//' | cut --fields=1 --delimiter="/")
   
     echo -ne "Pinging ${COLORS[2]}$1${COLORS[0]} ..."
     for i in {1..25}; do
@@ -391,57 +387,55 @@ function show_ips_from_file() {
     if [[ ! -f "${FILE}" ]]; then error_exit "${COLORS[3]}${FILE}${COLORS[0]} does not exist. ${DIALOG_ABORTING}"; fi
   done
     
-  local TEMP_FILE_ONE
-  local TEMP_FILE_TWO
-  local TEMP_FILE_THREE
-  local IS_TEMP_FILE_ONE_EMPTY
-  local IS_TEMP_FILE_TWO_EMPTY
-  local IS_TEMP_FILE_THREE_EMPTY
+  local TEMP_FILE_IPV4
+  local TEMP_FILE_IPV6
+  local TEMP_FILE_MAC
+  local IS_TEMP_FILE_IPV4_EMPTY
+  local IS_TEMP_FILE_IPV6_EMPTY
+  local IS_TEMP_FILE_MAC_EMPTY
 
-  TEMP_FILE_ONE=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
-  TEMP_FILE_TWO=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
-  TEMP_FILE_THREE=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
+  TEMP_FILE_IPV4=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
+  TEMP_FILE_IPV6=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
+  TEMP_FILE_MAC=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
 
   init_regexes
 
   for FILE in "${@}"; do
-    grep --extended-regexp --only-matching "${REGEX_IPV4}" "${FILE}" 2>/dev/null | sort --version-sort --unique >> "${TEMP_FILE_ONE}"
-    grep --extended-regexp --only-matching "${REGEX_IPV6}" "${FILE}" 2>/dev/null | sort --version-sort --unique >> "${TEMP_FILE_TWO}"
-    grep --extended-regexp --only-matching "${REGEX_MAC}"  "${FILE}" 2>/dev/null | sort --version-sort --unique >> "${TEMP_FILE_THREE}"
+    grep --extended-regexp --only-matching "${REGEX_IPV4}" "${FILE}" 2>/dev/null | sort --version-sort --unique >> "${TEMP_FILE_IPV4}"
+    grep --extended-regexp --only-matching "${REGEX_IPV6}" "${FILE}" 2>/dev/null | sort --version-sort --unique >> "${TEMP_FILE_IPV6}"
+    grep --extended-regexp --only-matching "${REGEX_MAC}"  "${FILE}" 2>/dev/null | sort --version-sort --unique >> "${TEMP_FILE_MAC}"
   done
 
-  if [[ -s "${TEMP_FILE_ONE}" ]]; then IS_TEMP_FILE_ONE_EMPTY=0; else IS_TEMP_FILE_ONE_EMPTY=1; fi
-  if [[ -s "${TEMP_FILE_TWO}" ]]; then IS_TEMP_FILE_TWO_EMPTY=0; else IS_TEMP_FILE_TWO_EMPTY=1; fi
-  if [[ -s "${TEMP_FILE_THREE}" ]]; then IS_TEMP_FILE_THREE_EMPTY=0; else IS_TEMP_FILE_THREE_EMPTY=1; fi
+  if [[ -s "${TEMP_FILE_IPV4}" ]]; then IS_TEMP_FILE_IPV4_EMPTY=0; else IS_TEMP_FILE_IPV4_EMPTY=1; fi
+  if [[ -s "${TEMP_FILE_IPV6}" ]]; then IS_TEMP_FILE_IPV6_EMPTY=0; else IS_TEMP_FILE_IPV6_EMPTY=1; fi
+  if [[ -s "${TEMP_FILE_MAC}" ]]; then IS_TEMP_FILE_MAC_EMPTY=0; else IS_TEMP_FILE_MAC_EMPTY=1; fi
 
-  case "${IS_TEMP_FILE_ONE_EMPTY}:${IS_TEMP_FILE_TWO_EMPTY}:${IS_TEMP_FILE_THREE_EMPTY}" in
+  case "${IS_TEMP_FILE_IPV4_EMPTY}:${IS_TEMP_FILE_IPV6_EMPTY}:${IS_TEMP_FILE_MAC_EMPTY}" in
     0:0:0) # IPv4, IPv6 and MAC addresses
-      paste "${TEMP_FILE_ONE}" "${TEMP_FILE_TWO}" "${TEMP_FILE_THREE}" | awk --field-separator='\t' '{printf("%-16s%-40s%s\n", $1, $2, toupper($3))}'
+      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-16s%-40s%s\n", $1, $2, toupper($3))}'
     ;;
     0:0:1) # Only IPv4 and IPv6 addresses
-      paste "${TEMP_FILE_ONE}" "${TEMP_FILE_TWO}" | awk --field-separator='\t' '{printf("%-16s%s\n", $1, $2)}' 
+      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" | awk --field-separator='\t' '{printf("%-16s%s\n", $1, $2)}' 
     ;;
     0:1:0) # Only IPv4 and MAC addresses
-      paste "${TEMP_FILE_ONE}" "${TEMP_FILE_THREE}" | awk --field-separator='\t' '{printf("%-16s%s\n", $1, toupper($2))}'
+      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-16s%s\n", $1, toupper($2))}'
     ;;
     0:1:1) # Only IPv4 addresses
-      paste "${TEMP_FILE_ONE}" | awk --field-separator='\t' '{printf("%s\n", $1)}'
+      paste "${TEMP_FILE_IPV4}" | awk --field-separator='\t' '{printf("%s\n", $1)}'
     ;;
     1:0:0) # Only IPv6 and MAC addresses
-      paste "${TEMP_FILE_TWO}" "${TEMP_FILE_THREE}" | awk --field-separator='\t' '{printf("%-40s%s\n", $1, toupper($2))}'
+      paste "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-40s%s\n", $1, toupper($2))}'
     ;;
     1:0:1) # Only IPv6 addresses
-      paste "${TEMP_FILE_TWO}" | awk --field-separator='\t' '{printf("%s\n", $1)}'
+      paste "${TEMP_FILE_IPV6}" | awk --field-separator='\t' '{printf("%s\n", $1)}'
     ;;
     1:1:0) # Only MAC addresses
-      paste "${TEMP_FILE_THREE}" | awk --field-separator='\t' '{printf("%s\n", toupper($1))}'
+      paste "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%s\n", toupper($1))}'
     ;;
     1:1:1) # None
-      error_exit "No valid IPv4, IPv6 or MAC addresses found. ${DIALOG_ABORTING}"
+      error_exit "${DIALOG_NO_VALID_ADDRESSES}"
     ;;
   esac
-  
-  mr_proper
 }
 
 # Prints active network interfaces and their gateway.
@@ -449,10 +443,10 @@ function show_gateway() {
   
   local GATEWAY
   
-  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /^[DdEeFfAaUuLlTt]/ {print $5}'))
+  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
 
   for i in "${!INTERFACES_ARRAY[@]}"; do
-    GATEWAY=$(ip route | awk '/${INTERFACES_ARRAY[i]}/ && /^default/ {print $3}')
+    GATEWAY=$(ip route | awk "/${INTERFACES_ARRAY[i]}/ && tolower(\$0) ~ /default/ {print \$3}")
     echo "${INTERFACES_ARRAY[i]}" "${GATEWAY}"
   done
 }
@@ -497,7 +491,7 @@ function show_live_hosts() {
 # Prints active network interfaces.
 function show_interfaces() {
 
-  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /^[DdEeFfAaUuLlTt]/ {print $5}'))
+  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
 
   echo "${INTERFACES_ARRAY[@]}"
 }
@@ -570,10 +564,10 @@ function show_next_hops() {
     0:0:1)
       case "${PROTOCOL}" in
         4)
-          mtr -"${PROTOCOL}" --report-cycles 2 --no-dns --report "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV4}" >> "${TEMP_FILE}"
+          mtr -"${PROTOCOL}" --report-cycles 2 --no-dns --report "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV4}"
         ;;
         6)
-          mtr -"${PROTOCOL}" --report-cycles 2 --no-dns --report "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV6}" >> "${TEMP_FILE}"
+          mtr -"${PROTOCOL}" --report-cycles 2 --no-dns --report "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV6}"
         ;;
       esac
     ;;
@@ -581,10 +575,10 @@ function show_next_hops() {
     0:1:0)
       case "${PROTOCOL}" in
         4)
-          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV4}" | tail --lines=+2 >> "${TEMP_FILE}"
+          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV4}" | tail --lines=+2
         ;;
         6)
-          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching  "${REGEX_IPV6}" | tail --lines=+2 >> "${TEMP_FILE}"
+          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching  "${REGEX_IPV6}" | tail --lines=+2
         ;;
       esac
     ;;
@@ -592,24 +586,25 @@ function show_next_hops() {
     0:1:1)
       case "${PROTOCOL}" in
         4)
-           mtr -"${PROTOCOL}" --report-cycles 2 --no-dns --report "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV4}" >> "${TEMP_FILE}"
+           mtr -"${PROTOCOL}" --report-cycles 2 --no-dns --report "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV4}"
         ;;
         6)
-           mtr -"${PROTOCOL}" --report-cycles 2 --no-dns --report "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV6}" >> "${TEMP_FILE}"
+           mtr -"${PROTOCOL}" --report-cycles 2 --no-dns --report "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV6}"
         ;;
       esac
     ;;
     # If it is installed 'tracepath' only
     1:0:0)
       # tracepath6 workaround: Many linux distributions do not have tracepath6 (it is included in manpages tho :/)
-      hash tracepath6 &>/dev/null && PROTOCOL=6 || (PROTOCOL="" && echo -e "${DIALOG_NO_TRACEPATH6}")
+      hash tracepath6 &>/dev/null && PROTOCOL=6
+      if [[ "${PROTOCOL}" -eq 4 ]]; then echo -e "${DIALOG_NO_TRACEPATH6}"; fi
 
       case "${PROTOCOL}" in
         4)
-          timeout "${SHORT_TIMEOUT}" tracepath"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | awk '{print $2}' | grep --extended-regexp --only-matching "${REGEX_IPV4}" >> "${TEMP_FILE}"
+          timeout "${SHORT_TIMEOUT}" tracepath"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | awk '{print $2}' | grep --extended-regexp --only-matching "${REGEX_IPV4}"
         ;;
         6)
-          timeout "${SHORT_TIMEOUT}" tracepath"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | awk '{print $2}' | grep --extended-regexp --only-matching "${REGEX_IPV6}" >> "${TEMP_FILE}"
+          timeout "${SHORT_TIMEOUT}" tracepath"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | awk '{print $2}' | grep --extended-regexp --only-matching "${REGEX_IPV6}"
         ;;
       esac
     ;;
@@ -617,10 +612,10 @@ function show_next_hops() {
     1:0:1)
       case "${PROTOCOL}" in
         4)
-          mtr -"${PROTOCOL}" --report-cycles 2 --no-dns --report "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV4}" >> "${TEMP_FILE}"
+          mtr -"${PROTOCOL}" --report-cycles 2 --no-dns --report "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV4}"
         ;;
         6)
-          mtr -"${PROTOCOL}" --report-cycles 2 --no-dns --report "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV6}" >> "${TEMP_FILE}"
+          mtr -"${PROTOCOL}" --report-cycles 2 --no-dns --report "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV6}"
         ;;
       esac
     ;;
@@ -628,10 +623,10 @@ function show_next_hops() {
     1:1:0)
       case "${PROTOCOL}" in
         4)
-          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV4}" | tail --lines=+2 >> "${TEMP_FILE}"
+          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV4}" | tail --lines=+2
         ;;
         6)
-          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV6}" | tail --lines=+2 >> "${TEMP_FILE}"
+          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV6}" | tail --lines=+2
         ;;
       esac
     ;;
@@ -639,46 +634,17 @@ function show_next_hops() {
     1:1:1)
       case "${PROTOCOL}" in
         4)
-          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV4}" | tail --lines=+2 >> "${TEMP_FILE}"
+          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV4}" | tail --lines=+2
         ;;
         6)
-          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV6}" | tail --lines=+2 >> "${TEMP_FILE}"
+          timeout "${SHORT_TIMEOUT}" traceroute -"${PROTOCOL}" -n "${FILTERED_INPUT}" 2> /dev/null | grep --extended-regexp --only-matching "${REGEX_IPV6}" | tail --lines=+2
         ;;
       esac
     ;;
-  esac
+  esac >> "${TEMP_FILE}"
   
   clear_line
   awk '{print $0}' "${TEMP_FILE}" | uniq
-  mr_proper
-}
-
-# TODO
-# THIS IS INCOMPLETE!!!!!!!!!!!!!!!!!!!!!
-function show_tables() {
-
-  hash iptables &>/dev/null ||cd error_exit "${DIALOG_NO_IPTABLES}"
-
-  local FILENAME
-
-  declare -a ALLOWED_ARRAY
-  declare -a BLOCKED_ARRAY
-
-  init_regexes
-  
-  ALLOWED_ARRAY=($(iptables -L INPUT -v -n | awk 'tolower($0) ~ /accept/ {print $8}' | grep --extended-regexp --only-matching "${REGEX_IPV4_CIDR}|${REGEX_IPV6_CIDR}|${REGEX_MAC}"))
-
-  FILENAME="iptables_all"
-  check_and_touch "${FILENAME}"
-
-  case "${1}" in
-    "--all")
-      echo "Allowed" "Blocked"
-      for i in "${!ALLOWED_ARRAY[@]}"; do
-        echo "${ALLOWED_ARRAY[i]}"
-      done
-    ;;
-  esac
 }
 
 # Prints active network interfaces with their MAC address.
@@ -686,7 +652,7 @@ function show_mac() {
   
   local MAC_OF
   
-  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /^[DdEeFfAaUuLlTt]/ {print $5}'))
+  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   
   for i in "${!INTERFACES_ARRAY[@]}"; do
     MAC_OF=$(awk '{print toupper($0)}' "/sys/class/net/${INTERFACES_ARRAY[i]}/address" 2> /dev/null)
@@ -707,69 +673,76 @@ function show_neighbor_cache() {
   awk '{print $0}' "${FILENAME_PREFIX}${FILENAME}" | sort --version-sort
 }
 
-# TODO
-# THIS IS INCOMPLETE
-# COPY PASTE THE LOGIC FROM ship -r host.com
-# Extracts valid IPv4, IPv6 and MAC addresses from a URL.
+# Extracts valid IPv4, IPv6 and MAC addresses from URLs.
 function show_ips_from_online_document() {
 
   check_for_missing_args "No URL was specified. ${DIALOG_ABORTING}" "${1}"
-  
-  local HTTP_CODE
+
+  local HTTP_CODE   
   local TEMP_FILE_IPV4
-  local TEMP_FILE_IPV4
+  local TEMP_FILE_IPV6
   local TEMP_FILE_MAC
   local TEMP_FILE_HTML
+  local IS_TEMP_FILE_IPV4_EMPTY
+  local IS_TEMP_FILE_IPV6_EMPTY
+  local IS_TEMP_FILE_MAC_EMPTY
 
   TEMP_FILE_IPV4=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
   TEMP_FILE_IPV6=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
   TEMP_FILE_MAC=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
   TEMP_FILE_HTML=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
-  
-  print_check "${1}"
-  HTTP_CODE=$(wget --spider --tries 1 --timeout="${TIMEOUT}" --server-response "${1}" 2>&1 | awk '/HTTP\//{print $2}' | tail --lines=1)
-  
-  clear_line
-  
-  if [[ ! "${HTTP_CODE}" -eq 200 ]]; then
-    error_exit "Destination is unreachable. Input was invalid or server is down or has connection issues. ${DIALOG_ABORTING}"
-  fi
-    
-  echo -ne "Downloading ${COLORS[2]}$1${COLORS[0]} ..."
-  wget "$1" --quiet --output-document="${TEMP_FILE_HTML}"
-  clear_line
 
   init_regexes
 
-  grep --extended-regexp --only-matching "${REGEX_IPV4}" "${TEMP_FILE_HTML}" | sort --version-sort --unique >> "${TEMP_FILE_IPV4}"
-  grep --extended-regexp --only-matching "${REGEX_IPV6}" "${TEMP_FILE_HTML}" | sort --version-sort --unique >> "${TEMP_FILE_IPV6}"
-  grep --extended-regexp --only-matching "${REGEX_MAC}" "${TEMP_FILE_HTML}" | sort --version-sort --unique >> "${TEMP_FILE_MAC}"
-  
-  if [[ ! -s "${FILENAME_PREFIX}${FILENAME_IPV4}" ]] && [[ ! -s "${FILENAME_PREFIX}${FILENAME_IPV6}" ]] && [[ ! -s "${FILENAME_PREFIX}${FILENAME_MAC}" ]]; then
-  # if no valid addresses found, exit.
-    error_exit "No valid IPv4, IPv6 or MAC addresses found. ${DIALOG_ABORTING}"
-  elif [[ -s "${FILENAME_PREFIX}${FILENAME_MAC}" ]] && [[ -s "${FILENAME_PREFIX}${FILENAME_IPV4}" ]] && [[ -s "${FILENAME_PREFIX}${FILENAME_IPV6}" ]]; then
-  # if there are valid IPv4, IPv6 and MAC addresses...
-    paste "${FILENAME_PREFIX}${FILENAME_IPV4}" "${FILENAME_PREFIX}${FILENAME_IPV6}" "${FILENAME_PREFIX}${FILENAME_MAC}" | awk --field-separator='\t' '{printf("%-16s%-40s%s\n", $1, $2, toupper($3))}'
-  elif [[ ! -s "${FILENAME_PREFIX}${FILENAME_MAC}" ]] && [[ -s "${FILENAME_PREFIX}${FILENAME_IPV4}" ]] && [[ -s "${FILENAME_PREFIX}${FILENAME_IPV6}" ]]; then
-  # if there are only                                                                        ^^^^addresses                                    ^^^^addresses...
-    paste "${FILENAME_PREFIX}${FILENAME_IPV4}" "${FILENAME_PREFIX}${FILENAME_IPV6}" | awk --field-separator='\t' '{printf("%-16s%s\n", $1, $2)}' 
-  elif [[ ! -s "${FILENAME_PREFIX}${FILENAME_IPV4}" ]] && [[ -s "${FILENAME_PREFIX}${FILENAME_MAC}" ]] && [[ -s "${FILENAME_PREFIX}${FILENAME_IPV6}" ]]; then 
-  # if there are only                                                                         ^^^addresses                                    ^^^^addresses...
-    paste "${FILENAME_PREFIX}${FILENAME_IPV6}" "${FILENAME_PREFIX}${FILENAME_MAC}" | awk --field-separator='\t' '{printf("%-40s%s\n", $1, toupper($2))}'
-  elif [[ ! -s "${FILENAME_PREFIX}${FILENAME_IPV6}" ]] && [[ -s "${FILENAME_PREFIX}${FILENAME_MAC}" ]] && [[ -s "${FILENAME_PREFIX}${FILENAME_IPV4}" ]]; then 
-  # if there are only                                                                         ^^^addresses                                    ^^^^addresses...
-    paste "${FILENAME_PREFIX}${FILENAME_IPV4}" "${FILENAME_PREFIX}${FILENAME_MAC}" | awk --field-separator='\t' '{printf("%-16s%s\n", $1, toupper($2))}'
-  elif [[ ! -s "${FILENAME_PREFIX}${FILENAME_MAC}" ]] && [[ ! -s "${FILENAME_PREFIX}${FILENAME_IPV6}" ]] && [[ -s "${FILENAME_PREFIX}${FILENAME_IPV4}" ]]; then
-  # if there are only                                                                                                                           ^^^^addresses...
-    paste "${FILENAME_PREFIX}${FILENAME_IPV4}" | awk --field-separator='\t' '{printf("%s\n", $1)}'
-  elif [[ ! -s "${FILENAME_PREFIX}${FILENAME_MAC}" ]] && [[ ! -s "${FILENAME_PREFIX}${FILENAME_IPV4}" ]] && [[ -s "${FILENAME_PREFIX}${FILENAME_IPV6}" ]]; then 
-  # if there are only                                                                                                                           ^^^^addresses...
-    paste "${FILENAME_PREFIX}${FILENAME_IPV6}" | awk --field-separator='\t' '{printf("%s\n", $1)}'
-  elif [[ ! -s "${FILENAME_PREFIX}${FILENAME_IPV4}" ]] && [[ ! -s "${FILENAME_PREFIX}${FILENAME_IPV6}" ]] && [[ -s "${FILENAME_PREFIX}${FILENAME_MAC}" ]]; then
-  # if there are only                                                                                                                            ^^^addresses...
-    paste "${FILENAME_PREFIX}${FILENAME_MAC}" | awk --field-separator='\t' '{printf("%s\n", toupper($1))}'
-  fi
+  for DOCUMENT in "${@}"; do
+    print_check "${DOCUMENT}"
+    HTTP_CODE=$(wget --spider --tries 1 --timeout="${TIMEOUT}" --server-response "${DOCUMENT}" 2>&1 | awk '/HTTP\//{print $2}' | tail --lines=1)
+    
+    clear_line
+    
+    if [[ ! "${HTTP_CODE}" -eq 200 ]]; then
+      error_exit "${COLORS[3]}${DOCUMENT}${COLORS[0]} is unreachable. Input was invalid or server is down or has connection issues. ${DIALOG_ABORTING}"
+    fi
+      
+    echo -ne "Downloading ${COLORS[2]}$1${COLORS[0]} ..."
+    wget "${DOCUMENT}" --quiet --output-document="${TEMP_FILE_HTML}"
+    clear_line
+
+    grep --extended-regexp --only-matching "${REGEX_IPV4}" "${TEMP_FILE_HTML}" | sort --version-sort --unique >> "${TEMP_FILE_IPV4}"
+    grep --extended-regexp --only-matching "${REGEX_IPV6}" "${TEMP_FILE_HTML}" | sort --version-sort --unique >> "${TEMP_FILE_IPV6}"
+    grep --extended-regexp --only-matching "${REGEX_MAC}" "${TEMP_FILE_HTML}" | sort --version-sort --unique >> "${TEMP_FILE_MAC}"
+  done
+
+  if [[ -s "${TEMP_FILE_IPV4}" ]]; then IS_TEMP_FILE_IPV4_EMPTY=0; else IS_TEMP_FILE_IPV4_EMPTY=1; fi
+  if [[ -s "${TEMP_FILE_IPV6}" ]]; then IS_TEMP_FILE_IPV6_EMPTY=0; else IS_TEMP_FILE_IPV6_EMPTY=1; fi
+  if [[ -s "${TEMP_FILE_MAC}" ]]; then IS_TEMP_FILE_MAC_EMPTY=0; else IS_TEMP_FILE_MAC_EMPTY=1; fi
+
+  case "${IS_TEMP_FILE_IPV4_EMPTY}:${IS_TEMP_FILE_IPV6_EMPTY}:${IS_TEMP_FILE_MAC_EMPTY}" in
+    0:0:0) # IPv4, IPv6 and MAC addresses
+      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-16s%-40s%s\n", $1, $2, toupper($3))}'
+    ;;
+    0:0:1) # Only IPv4 and IPv6 addresses
+      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" | awk --field-separator='\t' '{printf("%-16s%s\n", $1, $2)}' 
+    ;;
+    0:1:0) # Only IPv4 and MAC addresses
+      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-16s%s\n", $1, toupper($2))}'
+    ;;
+    0:1:1) # Only IPv4 addresses
+      paste "${TEMP_FILE_IPV4}" | awk --field-separator='\t' '{printf("%s\n", $1)}'
+    ;;
+    1:0:0) # Only IPv6 and MAC addresses
+      paste "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-40s%s\n", $1, toupper($2))}'
+    ;;
+    1:0:1) # Only IPv6 addresses
+      paste "${TEMP_FILE_IPV6}" | awk --field-separator='\t' '{printf("%s\n", $1)}'
+    ;;
+    1:1:0) # Only MAC addresses
+      paste "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%s\n", toupper($1))}'
+    ;;
+    1:1:1) # None
+      error_exit "${DIALOG_NO_VALID_ADDRESSES}"
+    ;;
+  esac
 }
 
 # Prints script's version and author's info.
@@ -787,7 +760,7 @@ function show_version() {
 # Prints active network interfaces with their IPv4 address and CIDR suffix.
 function show_ipv4_cidr() {
 
-  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /^[DdEeFfAaUuLlTt]/ {print $5}'))
+  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV4_CIDR_ARRAY=($(ip address show | awk '$1 ~ /inet$/{print $2}' | tail --lines=+2))
   
   for i in "${!IPV4_CIDR_ARRAY[@]}"; do
@@ -800,7 +773,7 @@ function show_ipv6_cidr() {
 
   check_ipv6
   
-  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /^[DdEeFfAaUuLlTt]/ {print $5}'))
+  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV6_CIDR_ARRAY=($(ip address show | awk '$1 ~ /inet6$/{print toupper($2)}' | tail --lines=+2))
 
   for i in "${!IPV6_CIDR_ARRAY[@]}"; do
@@ -813,8 +786,10 @@ function show_all_cidr() {
   
   local MAC_OF
   local DRIVER_OF
+  local GATEWAY
+  local CIDR
   
-  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /^[DdEeFfAaUuLlTt]/ {print $5}'))
+  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV4_CIDR_ARRAY=($(ip address show | awk '$1 ~ /inet$/{print $2}' | tail --lines=+2))
   declare IPV6_CIDR_ARRAY=($(ip address show | awk '$1 ~ /inet6$/{print toupper($2)}' | tail --lines=+2))
   
@@ -825,10 +800,12 @@ function show_all_cidr() {
       DRIVER_OF=$(awk --field-separator="=" 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent")
     fi
     MAC_OF=$(awk '{print toupper($0)}' "/sys/class/net/${INTERFACES_ARRAY[i]}/address" 2> /dev/null)
+    GATEWAY=$(ip route | awk "/${INTERFACES_ARRAY[i]}/ && tolower(\$0) ~ /default/ {print \$3}")
+    CIDR=$(echo -n "${IPV4_CIDR_ARRAY[i]}" | sed 's/^.*\//\//')
     if grep --ignore-case "ipv6" "/proc/modules" &>/dev/null; then
-      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${IPV4_CIDR_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
+      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${GATEWAY}${CIDR}" "${IPV4_CIDR_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
     else
-      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${IPV4_CIDR_ARRAY[i]}"
+      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${GATEWAY}${CIDR}" "${IPV4_CIDR_ARRAY[i]}"
     fi
   done
 }
@@ -853,9 +830,6 @@ function show_usage() {
   echo -e "  ${SCRIPT_NAME} ${COLORS[1]}-P ${COLORS[0]}, ${COLORS[1]}--port ${COLORS[0]}<>        shows connections to a port per IP (pass no argument to show common ports)"
   echo -e "  ${SCRIPT_NAME} ${COLORS[2]}-r ${COLORS[0]}, ${COLORS[2]}--route-ipv4 ${COLORS[0]}<>  shows the path to a network host using IPv4"
   echo -e "  ${SCRIPT_NAME} ${COLORS[2]}-r6${COLORS[0]}, ${COLORS[2]}--route-ipv6 ${COLORS[0]}<>  shows the path to a network host using IPv6"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[1]}-T ${COLORS[0]}, ${COLORS[1]}--tables ${COLORS[0]}        shows all allowed and blocked IP addresses"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[1]}-TA${COLORS[0]}, ${COLORS[1]}--tables-allowed${COLORS[0]} shows all allowed IP addresses"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[1]}-TB${COLORS[0]}, ${COLORS[1]}--tables-blocked ${COLORS[0]}shows all blocked IP addresses"
   echo -e "  ${SCRIPT_NAME} ${COLORS[2]}-u ${COLORS[0]}, ${COLORS[2]}--url ${COLORS[0]}<>         shows valid IP and MAC addresses found on a website"
   echo -e "  ${SCRIPT_NAME} ${COLORS[2]}-v ${COLORS[0]}, ${COLORS[2]}--version ${COLORS[0]}       shows the version of script"
   echo -e "  ${SCRIPT_NAME} ${COLORS[2]}--cidr-4${COLORS[0]}, ${COLORS[2]}--cidr-ipv4 ${COLORS[0]}shows active interfaces with their IPv4 address and CIDR"
@@ -873,27 +847,24 @@ function sail() {
   
   while :; do
     case "${1}" in
-            "-4"|"--ipv4") check_connectivity "--local"; show_ipv4; break ;;
-            "-6"|"--ipv6") check_connectivity "--local"; show_ipv6; break ;;
-            "-a"|"--all") check_connectivity "--local"; show_all; break ;;
-            "-d"|"--driver") check_connectivity "--local"; show_driver; break ;;
-            "-e"|"--external") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_ip_from "${2}"; shift 2; break ;;
-            "-f"|"--find") trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_ips_from_file "${@:2}"; break ;;
-            "-g"|"--gateway") check_connectivity "--local"; show_gateway; break ;;
-            "-h"|"--help") show_usage; break ;;
-            "-H"|"--hosts") check_connectivity "--local"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_live_hosts --normal; break ;;
-           "-HM"|"--hosts-mac") check_connectivity "--local"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_live_hosts --mac; break ;;
-            "-i"|"--interfaces") check_connectivity "--local"; show_interfaces; break ;;
-            "-P"|"--port") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_port_connections "${2}"; shift 2; break ;;
-            "-r"|"--route-ipv4") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_next_hops --ipv4 "${2}"; shift 2; break ;;
-           "-r6"|"--route-ipv6") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_next_hops --ipv6 "${2}"; shift 2; break ;;
-            "-T"|"--tables") show_tables --all; break ;;
-            "-TA"|"--tables-allowed") show_tables --allowed; break ;;
-            "-TB"|"--tables-blocked") show_tables --blocked; break ;;
-            "-m"|"--mac") check_connectivity "--local"; show_mac; break ;;
-            "-n"|"--neighbor") check_connectivity "--local"; show_neighbor_cache; break ;;
-            "-u"|"--url") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_ips_from_online_document "${2}"; shift 2; break ;;
-            "-v"|"--version") show_version; break ;;
+      "-4"|"--ipv4") check_connectivity "--local"; show_ipv4; break ;;
+      "-6"|"--ipv6") check_connectivity "--local"; show_ipv6; break ;;
+      "-a"|"--all") check_connectivity "--local"; show_all; break ;;
+      "-d"|"--driver") check_connectivity "--local"; show_driver; break ;;
+      "-e"|"--external") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_ip_from "${2}"; shift 2; break ;;
+      "-f"|"--find") trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_ips_from_file "${@:2}"; break ;;
+      "-g"|"--gateway") check_connectivity "--local"; show_gateway; break ;;
+      "-h"|"--help") show_usage; break ;;
+      "-H"|"--hosts") check_connectivity "--local"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_live_hosts --normal; break ;;
+      "-HM"|"--hosts-mac") check_connectivity "--local"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_live_hosts --mac; break ;;
+      "-i"|"--interfaces") check_connectivity "--local"; show_interfaces; break ;;
+      "-P"|"--port") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_port_connections "${2}"; shift 2; break ;;
+      "-r"|"--route-ipv4") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_next_hops --ipv4 "${2}"; shift 2; break ;;
+      "-r6"|"--route-ipv6") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_next_hops --ipv6 "${2}"; shift 2; break ;;
+      "-m"|"--mac") check_connectivity "--local"; show_mac; break ;;
+      "-n"|"--neighbor") check_connectivity "--local"; show_neighbor_cache; break ;;
+      "-u"|"--url") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_ips_from_online_document "${@:2}"; break ;;
+      "-v"|"--version") show_version; break ;;
       "--cidr-4"|"--cidr-ipv4") check_connectivity "--local"; show_ipv4_cidr; break ;;
       "--cidr-6"|"--cidr-ipv6") check_connectivity "--local"; show_ipv6_cidr; break ;;
       "--cidr-a"|"--cidr-all") check_connectivity "--local"; show_all_cidr; break ;;
@@ -901,6 +872,7 @@ function sail() {
     esac
   done
 
+  trap mr_proper 0 1
   exit 0
 }
 
