@@ -3,13 +3,17 @@ All notable changes to this project will be documented in this file.
 
 ## [2.3] - 2017-01-26
 ### Added
-* Functionality to pass as many as user wants `ship` parameters (for future usage).
+* Functionality to pass as many as user wants `ship` parameters.
+ * `ship -f file1 file2 fileN` or drag and drop each file.
 * `set -o xtrace` for debugging.
 
 ### Changed
 * **Fixed** issues when 'pinging' the host from complex URL (stream edit).
 * **Fixed** issues when 'pinging' a network host who does not accept ICMP packets.
 * **Fixed** issues when 'pinging' an invalid network host.
+* **Fixed** weird behavior when showing wireless driver used.
+* **Fixed** wrong IPv6 checking.
+* Timeout values to match slow connections.
 * Speed and performance improvements.
 * Code improvements.
 * Shebang for better portability.

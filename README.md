@@ -39,6 +39,7 @@ A simple, handy network addressing multitool with plenty features.
 | ip ss          | iproute2              | ~ | traceroute     | traceroute            |
 | mtr            | mtr                   | ~ | wget           | wget                  |
 
+It is required to have at least one of the following tools: `mtr tracepath traceroute`.
 The script uses standard commands included in `coreutils` so they are not checked.
 It also uses `ping` to check, test and validate connection and network hosts, it requires **CAP_NET_RAW** capability to be executed.
 
