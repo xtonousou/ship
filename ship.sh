@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #### Description......: Show IPv4, IPv6 and MAC addresses, and many more.
 #### Written by.......: Sotirios Roussis (aka. xtonousou) - xtonousou@gmail.com on 10-2016
-#### Known limitations: ipinfo.io offers free 1,000 daily requests. (ship -f)
+#### Known limitations: ipinfo.io offers free 1,000 daily requests. (ship -e)
 
 set -e
 
