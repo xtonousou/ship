@@ -133,7 +133,7 @@ Send me an email at [xtonousou@gmail.com].
 ### License
 
 [![GPLv3+IMG]](LICENSE.md)
-This script is under [GPLv3+].
+This script is under [GPLv3+] license.
 
 <!-- Links -->
 [Changelog]: CHANGELOG.md
