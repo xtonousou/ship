@@ -132,11 +132,11 @@ Send me an email at [xtonousou@gmail.com].
 
 ### License
 
-[![GPLv3-IMG]](LICENSE.md)
-This script is under GPLv3+ [GPL].
+[![GPLv3+IMG]](LICENSE.md)
+This script is under [GPLv3+].
 
 <!-- Links -->
 [Changelog]: CHANGELOG.md
-[GPL]: (LICENSE.md)
+[GPLv3+]: LICENSE.md
 [CIDR]: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
-[GPLv3-IMG]: http://gplv3.fsf.org/gplv3-127x51.png
+[GPLv3+IMG]: http://gplv3.fsf.org/gplv3-127x51.png
