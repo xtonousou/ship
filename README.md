@@ -44,7 +44,7 @@
 ### Requirements
 
  :wrench:   | Package Name 
-------------|--------------
+:----------:|:------------:
  awk        | awk / gawk   
  grep       | grep         
  ip         | iproute2     
@@ -75,7 +75,7 @@
 ### Compatibility
 
  :penguin: | Version            
------------|-------------------
+:---------:|:-----------------:
  Arch      | 4.7.5-1 - 4.9.6-1  
  Debian    | 7 - 8              
  Kali      | 2016.2             
