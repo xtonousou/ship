@@ -9,8 +9,6 @@
   <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img src="https://img.shields.io/badge/bash-3.2%20or%20later-lightgrey.svg?style=flat-square"></a>
     &nbsp;
   <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square"></a>
-    &nbsp;
-  <a href="https://www.gitcheese.com/app/#/projects/211c47d3-9fff-4fe9-b067-45ee9c9a2151/pledges/create"><img src="https://api.gitcheese.com/v1/projects/211c47d3-9fff-4fe9-b067-45ee9c9a2151/badges"></a>
 </p>
 
 ---
