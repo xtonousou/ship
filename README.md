@@ -60,9 +60,9 @@
 <table>
   <tr>
     <td>
-      It is required to have at least one of the following tools: <i>mtr tracepath traceroute</i>.
-      The script uses standard commands included in <i>coreutils</i> and shell builtins so they are not checked.
-      It also uses <i>ping</i> to check, test and validate connection and network hosts, it requires <b>CAP_NET_RAW</b> capability to be executed.
+      It is required to have at least one of the following tools: <b>mtr</b> | <b>tracepath</b> | <b>traceroute</b>.
+      The script uses standard commands included in <b>coreutils</b> and shell builtins so they are not checked.
+      It also uses <b>ping</b> to check, test and validate connection and network hosts, it requires <b>CAP_NET_RAW</b> capability to be executed.
     </td>
   </tr>
 </table>
