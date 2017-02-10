@@ -3,13 +3,13 @@
 <p align="center"><img width=20% src="/imgs/ship-logo.png"></p>
 <p align="center">shIP (aka. show IP) is a simple, handy network addressing multitool with plenty of features.</p>
 <p align="center">
-  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.3-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="ship.sh"><img src="https://img.shields.io/badge/Version-2.3-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
-  <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPLv3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="LICENSE.md"><img src="https://img.shields.io/badge/License-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
-  <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img src="https://img.shields.io/badge/bash-3.2%20or%20later-lightgrey.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img src="https://img.shields.io/badge/Bash-3.2+-lightgrey.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
-  <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/PayPal-Donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
 </p>
 
 ---
