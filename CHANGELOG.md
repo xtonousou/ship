@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.4] - 2017-02-11
+### Added
+* Show a list of private and reserved IP addreses (IPv4 and IPv6) with or without CIDR notation.
+
+### Changed
+* Fixed "Show neighbor cache" feature.
+* "Usage" output.
+* "Show version" output.
+* Beautified README.
+
 ## [2.3] - 2017-01-27
 ### Added
 * Functionality to pass multiple arguments at the same time.
