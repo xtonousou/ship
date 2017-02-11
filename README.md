@@ -1,15 +1,16 @@
 <!-- Color Scheme: Dark=13818d Light=44c2c7 -->
+
 <p align="center"><img width=10% src="/imgs/ship-text.png"></img></p>
 <p align="center"><img width=20% src="/imgs/ship-logo.png"></p>
 <p align="center">shIP (aka. show IP) is a simple, handy network addressing multitool with plenty of features.</p>
 <p align="center">
-  <a href="ship.sh"><img src="https://img.shields.io/badge/Version-2.3-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.4-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
-  <a href="LICENSE.md"><img src="https://img.shields.io/badge/License-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
-  <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img src="https://img.shields.io/badge/Bash-3.2+-lightgrey.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img src="https://img.shields.io/badge/bash-3.2+-lightgrey.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
-  <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/PayPal-Donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
 </p>
 
 ---
@@ -19,7 +20,7 @@
 * Show all active network **interfaces**
 * Show the **driver** used of each active network interface
 * Show the **gateway** of each online interface
-* Show the addresses of each active network interface with or without [CIDR]
+* Show the addresses of each active network interface with or without CIDR notation
  * **IPv4**
  * **IPv6** (*if possible*)
  * **MAC**
@@ -33,10 +34,11 @@
 * Show the **route** to a network host using three most common tools. `ship` checks which are installed and decides to run the fastest one for each case scenario
  * **IPv4**
  * **IPv6** (*if possible*)
+* Show list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
 * Compatible with most of the common linux distributions
 * Drag and drop URLs or file paths on console window
 * Cleaning temp files and handling remaining tasks on exit
-* <kbd>Ctrl+C</kbd> needs confirmation on long running tasks
+* Exiting on long running tasks needs confirmation
 
 ---
 
@@ -137,5 +139,4 @@ This script is under [GPLv3+] license.
 <!-- Links -->
 [Changelog]: CHANGELOG.md
 [GPLv3+]: LICENSE.md
-[CIDR]: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
 [GPLv3+IMG]: http://gplv3.fsf.org/gplv3-127x51.png
