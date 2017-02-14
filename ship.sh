@@ -110,22 +110,6 @@ function bin_to_dec() {
   return 0
 }
 
-# Convert a decimal to a hexadecimal.
-function bin_to_hex() {
-
-  printf '%x\n' "$((2#${1}))"
-
-  return 0
-}
-
-# Returns the integer representation of an IP arg, passed in HEX format (0xC0A80101).
-function hexadecimal_ip_to_decimal() {
-
-  printf "%d\n" "${1}"
-  
-  return 0
-}
-
 # Returns the integer representation of an IP arg, passed in ascii dotted-decimal notation (x.x.x.x).
 function dotted_quad_ip_to_decimal() {
 
@@ -133,12 +117,6 @@ function dotted_quad_ip_to_decimal() {
 
   return 0
 } 
-
-# Returns the IP address in ascii dotted-decimal notation (x.x.x.x), of a long integer.
-function decimal_to_dotted_quad_ip() {
-  
-  echo $(( $1 / 16777216 )).$(( $1 % 16777216 / 65536 )).$(( $1 % 65536 / 256 )).$(( $1 % 256 ))
-}
 
 # Prints a message while checking a network host.
 function print_check() {
@@ -1084,10 +1062,14 @@ function show_ips_from_online_documents() {
     wget "${DOCUMENT}" --quiet --output-document="${TEMP_FILE_HTML}"
     clear_line
 
-    grep --extended-regexp --only-matching "${REGEX_IPV4}" "${TEMP_FILE_HTML}" | sort --version-sort --unique >> "${TEMP_FILE_IPV4}"
-    grep --extended-regexp --only-matching "${REGEX_IPV6}" "${TEMP_FILE_HTML}" | sort --version-sort --unique >> "${TEMP_FILE_IPV6}"
-    grep --extended-regexp --only-matching "${REGEX_MAC}" "${TEMP_FILE_HTML}" | sort --version-sort --unique >> "${TEMP_FILE_MAC}"
+    grep --extended-regexp --only-matching "${REGEX_IPV4}" "${TEMP_FILE_HTML}" >> "${TEMP_FILE_IPV4}"
+    grep --extended-regexp --only-matching "${REGEX_IPV6}" "${TEMP_FILE_HTML}" >> "${TEMP_FILE_IPV6}"
+    grep --extended-regexp --only-matching "${REGEX_MAC}"  "${TEMP_FILE_HTML}" >> "${TEMP_FILE_MAC}"
   done
+
+  sort --version-sort --unique "${TEMP_FILE_IPV4}" > "${TEMP_FILE_IPV4}"
+  sort --version-sort --unique "${TEMP_FILE_IPV6}" > "${TEMP_FILE_IPV6}"
+  sort --version-sort --unique "${TEMP_FILE_MAC}" > "${TEMP_FILE_MAC}"
 
   if [[ -s "${TEMP_FILE_IPV4}" ]]; then IS_TEMP_FILE_IPV4_EMPTY=0; else IS_TEMP_FILE_IPV4_EMPTY=1; fi
   if [[ -s "${TEMP_FILE_IPV6}" ]]; then IS_TEMP_FILE_IPV6_EMPTY=0; else IS_TEMP_FILE_IPV6_EMPTY=1; fi
@@ -1248,6 +1230,7 @@ function show_usage() {
   return 0
 }
 
+# Prints the right usage of ship -s | --subnet.
 function show_usage_subnet() {
 
   echo -e "usage: ${SCRIPT_NAME} -s, --subnet ${COLORS[5]}192.168.0.1${COLORS[0]}"
