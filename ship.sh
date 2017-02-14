@@ -13,7 +13,7 @@
 
 ### Script's Info
 readonly VERSION="2.4"
-readonly SCRIPT_NAME="${0%.*}"
+readonly SCRIPT_NAME="ship"
 
 ### Author's Info
 readonly AUTHOR="Sotirios Roussis"
