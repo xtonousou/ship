@@ -34,7 +34,7 @@
 * Show the **route** to a network host using three most common tools. `ship` checks which are installed and decides to run the fastest one for each case scenario
  * **IPv4**
  * **IPv6** (*if possible*)
-* Show the resulting **broadcast**, **network address**, **Cisco wildcard mask**, **class** and **host range** by given IPv4 address and netmask
+* Show the resulting **broadcast**, **network** address, Cisco **wildcard** mask, **class** and **host range** by giving the IPv4 address and netmask
 * Show list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
 * Compatible with most of the common linux distributions
 * Drag and drop URLs or file paths on console window

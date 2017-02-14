@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.4] - 2017-02-11
+## [2.4] - 2017-02-14
 ### Added
 * Converting functions (Binary to Decimal, Binary to Hexadecimal, Decimal to Binary) to be used in other functions.
 * "Show network, broadcast address, netmask, CIDR, Cisco wildcard, class, host range, maximum hosts from given IP address".
@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 * Beautified README.
 
 ### TODO
-* Add subnetting support
+* SUBNETTING FEATURE!!! this is a must!!!
 * Add IPv6 support for the above.
 
 ## [2.3] - 2017-01-27
