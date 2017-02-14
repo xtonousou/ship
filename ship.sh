@@ -70,16 +70,12 @@ function init_regexes() {
 
   # MAC
   readonly REGEX_MAC="([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}"
-
   # IPv4
   readonly REGEX_IPV4="((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])"
-
   # IPv4 with CIDR notation
   readonly REGEX_IPV4_CIDR="(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|""[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))"
-
   # IPv6
   readonly REGEX_IPV6="([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe08:(:[0-9a-fA-F]{1,4}){2,2}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}${REGEX_IPV4}|([0-9a-fA-F]{1,4}:){1,4}:${REGEX_IPV4}"
-
   # IPv6 with CIDR notation
   readonly REGEX_IPV6_CIDR="^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$"
 
@@ -184,17 +180,41 @@ function check_cidr() {
       # if no CIDR is specified then pass the default value
       if [[ ! "${1}" ]]; then CIDR="24"; fi # default notation
       # check if cidr is < 0 or > 32
-      if [[ "${1}" -lt 0 ]] || [[ "${1}" -gt 32 ]]; then error_exit "${DIALOG_NO_VALID_CIDR}"; fi
-    ;;
-    "ipv6") # MODIFY TO VALIDATE CIDR FOR IPV6
-      # check for non numerical CIDR
-      if [[ ! "${1}" =~ ^[0-9]+$ ]]; then error_exit "${DIALOG_NO_VALID_CIDR}"; fi
-      # if no CIDR is specified then pass the default value
-      if [[ ! "${1}" ]]; then CIDR="24"; fi # default notation
-      # check if cidr is < 0 or > 32
-      if [[ "${1}" -lt 0 ]] || [[ "${1}" -gt 32 ]]; then error_exit "${DIALOG_NO_VALID_CIDR}"; fi
+      if [[ "${1}" -lt 1 ]] || [[ "${1}" -gt 32 ]]; then error_exit "${DIALOG_NO_VALID_CIDR}"; fi
     ;;
   esac
+}
+
+# Checks if an IP address is valid (if it passed the regexp).
+function check_ip_address() {
+
+  local IFS
+  local DECIMAL_POINTS
+  local PART_A
+  local PART_B
+  local PART_C
+  local PART_D
+
+  DECIMAL_POINTS=$(echo "${1}" | grep --only-matching "\\." | wc --lines)
+  # check if there are three dots
+  if [[ "${DECIMAL_POINTS}" != 3 ]]; then show_usage_subnet; error_exit; fi
+
+  IFS=.
+  read PART_A PART_B PART_C PART_D <<< "${1}"
+
+  # check if any part is empty
+  if [[ ! "${PART_A}" ]] || [[ ! "${PART_B}" ]] || [[ ! "${PART_C}" ]] || [[ ! "${PART_D}" ]]; then
+    show_usage_subnet
+    error_exit
+  # check if any part of the address is < 0 or > 255
+  elif [[ "${PART_A}" -lt 0 ]] || [[ "${PART_A}" -gt 255 ]] || [[ "${PART_B}" -lt 0 ]] || [[ "${PART_B}" -gt 255 ]] || [[ "${PART_C}" -lt 0 ]] || [[ "${PART_C}" -gt 255 ]] || [[ "${PART_D}" -lt 0 ]] || [[ "${PART_D}" -gt 255 ]]; then
+    show_usage_subnet
+    error_exit
+  fi
+
+  IFS=
+
+  return 0
 }
 
 # Checks if ipv6 module is loaded.
@@ -349,11 +369,41 @@ function show_all() {
   local MAC_OF
   local DRIVER_OF
   local GATEWAY
+  
+  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
+  declare IPV4_ARRAY=($(ip address show | awk '/inet/ {print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2))
+  declare IPV6_ARRAY=($(ip address show | awk 'tolower($0) ~ /inet6/{print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2 | awk '{print toupper($0)}'))
+
+  for i in "${!INTERFACES_ARRAY[@]}"; do
+    if [[ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ]]; then
+      DRIVER_OF=$(awk --field-separator="=" 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent")
+    else
+      DRIVER_OF=$(awk --field-separator="=" 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent")
+    fi
+    MAC_OF=$(awk '{print toupper($0)}' "/sys/class/net/${INTERFACES_ARRAY[i]}/address" 2> /dev/null)
+    GATEWAY=$(ip route | awk "/${INTERFACES_ARRAY[i]}/ && tolower(\$0) ~ /default/ {print \$3}")
+    if grep --ignore-case "ipv6" "/proc/modules" &>/dev/null; then
+      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${GATEWAY}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
+    else
+      echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${GATEWAY}" "${IPV4_ARRAY[i]}"
+    fi
+  done
+
+  return 0
+}
+
+function show_calculations() {
+
   local IFS
   local DECIMAL_POINTS
   local BITS
-  local HOST_BITS
-  local HOST_BITS_MASK_BINARY
+  local HOSTS
+  local HOST_MINIMUM
+  local HOST_MINIMUM_BINARY
+  local HOST_MAXIMUM
+  local HOST_MAXIMUM_BINARY
+  local CLASS
+  local CLASS_DESCRIPTION
   local IP
   local IP_BINARY
   local NETMASK
@@ -377,114 +427,161 @@ function show_all() {
   local PART_C
   local PART_D
   local CIDR
-  
-  declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
-  declare IPV4_ARRAY=($(ip address show | awk '/inet/ {print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2))
-  declare IPV6_ARRAY=($(ip address show | awk 'tolower($0) ~ /inet6/{print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2 | awk '{print toupper($0)}'))
 
-  if [[ -z "${1}" ]]; then  
-    for i in "${!INTERFACES_ARRAY[@]}"; do
-      if [[ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ]]; then
-        DRIVER_OF=$(awk --field-separator="=" 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent")
-      else
-        DRIVER_OF=$(awk --field-separator="=" 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent")
-      fi
-      MAC_OF=$(awk '{print toupper($0)}' "/sys/class/net/${INTERFACES_ARRAY[i]}/address" 2> /dev/null)
-      GATEWAY=$(ip route | awk "/${INTERFACES_ARRAY[i]}/ && tolower(\$0) ~ /default/ {print \$3}")
-      if grep --ignore-case "ipv6" "/proc/modules" &>/dev/null; then
-        echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${GATEWAY}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
-      else
-        echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${GATEWAY}" "${IPV4_ARRAY[i]}"
-      fi
-    done
-  else
-    init_regexes
+  init_regexes
 
-    IP=$(echo "${1}" | grep --extended-regexp --only-matching "${REGEX_IPV4}")
+  IP=$(echo "${1}" | grep --extended-regexp "${REGEX_IPV4}")
+  check_ip_address $(echo "${IP}" | awk --field-separator='/' '{print $1}') # check only the IP part
 
-    # if ipv4/cidr
-    if echo "${1}" | grep --extended-regexp --only-matching "${REGEX_IPV4_CIDR}" &> /dev/null; then
-      CIDR=$(echo "${1}" | awk --field-separator='/' '{print $2}')
-      check_cidr "${CIDR}" "ipv4"
+  # if ipv4/cidr
+  if echo "${1}" | grep --extended-regexp --only-matching "${REGEX_IPV4_CIDR}" &> /dev/null; then
+    CIDR=$(echo "${1}" | awk --field-separator='/' '{print $2}')
+    check_cidr "${CIDR}" "ipv4"
 
-      NETMASK=$(( 0xffffffff ^ (( 1 << ( 32 - CIDR )) -1 ) ))
-      NETMASK=$(( ( NETMASK >> 24 ) & 0xff )).$(( ( NETMASK >> 16 ) & 0xff )).$(( ( NETMASK >> 8 ) & 0xff )).$(( NETMASK & 0xff ))
+    NETMASK=$(( 0xffffffff ^ (( 1 << ( 32 - CIDR )) -1 ) ))
+    NETMASK=$(( ( NETMASK >> 24 ) & 0xff )).$(( ( NETMASK >> 16 ) & 0xff )).$(( ( NETMASK >> 8 ) & 0xff )).$(( NETMASK & 0xff ))
 
-      IFS=.
-      read NETMASK_PART_A NETMASK_PART_B NETMASK_PART_C NETMASK_PART_D <<< "${NETMASK}"
-      NETMASK_BINARY="$(dec_to_bin ${NETMASK_PART_A}).$(dec_to_bin ${NETMASK_PART_B}).$(dec_to_bin ${NETMASK_PART_C}).$(dec_to_bin ${NETMASK_PART_D})"
-    # if only ipv4 and no CIDR
-    elif echo "${1}" | grep --extended-regexp --only-matching "${REGEX_IPV4}" &> /dev/null; then
-      # if no netmask was specified keep the default value
-      if [[ -z "${2}" ]]; then NETMASK="255.255.255.0"; else NETMASK="${2}"; fi
-      DECIMAL_POINTS=$(echo "${NETMASK}" | grep --only-matching "\\." | wc --lines)
-      # check if there are three dots
-      if [[ "${DECIMAL_POINTS}" != 3 ]]; then error_exit "${DIALOG_NO_VALID_MASK}"; fi
-      
-      IFS=.
-      read NETMASK_PART_A NETMASK_PART_B NETMASK_PART_C NETMASK_PART_D <<< "${NETMASK}"
-      
-      # check if any part is empty
-      if [[ ! "${NETMASK_PART_A}" ]] || [[ ! "${NETMASK_PART_B}" ]] || [[ ! "${NETMASK_PART_C}" ]] || [[ ! "${NETMASK_PART_D}" ]]; then
+    IFS=.
+    read NETMASK_PART_A NETMASK_PART_B NETMASK_PART_C NETMASK_PART_D <<< "${NETMASK}"
+    NETMASK_BINARY="$(dec_to_bin ${NETMASK_PART_A}).$(dec_to_bin ${NETMASK_PART_B}).$(dec_to_bin ${NETMASK_PART_C}).$(dec_to_bin ${NETMASK_PART_D})"
+  # if only ipv4 and no CIDR
+  elif echo "${1}" | grep --extended-regexp --only-matching "${REGEX_IPV4}" &> /dev/null; then
+    # if no netmask was specified keep the default value
+    if [[ -z "${2}" ]]; then NETMASK="255.255.255.0"; else NETMASK="${2}"; fi
+    DECIMAL_POINTS=$(echo "${NETMASK}" | grep --only-matching "\\." | wc --lines)
+    check_ip_address "${NETMASK}"
+    
+    IFS=.
+    read NETMASK_PART_A NETMASK_PART_B NETMASK_PART_C NETMASK_PART_D <<< "${NETMASK}"
+    
+    # check if any part is empty
+    if [[ ! "${NETMASK_PART_A}" ]] || [[ ! "${NETMASK_PART_B}" ]] || [[ ! "${NETMASK_PART_C}" ]] || [[ ! "${NETMASK_PART_D}" ]]; then
+      error_exit "${DIALOG_NO_VALID_MASK}"
+    # check if any part of netmask is < 0 or > 255
+    elif [[ "${NETMASK_PART_A}" -lt 0 ]] || [[ "${NETMASK_PART_A}" -gt 255 ]] || [[ "${NETMASK_PART_B}" -lt 0 ]] || [[ "${NETMASK_PART_B}" -gt 255 ]] ||
+         [[ "${NETMASK_PART_C}" -lt 0 ]] || [[ "${NETMASK_PART_C}" -gt 255 ]] || [[ "${NETMASK_PART_D}" -lt 0 ]] || [[ "${NETMASK_PART_D}" -gt 255 ]]; then
         error_exit "${DIALOG_NO_VALID_MASK}"
-      # check if any part of netmask is < 0 or > 255
-      elif [[ "${NETMASK_PART_A}" -lt 0 ]] || [[ "${NETMASK_PART_A}" -gt 255 ]] ||
-         [[ "${NETMASK_PART_B}" -lt 0 ]] || [[ "${NETMASK_PART_B}" -gt 255 ]] ||
-         [[ "${NETMASK_PART_C}" -lt 0 ]] || [[ "${NETMASK_PART_C}" -gt 255 ]] ||
-         [[ "${NETMASK_PART_D}" -lt 0 ]] || [[ "${NETMASK_PART_D}" -gt 255 ]]; then
-          error_exit "${DIALOG_NO_VALID_MASK}"
-      fi
-      
-      NETMASK_BINARY="$(dec_to_bin ${NETMASK_PART_A}).$(dec_to_bin ${NETMASK_PART_B}).$(dec_to_bin ${NETMASK_PART_C}).$(dec_to_bin ${NETMASK_PART_D})"
-      CIDR=$(echo "${NETMASK_BINARY}" | grep --only-matching 1 | wc --lines)
     fi
     
-    read IP_PART_A IP_PART_B IP_PART_C IP_PART_D <<< "${IP}"
-    IP_BINARY="$(dec_to_bin ${IP_PART_A}).$(dec_to_bin ${IP_PART_B}).$(dec_to_bin ${IP_PART_C}).$(dec_to_bin ${IP_PART_D})"
-    
-    WILDCARD_BINARY=$(echo "${NETMASK_BINARY}" | tr 01 10)
-    read PART_A PART_B PART_C PART_D <<< "${WILDCARD_BINARY}"
-
-    IFS=
-
-    WILDCARD="$(bin_to_dec ${PART_A}).$(bin_to_dec ${PART_B}).$(bin_to_dec ${PART_C}).$(bin_to_dec ${PART_D})"
-    NETWORK_ADDRESS=$(( IP_PART_A & NETMASK_PART_A )).$(( IP_PART_B & NETMASK_PART_B )).$(( IP_PART_C & NETMASK_PART_C )).$(( IP_PART_D & NETMASK_PART_D ))
-    PART_A=$(echo "${NETWORK_ADDRESS}" | cut --delimiter='.' --fields=1); PART_B=$(echo "${NETWORK_ADDRESS}" | cut --delimiter='.' --fields=2)
-    PART_C=$(echo "${NETWORK_ADDRESS}" | cut --delimiter='.' --fields=3); PART_D=$(echo "${NETWORK_ADDRESS}" | cut --delimiter='.' --fields=4)
-
-    NETWORK_ADDRESS_BINARY="$(dec_to_bin ${PART_A}).$(dec_to_bin ${PART_B}).$(dec_to_bin ${PART_C}).$(dec_to_bin ${PART_D})"
-    
-    HOST_BITS=$(echo "${NETMASK_BINARY}" | grep --only-matching 0 | wc --lines)
-
-    HOST_BITS_MASK_BINARY="00000000000000000000000000000000"
-    HOST_BITS_MASK_BINARY=${HOST_BITS_MASK_BINARY::-${HOST_BITS}} # remove last bits, as many as HOST_BITS are
-    BROADCAST_ADDRESS_BINARY=$(echo ${IP_BINARY//.}) # remove dots
-    BROADCAST_ADDRESS_BINARY=${BROADCAST_ADDRESS_BINARY::-${HOST_BITS}} # remove last bits, as many as HOST_BITS are
-    
-    BITS=$(( 32 - HOST_BITS )) # append bits to trimmed binary
-    until [[ "${BITS}" -eq 32 ]]; do
-      BROADCAST_ADDRESS_BINARY+="1" # append a bit every loop
-      HOST_BITS_MASK_BINARY+="1" # append a bit every loop
-      let BITS+=1
-    done
-    
-    BROADCAST_ADDRESS_BINARY=$(echo "${BROADCAST_ADDRESS_BINARY}" | sed --expression="s/\(.\{8\}\)/\1./g" --expression="s/\(.*\)./\1 /") # put dot every 8th character and remove last occurence of dot
-    HOST_BITS_MASK_BINARY=$(echo "${HOST_BITS_MASK_BINARY}" | sed --expression="s/\(.\{8\}\)/\1./g" --expression="s/\(.*\)./\1 /") # put dot every 8th character and remove last occurence of dot
-
-    PART_A=$(echo "${BROADCAST_ADDRESS_BINARY}" | cut --delimiter='.' --fields=1); PART_B=$(echo "${BROADCAST_ADDRESS_BINARY}" | cut --delimiter='.' --fields=2)
-    PART_C=$(echo "${BROADCAST_ADDRESS_BINARY}" | cut --delimiter='.' --fields=3); PART_D=$(echo "${BROADCAST_ADDRESS_BINARY}" | cut --delimiter='.' --fields=4)
-    BROADCAST_ADDRESS="$(bin_to_dec ${PART_A}).$(bin_to_dec ${PART_B}).$(bin_to_dec ${PART_C}).$(bin_to_dec ${PART_D})"
-    
-    printf "${COLORS[0]}%-12s${COLORS[5]}%-22s${COLORS[1]}%s${COLORS[0]}\n" "Address:" "${IP}" "${IP_BINARY}"
-    printf "${COLORS[0]}%-12s${COLORS[5]}%-22s${COLORS[1]}%s${COLORS[0]}\n" "Netmask:" "${NETMASK} = ${CIDR}" "${NETMASK_BINARY}"
-    printf "${COLORS[0]}%-12s${COLORS[5]}%-22s${COLORS[1]}%s${COLORS[0]}\n" "Wildcard:" "${WILDCARD}" "${WILDCARD_BINARY}"
-    printf "=>\n"
-    printf "${COLORS[0]}%-12s${COLORS[5]}%-22s${COLORS[1]}%s${COLORS[0]}\n" "Network:" "${NETWORK_ADDRESS}/${CIDR}" "${NETWORK_ADDRESS_BINARY}"
-    printf "${COLORS[0]}%-12s${COLORS[5]}%-22s${COLORS[1]}%s${COLORS[0]}\n" "Broadcast:" "${BROADCAST_ADDRESS}" "${BROADCAST_ADDRESS_BINARY}"
+    NETMASK_BINARY="$(dec_to_bin ${NETMASK_PART_A}).$(dec_to_bin ${NETMASK_PART_B}).$(dec_to_bin ${NETMASK_PART_C}).$(dec_to_bin ${NETMASK_PART_D})"
+    CIDR=$(echo "${NETMASK_BINARY}" | grep --only-matching 1 | wc --lines)
+  else
+    show_usage_subnet
+    error_exit
   fi
 
+  IP=$(echo "${IP}" | awk --field-separator='/' '{print $1}') # remove CIDR from IP address
+  
+  read IP_PART_A IP_PART_B IP_PART_C IP_PART_D <<< "${IP}"
+  IP_BINARY="$(dec_to_bin ${IP_PART_A}).$(dec_to_bin ${IP_PART_B}).$(dec_to_bin ${IP_PART_C}).$(dec_to_bin ${IP_PART_D})"
+  
+  WILDCARD_BINARY=$(echo "${NETMASK_BINARY}" | tr 01 10)
+  read PART_A PART_B PART_C PART_D <<< "${WILDCARD_BINARY}"
+
+  WILDCARD="$(bin_to_dec ${PART_A}).$(bin_to_dec ${PART_B}).$(bin_to_dec ${PART_C}).$(bin_to_dec ${PART_D})"
+  
+  NETWORK_ADDRESS=$(( IP_PART_A & NETMASK_PART_A )).$(( IP_PART_B & NETMASK_PART_B )).$(( IP_PART_C & NETMASK_PART_C )).$(( IP_PART_D & NETMASK_PART_D ))
+  PART_A=$(echo "${NETWORK_ADDRESS}" | cut --delimiter='.' --fields=1); PART_B=$(echo "${NETWORK_ADDRESS}" | cut --delimiter='.' --fields=2)
+  PART_C=$(echo "${NETWORK_ADDRESS}" | cut --delimiter='.' --fields=3); PART_D=$(echo "${NETWORK_ADDRESS}" | cut --delimiter='.' --fields=4)
+  NETWORK_ADDRESS_BINARY="$(dec_to_bin ${PART_A}).$(dec_to_bin ${PART_B}).$(dec_to_bin ${PART_C}).$(dec_to_bin ${PART_D})"
+  
+  HOST_BITS=$(echo "${NETMASK_BINARY}" | grep --only-matching 0 | wc --lines)
+  
+  # Calculate first usable IP address
+  PART_D=$(( PART_D + 1 )) # add 1 to the last octet of the network address
+  HOST_MINIMUM="${PART_A}.${PART_B}.${PART_C}.${PART_D}" # merge decimal parts
+  HOST_MINIMUM_BINARY=$(dec_to_bin "${PART_A}").$(dec_to_bin "${PART_B}").$(dec_to_bin "${PART_C}").$(dec_to_bin "${PART_D}") # convert to binary
+
+  BROADCAST_ADDRESS_BINARY=$(echo ${IP_BINARY//.}) # remove dots
+  BROADCAST_ADDRESS_BINARY=${BROADCAST_ADDRESS_BINARY::-${HOST_BITS}} # remove last bits, as many as HOST_BITS are
+  
+  BITS=$(( 32 - HOST_BITS )) # append bits to trimmed binary
+  until [[ "${BITS}" -eq 32 ]]; do
+    BROADCAST_ADDRESS_BINARY+="1" # append a bit every loop
+    let BITS+=1
+  done
+  
+  BROADCAST_ADDRESS_BINARY=$(echo "${BROADCAST_ADDRESS_BINARY}" | sed --expression="s/\(.\{8\}\)/\1./g" --expression="s/\(.*\)./\1 /") # put dot every 8th character and remove last occurence of dot
+  
+  PART_A=$(echo "${BROADCAST_ADDRESS_BINARY}" | cut --delimiter='.' --fields=1); PART_B=$(echo "${BROADCAST_ADDRESS_BINARY}" | cut --delimiter='.' --fields=2)
+  PART_C=$(echo "${BROADCAST_ADDRESS_BINARY}" | cut --delimiter='.' --fields=3); PART_D=$(echo "${BROADCAST_ADDRESS_BINARY}" | cut --delimiter='.' --fields=4)
+  BROADCAST_ADDRESS="$(bin_to_dec ${PART_A}).$(bin_to_dec ${PART_B}).$(bin_to_dec ${PART_C}).$(bin_to_dec ${PART_D})"
+  
+  # Calculate last usable IP address
+  PART_D=$(bin_to_dec "${PART_D}") # convert to decimal in order to substract later
+  PART_D=$(( PART_D - 1 )) # substract 1 from the last octet of the broadcast address
+  PART_D=$(dec_to_bin "${PART_D}") # convert to binary
+  HOST_MAXIMUM=$(bin_to_dec "${PART_A}").$(bin_to_dec "${PART_B}").$(bin_to_dec "${PART_C}").$(bin_to_dec "${PART_D}") # merge parts and convert them to decimals
+  HOST_MAXIMUM_BINARY="${PART_A}.${PART_B}.${PART_C}.${PART_D}" # merge binary parts
+
+  # Maximum Number of hosts
+  HOSTS=$(( 2 ** ( 32 - CIDR ) - 2 ))
+  
+  # Classful addressing: leading bits checking
+  IP_PART_A=$(dec_to_bin "${IP_PART_A}") # convert first octet to binary
+  case "${IP_PART_A}" in
+    0*) CLASS="A" ;;
+    10*) CLASS="B" ;;
+    110*) CLASS="C" ;;
+    1110*) CLASS="D" ;;
+    1111*) CLASS="E" ;;
+  esac
+  
+  # RFC 1918 based
+  IP_PART_B=$(dec_to_bin "${IP_PART_B}") # convert second octet to binary
+  case "${IP_PART_A}:${IP_PART_B}" in
+    01111111:*) CLASS_DESCRIPTION="Loopback" ;;
+    00001010:*) CLASS_DESCRIPTION="Private Internet" ;;
+    10101100:0001*) CLASS_DESCRIPTION="Private Internet" ;;
+    11000000:10101000) CLASS_DESCRIPTION="Private Internet" ;;
+    1110*:*) CLASS_DESCRIPTION="Multicast" ;;
+    1111*:*) CLASS_DESCRIPTION="Experimental" ;;
+  esac
+
+  case "${CIDR}" in
+    30) CLASS_DESCRIPTION+=", Glue Network PtP Link" ;;
+    31)
+      CLASS_DESCRIPTION+=", PtP Link RFC 3021"
+      HOSTS=2
+      HOST_MINIMUM="${NETWORK_ADDRESS}"
+      HOST_MINIMUM_BINARY="${NETWORK_ADDRESS_BINARY}"
+      IP_PART_A=$(bin_to_dec "${IP_PART_A}")
+      IP_PART_B=$(bin_to_dec "${IP_PART_B}")
+      # calculates properly host range
+      if [[ $(( IP_PART_D % 2 )) -eq 0 ]]; then
+        IP_PART_D=$(( IP_PART_D + 1 ))
+        HOST_MAXIMUM="${IP_PART_A}.${IP_PART_B}.${IP_PART_C}.${IP_PART_D}"
+        HOST_MAXIMUM_BINARY=$(dec_to_bin "${IP_PART_A}").$(dec_to_bin "${IP_PART_B}").$(dec_to_bin "${IP_PART_C}").$(dec_to_bin "${IP_PART_D}")
+      else
+        HOST_MAXIMUM="${IP}"
+        HOST_MAXIMUM_BINARY="${IP_BINARY}"
+      fi
+    ;;
+    32) CLASS_DESCRIPTION+=", Hostroute" ; HOSTS=1 ;;
+  esac
+
+  IFS=
+  
+  printf "%-11s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address:" "${IP}" "${IP_BINARY}"
+  printf "%-11s${COLORS[4]}%-21s${COLORS[1]}%s${COLORS[0]}\n" "Netmask:" "${NETMASK} = ${CIDR}" "${NETMASK_BINARY}"
+  printf "%-11s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Wildcard:" "${WILDCARD}" "${WILDCARD_BINARY}"
+  printf "=>\n"
+  if [[ "${CIDR}" -le 31 ]]; then
+    printf "%-11s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Network:" "${NETWORK_ADDRESS}/${CIDR}" "${NETWORK_ADDRESS_BINARY}"
+    printf "%-11s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "HostMin:" "${HOST_MINIMUM}" "${HOST_MINIMUM_BINARY}"
+    printf "%-11s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "HostMax:" "${HOST_MAXIMUM}" "${HOST_MAXIMUM_BINARY}"
+  else
+    printf "%-11s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Hostroute:" "${IP}" "${IP_BINARY}"
+  fi
+  if [[ "${CIDR}" -le 30 ]]; then
+    printf "%-11s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Broadcast:" "${BROADCAST_ADDRESS}" "${BROADCAST_ADDRESS_BINARY}"
+  fi
+  printf "%-11s${COLORS[4]}%-21s${COLORS[5]}%s${COLORS[0]}%-22s${COLORS[4]}\n" "Hosts/Net:" "${HOSTS}" "Class ${CLASS}" " ${CLASS_DESCRIPTION}"
+
+  echo
+
   return 0
-}
+}  
 
 # Prints the driver used of active interface.
 function show_driver() {
@@ -1087,12 +1184,11 @@ function show_usage() {
   echo    "  usage: ${SCRIPT_NAME} [OPTION] <ARGUMENT/S>"
   echo -e " ${SCRIPT_NAME} ${COLORS[0]}-4 ${COLORS[0]}, ${COLORS[0]}--ipv4 ${COLORS[0]}            shows active interfaces with their IPv4 address"
   echo -e " ${SCRIPT_NAME} ${COLORS[0]}-6 ${COLORS[0]}, ${COLORS[0]}--ipv6 ${COLORS[0]}            shows active interfaces with their IPv6 address"
-  echo -e " ${SCRIPT_NAME} ${COLORS[0]}-a ${COLORS[0]}, ${COLORS[0]}--all ${COLORS[0]}             shows all network info"
-  echo -e " ${SCRIPT_NAME} ${COLORS[0]}-a ${COLORS[0]}, ${COLORS[0]}--all ${COLORS[0]}<>           shows network info of target IP address"
+  echo -e " ${SCRIPT_NAME} ${COLORS[0]}-a ${COLORS[0]}, ${COLORS[0]}--all ${COLORS[0]}             shows all information"
   echo -e " ${SCRIPT_NAME} ${COLORS[0]}-d ${COLORS[0]}, ${COLORS[0]}--driver ${COLORS[0]}          shows each active interface's driver"
   echo -e " ${SCRIPT_NAME} ${COLORS[0]}-e ${COLORS[0]}, ${COLORS[0]}--external ${COLORS[0]}        shows your external IP address"
   echo -e " ${SCRIPT_NAME} ${COLORS[0]}-e ${COLORS[0]}, ${COLORS[0]}--external ${COLORS[0]}<>      shows external IP addresses"
-  echo -e " ${SCRIPT_NAME} ${COLORS[0]}-f ${COLORS[0]}, ${COLORS[0]}--find ${COLORS[0]}<>          shows valid IP and MAC addresses found on a file"
+  echo -e " ${SCRIPT_NAME} ${COLORS[0]}-f ${COLORS[0]}, ${COLORS[0]}--find ${COLORS[0]}<>          shows valid IP and MAC addresses found on file/s"
   echo -e " ${SCRIPT_NAME} ${COLORS[0]}-g ${COLORS[0]}, ${COLORS[0]}--gateway ${COLORS[0]}         shows gateway of online interfaces"
   echo -e " ${SCRIPT_NAME} ${COLORS[0]}-h ${COLORS[0]}, ${COLORS[0]}--help${COLORS[0]}             shows this help message"
   echo -e " ${SCRIPT_NAME} ${COLORS[1]}-H ${COLORS[0]}, ${COLORS[1]}--hosts ${COLORS[0]}           shows active hosts on network"
@@ -1105,15 +1201,25 @@ function show_usage() {
   echo -e " ${SCRIPT_NAME} ${COLORS[1]}-P ${COLORS[0]}, ${COLORS[1]}--port ${COLORS[0]}<>          shows connections to a port per IP"
   echo -e " ${SCRIPT_NAME} ${COLORS[0]}-r ${COLORS[0]}, ${COLORS[0]}--route-ipv4 ${COLORS[0]}<>    shows the path to a network host using IPv4"
   echo -e " ${SCRIPT_NAME} ${COLORS[0]}-r6${COLORS[0]}, ${COLORS[0]}--route-ipv6 ${COLORS[0]}<>    shows the path to a network host using IPv6"
-  echo -e " ${SCRIPT_NAME} ${COLORS[0]}-u ${COLORS[0]}, ${COLORS[0]}--url ${COLORS[0]}<>           shows valid IP and MAC addresses found on a website"
+  echo -e " ${SCRIPT_NAME} ${COLORS[0]}-s ${COLORS[0]}, ${COLORS[0]}--subnet ${COLORS[0]}          shows subnetting information"
+  echo -e " ${SCRIPT_NAME} ${COLORS[0]}-s ${COLORS[0]}, ${COLORS[0]}--subnet ${COLORS[0]}<>        shows created subnetworks"
+  echo -e " ${SCRIPT_NAME} ${COLORS[0]}-u ${COLORS[0]}, ${COLORS[0]}--url ${COLORS[0]}<>           shows valid IP and MAC addresses found on website/s"
   echo -e " ${SCRIPT_NAME} ${COLORS[0]}-v ${COLORS[0]}, ${COLORS[0]}--version ${COLORS[0]}         shows the version of script"
   echo -e " ${SCRIPT_NAME} ${COLORS[2]}--cidr-4${COLORS[0]}, ${COLORS[2]}--cidr-ipv4 ${COLORS[0]}  shows active interfaces with their IPv4 address and CIDR"
   echo -e " ${SCRIPT_NAME} ${COLORS[2]}--cidr-6${COLORS[0]}, ${COLORS[2]}--cidr-ipv6 ${COLORS[0]}  shows active interfaces with their IPv6 address and CIDR"
-  echo -e " ${SCRIPT_NAME} ${COLORS[2]}--cidr-a${COLORS[0]}, ${COLORS[2]}--cidr-all ${COLORS[0]}   shows all basic info with CIDR"
-  echo -e " ${SCRIPT_NAME} ${COLORS[2]}--cidr-a${COLORS[0]}, ${COLORS[2]}--cidr-all ${COLORS[0]}<> shows network info of target IP address"
+  echo -e " ${SCRIPT_NAME} ${COLORS[2]}--cidr-a${COLORS[0]}, ${COLORS[2]}--cidr-all ${COLORS[0]}   shows all information with CIDR"
   echo -e " ${SCRIPT_NAME} ${COLORS[2]}--cidr-l${COLORS[0]}, ${COLORS[2]}--cidr-list ${COLORS[0]}  shows a list of private and reserved IP addresses with CIDR"
   echo -e "  options in ${COLORS[2]}GREEN${COLORS[0]} include ${COLORS[2]}CIDR${COLORS[0]} notation"
   echo -e "  options in ${COLORS[1]}RED${COLORS[0]}   require ${COLORS[1]}ROOT${COLORS[0]} privileges"
+
+  return 0
+}
+
+function show_usage_subnet() {
+
+  echo -e "usage: ${SCRIPT_NAME} -s, --subnet ${COLORS[5]}192.168.0.1${COLORS[0]}"
+  echo -e "       ${SCRIPT_NAME} -s, --subnet ${COLORS[5]}192.168.0.1/24${COLORS[0]}"
+  echo -e "       ${SCRIPT_NAME} -s, --subnet ${COLORS[5]}192.168.0.1 255.255.255.0${COLORS[0]}"
 
   return 0
 }
@@ -1129,7 +1235,7 @@ function sail() {
     case "${1}" in
       "-4"|"--ipv4") check_connectivity "--local"; show_ipv4; break ;;
       "-6"|"--ipv6") check_connectivity "--local"; show_ipv6; break ;;
-      "-a"|"--all") check_connectivity "--local"; show_all "${@:2}"; break ;;
+      "-a"|"--all") check_connectivity "--local"; show_all; break ;;
       "-d"|"--driver") check_connectivity "--local"; show_driver; break ;;
       "-e"|"--external") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_ip_from "${2}"; shift 2; break ;;
       "-f"|"--find") trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_ips_from_file "${@:2}"; break ;;
@@ -1138,17 +1244,18 @@ function sail() {
       "-H"|"--hosts") check_connectivity "--local"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_live_hosts --normal; break ;;
       "-HM"|"--hosts-mac") check_connectivity "--local"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_live_hosts --mac; break ;;
       "-i"|"--interfaces") check_connectivity "--local"; show_interfaces; break ;;
-      "-P"|"--port") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_port_connections "${2}"; shift 2; break ;;
-      "-r"|"--route-ipv4") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_next_hops --ipv4 "${2}"; shift 2; break ;;
-      "-r6"|"--route-ipv6") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_next_hops --ipv6 "${2}"; shift 2; break ;;
       "-l"|"--list") show_bogon_ips "normal"; break ;;
       "-m"|"--mac") check_connectivity "--local"; show_mac; break ;;
       "-n"|"--neighbor") check_connectivity "--local"; show_neighbor_cache; break ;;
+      "-P"|"--port") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_port_connections "${2}"; shift 2; break ;;
+      "-r"|"--route-ipv4") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_next_hops --ipv4 "${2}"; shift 2; break ;;
+      "-r6"|"--route-ipv6") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_next_hops --ipv6 "${2}"; shift 2; break ;;
+      "-s"|"--subnet") show_calculations "${@:2}"; break ;;
       "-u"|"--url") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_ips_from_online_document "${@:2}"; break ;;
       "-v"|"--version") show_version; break ;;
       "--cidr-4"|"--cidr-ipv4") check_connectivity "--local"; show_ipv4_cidr; break ;;
       "--cidr-6"|"--cidr-ipv6") check_connectivity "--local"; show_ipv6_cidr; break ;;
-      "--cidr-a"|"--cidr-all") check_connectivity "--local"; show_all_cidr "${@:2}"; break ;;
+      "--cidr-a"|"--cidr-all") check_connectivity "--local"; show_all_cidr; break ;;
       "--cidr-l"|"--cidr-list") show_bogon_ips "cidr"; break ;;
       *) error_exit "${DIALOG_ERROR}" "${1}"; break ;;
     esac

@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [2.4] - 2017-02-11
 ### Added
 * Converting functions (Binary to Decimal, Binary to Hexadecimal, Decimal to Binary) to be used in other functions.
-* "Show network, broadcast address, netmask, CIDR, wildcard, host range, maximum hosts from given IP address".
- * `ship -a 192.168.1.1/24` or `ship -a 192.168.1.1` with CIDR /24 as default, or `ship -a 192.168.1.1 255.255.255.0`
+* "Show network, broadcast address, netmask, CIDR, Cisco wildcard, class, host range, maximum hosts from given IP address".
+ *  Seriously why need to install `ipcalc`, when you can do this with pure Bash? :smirk:
 * Show a list of private and reserved IP addreses (IPv4 and IPv6) with or without CIDR notation.
 
 ### Changed
@@ -15,8 +15,6 @@ All notable changes to this project will be documented in this file.
 * Beautified README.
 
 ### TODO
-* Add `ship --cidr-a <>` and modify `ship -a <>`.
-* Add Class display on `ship -a <>`.
 * Add subnetting support
 * Add IPv6 support for the above.
 
