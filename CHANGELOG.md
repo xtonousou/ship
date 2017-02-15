@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.4] - 2017-02-14
+## [2.4] - 2017-02-15
 ### Added
 * Converting functions (Binary to Decimal, Binary to Hexadecimal, Decimal to Binary) to be used in other functions.
 * "Show network, broadcast address, netmask, CIDR, Cisco wildcard, class, host range, maximum hosts from given IP address".
@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
 * Show a list of private and reserved IP addreses (IPv4 and IPv6) with or without CIDR notation (Bogon IPs).
 
 ### Changed
-* Fixed "Show neighbor cache" feature.
+* **Fixed** "Show neighbor cache" feature.
+* **Fixed** file/s and online document/s sorting methods and output.
 * "Usage" output.
 * "Show version" output.
 * Beautified README.

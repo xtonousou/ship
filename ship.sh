@@ -2,7 +2,7 @@
 ## Title........: ship.sh
 ## Description..: A simple, handy network addressing multitool with plenty of features.
 ## Author.......: Sotirios Roussis aka. xtonousou - xtonousou@gmail.com
-## Date.........: 20160214
+## Date.........: 20160215
 ## Version......: 2.4
 ## Usage........: bash ship.sh
 ## Bash Version.: 3.2 or later
@@ -482,10 +482,14 @@ function show_ips_from_file() {
   init_regexes
 
   for FILE in "${@}"; do
-    grep --extended-regexp --only-matching "${REGEX_IPV4}" "${FILE}" 2>/dev/null | sort --version-sort --unique >> "${TEMP_FILE_IPV4}"
-    grep --extended-regexp --only-matching "${REGEX_IPV6}" "${FILE}" 2>/dev/null | sort --version-sort --unique >> "${TEMP_FILE_IPV6}"
-    grep --extended-regexp --only-matching "${REGEX_MAC}"  "${FILE}" 2>/dev/null | sort --version-sort --unique >> "${TEMP_FILE_MAC}"
+    grep --extended-regexp --only-matching "${REGEX_IPV4}" "${FILE}" 2>/dev/null >> "${TEMP_FILE_IPV4}"
+    grep --extended-regexp --only-matching "${REGEX_IPV6}" "${FILE}" 2>/dev/null >> "${TEMP_FILE_IPV6}"
+    grep --extended-regexp --only-matching "${REGEX_MAC}"  "${FILE}" 2>/dev/null >> "${TEMP_FILE_MAC}"
   done
+
+  sort --version-sort --unique --output="${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV4}"
+  sort --version-sort --unique --output="${TEMP_FILE_IPV6}" "${TEMP_FILE_IPV6}"
+  sort --version-sort --unique --output="${TEMP_FILE_MAC}" "${TEMP_FILE_MAC}"
 
   if [[ -s "${TEMP_FILE_IPV4}" ]]; then IS_TEMP_FILE_IPV4_EMPTY=0; else IS_TEMP_FILE_IPV4_EMPTY=1; fi
   if [[ -s "${TEMP_FILE_IPV6}" ]]; then IS_TEMP_FILE_IPV6_EMPTY=0; else IS_TEMP_FILE_IPV6_EMPTY=1; fi
@@ -493,19 +497,19 @@ function show_ips_from_file() {
 
   case "${IS_TEMP_FILE_IPV4_EMPTY}:${IS_TEMP_FILE_IPV6_EMPTY}:${IS_TEMP_FILE_MAC_EMPTY}" in
     0:0:0) # IPv4, IPv6 and MAC addresses
-      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-16s%-40s%s\n", $1, $2, toupper($3))}'
+      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-15s │ %-39s │ %s\n", $1, $2, toupper($3))}'
     ;;
     0:0:1) # Only IPv4 and IPv6 addresses
-      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" | awk --field-separator='\t' '{printf("%-16s%s\n", $1, $2)}' 
+      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" | awk --field-separator='\t' '{printf("%-15s │ %s\n", $1, $2)}'
     ;;
     0:1:0) # Only IPv4 and MAC addresses
-      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-16s%s\n", $1, toupper($2))}'
+      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-15s │ %s\n", $1, toupper($2))}'
     ;;
     0:1:1) # Only IPv4 addresses
       paste "${TEMP_FILE_IPV4}" | awk --field-separator='\t' '{printf("%s\n", $1)}'
     ;;
     1:0:0) # Only IPv6 and MAC addresses
-      paste "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-40s%s\n", $1, toupper($2))}'
+      paste "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-39s │ %s\n", $1, toupper($2))}'
     ;;
     1:0:1) # Only IPv6 addresses
       paste "${TEMP_FILE_IPV6}" | awk --field-separator='\t' '{printf("%s\n", $1)}'
@@ -697,7 +701,7 @@ function show_port_connections() {
     echo -e "      ${COLORS[2]}┌─> ${COLORS[1]}Count Port ${COLORS[2]}──┐"
     echo -e "      │ ┌───────> ${COLORS[1]}IPv4 ${COLORS[2]}└─> ${COLORS[1]}${PORT}"
     echo -e "    ${COLORS[2]}┌─┘ └──────────────┐${COLORS[0]}"
-    ss --numeric --processes | awk "/${PORT}/ && /${REGEX_IPV4}/ {print \$6}" | cut --delimiter=":" --fields=1 | uniq --count
+    ss --numeric --processes | awk "/${PORT}/&&/${REGEX_IPV4}/{print \$6}" | cut --delimiter=":" --fields=1 | uniq --count
     sleep 3
   done
 
@@ -1067,29 +1071,29 @@ function show_ips_from_online_documents() {
     grep --extended-regexp --only-matching "${REGEX_MAC}"  "${TEMP_FILE_HTML}" >> "${TEMP_FILE_MAC}"
   done
 
-  sort --version-sort --unique "${TEMP_FILE_IPV4}" > "${TEMP_FILE_IPV4}"
-  sort --version-sort --unique "${TEMP_FILE_IPV6}" > "${TEMP_FILE_IPV6}"
-  sort --version-sort --unique "${TEMP_FILE_MAC}" > "${TEMP_FILE_MAC}"
-
   if [[ -s "${TEMP_FILE_IPV4}" ]]; then IS_TEMP_FILE_IPV4_EMPTY=0; else IS_TEMP_FILE_IPV4_EMPTY=1; fi
   if [[ -s "${TEMP_FILE_IPV6}" ]]; then IS_TEMP_FILE_IPV6_EMPTY=0; else IS_TEMP_FILE_IPV6_EMPTY=1; fi
   if [[ -s "${TEMP_FILE_MAC}" ]]; then IS_TEMP_FILE_MAC_EMPTY=0; else IS_TEMP_FILE_MAC_EMPTY=1; fi
 
+  sort --version-sort --unique --output="${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV4}"
+  sort --version-sort --unique --output="${TEMP_FILE_IPV6}" "${TEMP_FILE_IPV6}"
+  sort --version-sort --unique --output="${TEMP_FILE_MAC}" "${TEMP_FILE_MAC}"
+
   case "${IS_TEMP_FILE_IPV4_EMPTY}:${IS_TEMP_FILE_IPV6_EMPTY}:${IS_TEMP_FILE_MAC_EMPTY}" in
     0:0:0) # IPv4, IPv6 and MAC addresses
-      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-16s%-40s%s\n", $1, $2, toupper($3))}'
+      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-15s │ %-39s │ %s\n", $1, $2, toupper($3))}'
     ;;
     0:0:1) # Only IPv4 and IPv6 addresses
-      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" | awk --field-separator='\t' '{printf("%-16s%s\n", $1, $2)}' 
+      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" | awk --field-separator='\t' '{printf("%-15s │ %s\n", $1, $2)}'
     ;;
     0:1:0) # Only IPv4 and MAC addresses
-      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-16s%s\n", $1, toupper($2))}'
+      paste "${TEMP_FILE_IPV4}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-15s │ %s\n", $1, toupper($2))}'
     ;;
     0:1:1) # Only IPv4 addresses
       paste "${TEMP_FILE_IPV4}" | awk --field-separator='\t' '{printf("%s\n", $1)}'
     ;;
     1:0:0) # Only IPv6 and MAC addresses
-      paste "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-40s%s\n", $1, toupper($2))}'
+      paste "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" | awk --field-separator='\t' '{printf("%-39s │ %s\n", $1, toupper($2))}'
     ;;
     1:0:1) # Only IPv6 addresses
       paste "${TEMP_FILE_IPV6}" | awk --field-separator='\t' '{printf("%s\n", $1)}'
