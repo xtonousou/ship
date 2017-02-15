@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 * Show a list of private and reserved IP addreses (IPv4 and IPv6) with or without CIDR notation (Bogon IPs).
 
 ### Changed
+* **Fixed** wrong output of active connection based on port.
 * **Fixed** "Show neighbor cache" feature.
 * **Fixed** file/s and online document/s sorting methods and output.
 * "Usage" output.

@@ -686,12 +686,14 @@ function show_port_connections() {
   
   local PORT
   
-  if [[ -z "$1" ]]; then print_port_protocol_list; exit 0; fi
+  if [[ -z "${1}" ]]; then print_port_protocol_list; exit 0; fi
   
   check_root_permissions
-  check_if_parameter_is_not_numerical "$1"
+  check_if_parameter_is_not_numerical "${1}"
   
-  PORT="$1"
+  PORT="${1}"
+
+  init_regexes
   
   clear
   while :; do
