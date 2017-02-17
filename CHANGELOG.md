@@ -1,6 +1,32 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## TODO
+### Add
+* Subnetting feature.
+ * Split networks and such.
+
+### Change
+* Clean code.
+ * Match the line breaking column **80**, as much as it is possible.
+
+## [2.4] - 2017-02-17
+### Added
+* Converting functions (Binary to Decimal, Binary to Hexadecimal, Decimal to Binary) to be used in other functions.
+* "Show network, broadcast address, netmask, CIDR, Cisco wildcard, class, host range, maximum hosts from given IP address".
+ * Seriously why need to install `ipcalc sipcalc`, when you can do this with pure Bash? :smirk:
+* Show a list of private and reserved IP addreses (IPv4 and IPv6) with or without CIDR notation (Bogon IPs).
+* More sources to grab user's public IP.
+  * Randomly choose from 6 different web sources to grab the IP.
+
+### Changed
+* **Fixed** wrong output of active connection/s based on port.
+* **Fixed** "Show neighbor cache" feature.
+* **Fixed** file/s and online document/s sorting methods and output.
+* "Usage" output.
+* "Show version" output.
+* Beautified README.
+
 ## [2.3] - 2017-01-27
 ### Added
 * Functionality to pass multiple arguments at the same time.
