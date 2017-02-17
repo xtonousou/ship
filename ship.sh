@@ -2,11 +2,10 @@
 ## Title........: ship.sh
 ## Description..: A simple, handy network addressing multitool with plenty of features.
 ## Author.......: Sotirios Roussis aka. xtonousou - xtonousou@gmail.com
-## Date.........: 20160215
+## Date.........: 20160217
 ## Version......: 2.4
 ## Usage........: bash ship.sh
 ## Bash Version.: 3.2 or later
-## Limitations..: ipinfo.io offers free 1,000 daily requests (ship -e)
 
 ### Debugging
 #set -o xtrace
@@ -34,7 +33,14 @@ declare -r COLORS=(
 ### Locations
 readonly TEMP="/tmp"
 readonly GOOGLE_DNS="8.8.8.8"
-readonly IPINFO="ipinfo.io"
+declare -r PUBLIC_IP=(
+  "icanhazip.com"
+  "ident.me"
+  "ipinfo.io/ip"
+  "ip-addr.es"
+  "wgetip.com"
+  "wtfismyip.com/text"
+)
 
 ### Timeouts
 readonly SHORT_TIMEOUT="2"
@@ -193,8 +199,8 @@ function check_cidr() {
   esac
 }
 
-# Checks if an IP address is valid (if it passed the regexp).
-function check_ip_address() {
+# Checks if a network address is valid.
+function check_dotted_quad_address() {
 
   local IFS
   local DECIMAL_POINTS
@@ -209,6 +215,12 @@ function check_ip_address() {
 
   IFS=.
   read -r PART_A PART_B PART_C PART_D <<< "${1}"
+
+  # check for non numerical values
+  if [[ ! "${PART_A}" =~ ^[0-9]+$ ]] || [[ ! "${PART_B}" =~ ^[0-9]+$ ]] || [[ ! "${PART_C}" =~ ^[0-9]+$ ]] || [[ ! "${PART_D}" =~ ^[0-9]+$ ]]; then
+    show_usage_subnet
+    error_exit
+  fi
 
   # check if any part is empty
   if [[ ! "${PART_A}" ]] || [[ ! "${PART_B}" ]] || [[ ! "${PART_C}" ]] || [[ ! "${PART_D}" ]]; then
@@ -424,10 +436,14 @@ function show_ip_from() {
   
   local HTTP_CODE
   local TEMP_FILE
+  local RANDOM_SOURCE
+
+  RANDOM_SOURCE="${PUBLIC_IP["$(( RANDOM % ${#PUBLIC_IP[@]} ))"]}"
   
   if [[ -z "${1}" ]]; then
-    print_check "${IPINFO}"
-    HTTP_CODE=$(wget --spider --tries=1 --timeout="${TIMEOUT}" --server-response "${IPINFO}" 2>&1 | awk '/HTTP\//{print $2}' | tail --lines=1)
+    
+    print_check "${RANDOM_SOURCE}"
+    HTTP_CODE=$(wget --spider --tries=1 --timeout="${TIMEOUT}" --server-response "${RANDOM_SOURCE}" 2>&1 | awk '/HTTP\//{print $2}' | tail --lines=1)
     
     if [[ ! "${HTTP_CODE}" -eq 200 ]]; then error_exit "${DIALOG_SERVER_IS_DOWN}"; fi
 
@@ -435,7 +451,7 @@ function show_ip_from() {
     TEMP_FILE=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
     
     echo -ne "Grabbing ${COLORS[2]}IP${COLORS[0]} ..."
-    wget "${IPINFO}/ip" --quiet --output-document="${TEMP_FILE}"
+    wget "${RANDOM_SOURCE}" --quiet --output-document="${TEMP_FILE}"
     
     clear_line
     awk '{print $0}' "${TEMP_FILE}"
@@ -842,140 +858,158 @@ function show_next_hops() {
 function show_subnetworks() {
 
   local IFS
+  local CIDR
   local DECIMAL_POINTS
   local BITS
-  local HOSTS
-  local HOST_MINIMUM
-  local HOST_MINIMUM_BINARY
-  local HOST_MAXIMUM
-  local HOST_MAXIMUM_BINARY
-  local CLASS
-  local CLASS_DESCRIPTION
-  local IP
-  local IP_BINARY
-  local NETMASK
-  local NETMASK_BINARY
-  local WILDCARD
-  local WILDCARD_BINARY
-  local NETWORK_ADDRESS
-  local NETWORK_ADDRESS_BINARY
-  local BROADCAST_ADDRESS
-  local BROADCAST_ADDRESS_BINARY
-  local IP_PART_A
-  local IP_PART_B
-  local IP_PART_C
-  local IP_PART_D
-  local NETMASK_PART_A
-  local NETMASK_PART_B
-  local NETMASK_PART_C
-  local NETMASK_PART_D
-  local PART_A
-  local PART_B
-  local PART_C
-  local PART_D
-  local CIDR
+  local HOSTS HOST_MINIMUM HOST_MINIMUM_BINARY HOST_MAXIMUM HOST_MAXIMUM_BINARY
+  local CLASS CLASS_DESCRIPTION
+  local IP IP_BINARY
+  local NETMASK NETMASK_BINARY
+  local WILDCARD WILDCARD_BINARY
+  local NETWORK_ADDRESS NETWORK_ADDRESS_BINARY
+  local BROADCAST_ADDRESS BROADCAST_ADDRESS_BINARY
+  local IP_PART_A IP_PART_B IP_PART_C IP_PART_D
+  local NETMASK_PART_A NETMASK_PART_B NETMASK_PART_C NETMASK_PART_D
+  local PART_A PART_B PART_C PART_D
 
   init_regexes
 
-  IP=$(echo "${1}" | grep --extended-regexp "${REGEX_IPV4}")
-  check_ip_address "$(echo "${IP}" | awk --field-separator='/' '{print $1}')" # check only the IP part
+  # pass the input into a variable
+  IP=$(grep --extended-regexp "${REGEX_IPV4}" <<< "${1}")
+  check_dotted_quad_address "$(awk --field-separator='/' '{print $1}' <<< "${IP}")" # check only the IP part
 
   # if ipv4/cidr
-  if echo "${1}" | grep --extended-regexp --only-matching "${REGEX_IPV4_CIDR}" &> /dev/null; then
-    CIDR=$(echo "${1}" | awk --field-separator='/' '{print $2}')
+  if grep --extended-regexp --only-matching "${REGEX_IPV4_CIDR}" <<< "${1}" &> /dev/null; then
+    CIDR=$(awk --field-separator='/' '{print $2}' <<< "${1}")
+    # check if CIDR is valid
     check_cidr "${CIDR}" "ipv4"
 
+    # calculate netmask
     NETMASK=$(( 0xffffffff ^ (( 1 << ( 32 - CIDR )) -1 ) ))
     NETMASK=$(( ( NETMASK >> 24 ) & 0xff )).$(( ( NETMASK >> 16 ) & 0xff )).$(( ( NETMASK >> 8 ) & 0xff )).$(( NETMASK & 0xff ))
 
     IFS=.
+    # split netmask into multiple parts for better ease
     read -r NETMASK_PART_A NETMASK_PART_B NETMASK_PART_C NETMASK_PART_D <<< "${NETMASK}"
+    # convert netmask to binary
     NETMASK_BINARY="$(dec_to_bin "${NETMASK_PART_A}").$(dec_to_bin "${NETMASK_PART_B}").$(dec_to_bin "${NETMASK_PART_C}").$(dec_to_bin "${NETMASK_PART_D}")"
   # if only ipv4 and no CIDR
-  elif echo "${1}" | grep --extended-regexp --only-matching "${REGEX_IPV4}" &> /dev/null; then
+  elif grep --extended-regexp --only-matching "${REGEX_IPV4}" <<< "${1}" &> /dev/null; then
     # if no netmask was specified keep the default value
     if [[ -z "${2}" ]]; then NETMASK="255.255.255.0"; else NETMASK="${2}"; fi
-    DECIMAL_POINTS=$(echo "${NETMASK}" | grep --only-matching "\\." | wc --lines)
-    check_ip_address "${NETMASK}"
-    
+
     IFS=.
-    read -r NETMASK_PART_A NETMASK_PART_B NETMASK_PART_C NETMASK_PART_D <<< "${NETMASK}"
-    
-    # check if any part is empty
-    if [[ ! "${NETMASK_PART_A}" ]] || [[ ! "${NETMASK_PART_B}" ]] || [[ ! "${NETMASK_PART_C}" ]] || [[ ! "${NETMASK_PART_D}" ]]; then
-      error_exit "${DIALOG_NO_VALID_MASK}"
-    # check if any part of netmask is < 0 or > 255
-    elif [[ "${NETMASK_PART_A}" -lt 0 ]] || [[ "${NETMASK_PART_A}" -gt 255 ]] || [[ "${NETMASK_PART_B}" -lt 0 ]] || [[ "${NETMASK_PART_B}" -gt 255 ]] ||
-         [[ "${NETMASK_PART_C}" -lt 0 ]] || [[ "${NETMASK_PART_C}" -gt 255 ]] || [[ "${NETMASK_PART_D}" -lt 0 ]] || [[ "${NETMASK_PART_D}" -gt 255 ]]; then
-        error_exit "${DIALOG_NO_VALID_MASK}"
+    declare -a NETMASK_ARRAY
+    # split netmask into parts and pass them into an array
+    NETMASK_ARRAY=($(tr " " "\n" <<< "${NETMASK}"))
+
+    # check if netmask is valid
+    check_dotted_quad_address "${NETMASK}"
+    if [[ "${NETMASK_ARRAY[0]}" -eq 0 ]]; then # if netmask first part is 0
+      echo -e "${DIALOG_NO_VALID_MASK}"
+      show_usage_subnet
+      error_exit
     fi
-    
+    # iterate through netmask and validate
+    for POSITION in "${!NETMASK_ARRAY[@]}"; do
+      case "${NETMASK_ARRAY[POSITION]}" in
+        255) ;; 254) ;; 252) ;; 248) ;; 240) ;;
+        224) ;; 192) ;; 128) ;;   0) ;;
+        *)
+          echo -e "${DIALOG_NO_VALID_MASK}"
+          show_usage_subnet
+          error_exit
+        ;;
+      esac
+    done
+
+    # pass netmask array values into variables for better ease
+    NETMASK_PART_A="${NETMASK_ARRAY[0]}"; NETMASK_PART_B="${NETMASK_ARRAY[1]}"
+    NETMASK_PART_C="${NETMASK_ARRAY[2]}"; NETMASK_PART_D="${NETMASK_ARRAY[3]}"
+
+    # convert netmask to binary
     NETMASK_BINARY="$(dec_to_bin "${NETMASK_PART_A}").$(dec_to_bin "${NETMASK_PART_B}").$(dec_to_bin "${NETMASK_PART_C}").$(dec_to_bin "${NETMASK_PART_D}")"
+    # convert netmask to CIDR
     CIDR=$(echo "${NETMASK_BINARY}" | grep --only-matching 1 | wc --lines)
   else
     show_usage_subnet
     error_exit
   fi
 
-  IP=$(echo "${IP}" | awk --field-separator='/' '{print $1}') # remove CIDR from IP address
-  
+  # remove CIDR from IP address
+  IP=$(awk --field-separator='/' '{print $1}' <<< "${IP}")
+
+  # pass IP parts into multiple variables for future checks
   read -r IP_PART_A IP_PART_B IP_PART_C IP_PART_D <<< "${IP}"
+  # convert IP to binary
   IP_BINARY="$(dec_to_bin "${IP_PART_A}").$(dec_to_bin "${IP_PART_B}").$(dec_to_bin "${IP_PART_C}").$(dec_to_bin "${IP_PART_D}")"
-  
-  WILDCARD_BINARY=$(echo "${NETMASK_BINARY}" | tr 01 10) # inverse the address
+
+  # calculate wildcard in binary
+  WILDCARD_BINARY=$(tr 01 10 <<< "${NETMASK_BINARY}") # inverse the address
+  # pass wildcard parts into multiple variables for future checks
   read -r PART_A PART_B PART_C PART_D <<< "${WILDCARD_BINARY}"
 
+  # convert wildcard to decimal
   WILDCARD="$(bin_to_dec "${PART_A}").$(bin_to_dec "${PART_B}").$(bin_to_dec "${PART_C}").$(bin_to_dec "${PART_D}")"
-  
+
+  # calculate network address by => parts of ip address AND parts of netmask address
   NETWORK_ADDRESS=$(( IP_PART_A & NETMASK_PART_A )).$(( IP_PART_B & NETMASK_PART_B )).$(( IP_PART_C & NETMASK_PART_C )).$(( IP_PART_D & NETMASK_PART_D ))
-  PART_A=$(echo "${NETWORK_ADDRESS}" | cut --delimiter='.' --fields=1); PART_B=$(echo "${NETWORK_ADDRESS}" | cut --delimiter='.' --fields=2)
-  PART_C=$(echo "${NETWORK_ADDRESS}" | cut --delimiter='.' --fields=3); PART_D=$(echo "${NETWORK_ADDRESS}" | cut --delimiter='.' --fields=4)
+  # split network address into parts for better ease
+  PART_A=$(cut --delimiter='.' --fields=1 <<< "${NETWORK_ADDRESS}"); PART_B=$(cut --delimiter='.' --fields=2 <<< "${NETWORK_ADDRESS}")
+  PART_C=$(cut --delimiter='.' --fields=3 <<< "${NETWORK_ADDRESS}"); PART_D=$(cut --delimiter='.' --fields=4 <<< "${NETWORK_ADDRESS}")
+  # convert network address to binary
   NETWORK_ADDRESS_BINARY="$(dec_to_bin "${PART_A}").$(dec_to_bin "${PART_B}").$(dec_to_bin "${PART_C}").$(dec_to_bin "${PART_D}")"
-  
+
+  # calculate host bits
   HOST_BITS=$(echo "${NETMASK_BINARY}" | grep --only-matching 0 | wc --lines) # count how many 0s are there in netmask binary
   
-  # Calculate first usable IP address
+  # calculate first usable IP address
   PART_D=$(( PART_D + 1 )) # add 1 to the last octet of the network address
   HOST_MINIMUM="${PART_A}.${PART_B}.${PART_C}.${PART_D}" # merge decimal parts
   HOST_MINIMUM_BINARY=$(dec_to_bin "${PART_A}").$(dec_to_bin "${PART_B}").$(dec_to_bin "${PART_C}").$(dec_to_bin "${PART_D}") # convert to binary
 
-  BROADCAST_ADDRESS_BINARY=${IP_BINARY//.} # remove dots
-  BROADCAST_ADDRESS_BINARY=${BROADCAST_ADDRESS_BINARY::-${HOST_BITS}} # remove last bits, as many as HOST_BITS are
+  BROADCAST_ADDRESS_BINARY="${IP_BINARY//.}" # remove dots
+  BROADCAST_ADDRESS_BINARY="${BROADCAST_ADDRESS_BINARY::-${HOST_BITS}}" # remove last bits, as many as HOST_BITS are
   
   BITS=$(( 32 - HOST_BITS )) # append bits to trimmed binary
   until [[ "${BITS}" -eq 32 ]]; do
     BROADCAST_ADDRESS_BINARY+="1" # append a bit every loop
     let BITS+=1
   done
-  
-  BROADCAST_ADDRESS_BINARY=$(echo "${BROADCAST_ADDRESS_BINARY}" | sed --expression="s/\(.\{8\}\)/\1./g" --expression="s/\(.*\)./\1 /") # put dot every 8th character and remove last occurence of dot
-  
-  PART_A=$(echo "${BROADCAST_ADDRESS_BINARY}" | cut --delimiter='.' --fields=1); PART_B=$(echo "${BROADCAST_ADDRESS_BINARY}" | cut --delimiter='.' --fields=2)
-  PART_C=$(echo "${BROADCAST_ADDRESS_BINARY}" | cut --delimiter='.' --fields=3); PART_D=$(echo "${BROADCAST_ADDRESS_BINARY}" | cut --delimiter='.' --fields=4)
+
+   # put a dot every 8th character and remove last occurence of dot
+  BROADCAST_ADDRESS_BINARY=$(sed --expression="s/\(.\{8\}\)/\1./g" --expression="s/\(.*\)./\1 /" <<< "${BROADCAST_ADDRESS_BINARY}")
+
+  # split broadcast address binary into parts for better ease
+  PART_A=$(cut --delimiter='.' --fields=1 <<< "${BROADCAST_ADDRESS_BINARY}"); PART_B=$(cut --delimiter='.' --fields=2 <<< "${BROADCAST_ADDRESS_BINARY}")
+  PART_C=$(cut --delimiter='.' --fields=3 <<< "${BROADCAST_ADDRESS_BINARY}"); PART_D=$(cut --delimiter='.' --fields=4 <<< "${BROADCAST_ADDRESS_BINARY}")
+  # convert broadcast address binary to decimal
   BROADCAST_ADDRESS="$(bin_to_dec "${PART_A}").$(bin_to_dec "${PART_B}").$(bin_to_dec "${PART_C}").$(bin_to_dec "${PART_D}")"
   
-  # Calculate last usable IP address
+  # calculate last usable IP address
   PART_D=$(bin_to_dec "${PART_D}") # convert to decimal in order to substract later
   PART_D=$(( PART_D - 1 )) # substract 1 from the last octet of the broadcast address
   PART_D=$(dec_to_bin "${PART_D}") # convert to binary
   HOST_MAXIMUM=$(bin_to_dec "${PART_A}").$(bin_to_dec "${PART_B}").$(bin_to_dec "${PART_C}").$(bin_to_dec "${PART_D}") # merge parts and convert them to decimals
   HOST_MAXIMUM_BINARY="${PART_A}.${PART_B}.${PART_C}.${PART_D}" # merge binary parts
 
-  # Maximum Number of hosts
+  # maximum Number of hosts
   HOSTS=$(( 2 ** ( 32 - CIDR ) - 2 ))
   
-  # Classful addressing: leading bits checking
+  # classful addressing: leading bits checking
   IP_PART_A=$(dec_to_bin "${IP_PART_A}") # convert first octet to binary
+  # find class by checking first 0-4 bits
   case "${IP_PART_A}" in
-    0*) CLASS="A" ;;
-    10*) CLASS="B" ;;
-    110*) CLASS="C" ;;
+       0*) CLASS="A" ;;
+      10*) CLASS="B" ;;
+     110*) CLASS="C" ;;
     1110*) CLASS="D" ;;
     1111*) CLASS="E" ;;
   esac
   
   # RFC 1918 based
   IP_PART_B=$(dec_to_bin "${IP_PART_B}") # convert second octet to binary
+  # describe the IP address by checking the first two octets
   case "${IP_PART_A}:${IP_PART_B}" in
     01111111:*) CLASS_DESCRIPTION="Loopback" ;;
     00001010:*) CLASS_DESCRIPTION="Private Internet" ;;
@@ -985,8 +1019,11 @@ function show_subnetworks() {
     1111*:*) CLASS_DESCRIPTION="Experimental" ;;
   esac
 
+  # describe IP address by checking the CIDR 30-32 
   case "${CIDR}" in
-    30) CLASS_DESCRIPTION+=", Glue Network PtP Link" ;;
+    30)
+      CLASS_DESCRIPTION+=", Glue Network PtP Link"
+    ;;
     31)
       CLASS_DESCRIPTION+=", PtP Link RFC 3021"
       HOSTS=2
@@ -1004,7 +1041,10 @@ function show_subnetworks() {
         HOST_MAXIMUM_BINARY="${IP_BINARY}"
       fi
     ;;
-    32) CLASS_DESCRIPTION+=", Hostroute" ; HOSTS=1 ;;
+    32)
+      CLASS_DESCRIPTION+=", Hostroute"
+      HOSTS=1 # number of hosts workaround
+    ;;
   esac
 
   IFS=
@@ -1027,8 +1067,7 @@ function show_subnetworks() {
     printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Broadcast:" "${BROADCAST_ADDRESS}" "${BROADCAST_ADDRESS_BINARY}"
   fi
   printf "%-16s${COLORS[4]}%-21s${COLORS[5]}%s${COLORS[0]}%-22s${COLORS[4]}\n" "Hosts/Net:" "${HOSTS}" "Class ${CLASS}" " ${CLASS_DESCRIPTION}"
-
-  echo
+  printf "\n"
 
   return 0
 }
