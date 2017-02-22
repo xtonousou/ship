@@ -1,14 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## TODO
-### Add
-* Subnetting feature.
- * Split networks and such.
+## [2.5] - 2017-02-22
+### Changed
+* Minor code clean up.
+* Minor code improvements.
+* Checking functions for **IPv6** compatibility.
 
-### Change
-* Clean code.
- * Match the line breaking column **80**, as much as it is possible.
+### Removed
+* Warnings with `shellcheck`.
 
 ## [2.4] - 2017-02-17
 ### Added
