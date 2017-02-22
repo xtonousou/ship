@@ -308,7 +308,7 @@ function check_root_permissions() {
 # Checks Bash version. Minimum is version 3.2.
 function check_bash_version() {
 
-	[ "${BASH_VERSINFO[0]}${BASH_VERSINFO[1]}" -lt 32 ] && error_exit "Insufficient Bash version. Bash 3.2 or newer is required. ${DIALOG_ABORTING}"
+  [ "${BASH_VERSINFO[0]}${BASH_VERSINFO[1]}" -lt 32 ] && error_exit "Insufficient Bash version. Bash 3.2 or newer is required. ${DIALOG_ABORTING}"
 
   return 0
 }
@@ -333,9 +333,9 @@ function trap_handler() {
     read -r YESNO &>/dev/null
 	done
 
-	[ "${YESNO}" = "Y" ] && YESNO="y"
-	[ "${YESNO}" = "N" ] && YESNO="n"
-	[ "${YESNO}" = "y" ] && clear && handle_jobs && exit 0
+  [ "${YESNO}" = "Y" ] && YESNO="y"
+  [ "${YESNO}" = "N" ] && YESNO="n"
+  [ "${YESNO}" = "y" ] && clear && handle_jobs && exit 0
 
   return 0
 }

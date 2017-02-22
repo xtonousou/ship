@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 * Minor code clean up.
 * Minor code improvements.
-* Checking functions for **IPv6** compatibility.
+* Checking functions for **IPv6** compatibility and bash version validation.
 
 ### Removed
 * Warnings with `shellcheck`.
