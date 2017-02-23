@@ -75,8 +75,6 @@ readonly DIALOG_NO_TRACE_COMMAND="You must install at least one of the following
 # Initializes a set of regexps variables (IPv4, IPv6, with and without CIDR).
 function init_regexes() {
 
-  local REGEX_MAC REGEX_IPV4 REGEX_IPV4_CIDR REGEX_IPV6 REGEX_IPV6_CIDR
-
   # MAC
   REGEX_MAC="([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}"
   # IPv4
@@ -239,24 +237,24 @@ function check_dotted_quad_address() {
 
   DECIMAL_POINTS=$(echo "${1}" | grep --only-matching "\\." | wc --lines)
   # check if there are three dots
-  [ "${DECIMAL_POINTS}" -ne 3 ] && show_usage_subnet && error_exit
+  [ "${DECIMAL_POINTS}" -ne 3 ] && show_usage_ipcalc && error_exit
 
   IFS=.
   read -r PART_A PART_B PART_C PART_D <<< "${1}"
 
   # check for non numerical values
   [[ ! "${PART_A}" =~ ^[0-9]+$ || ! "${PART_B}" =~ ^[0-9]+$ || ! "${PART_C}" =~ ^[0-9]+$ || ! "${PART_D}" =~ ^[0-9]+$ ]] \
-    && show_usage_subnet \
+    && show_usage_ipcalc \
     && error_exit
 
   # check if any part is empty
   [[ ! "${PART_A}" || ! "${PART_B}" || ! "${PART_C}" || ! "${PART_D}" ]] \
-    && show_usage_subnet \
+    && show_usage_ipcalc \
     && error_exit
 
   # check if any part of the address is < 0 or > 255
   [[ "${PART_A}" -lt 0 || "${PART_A}" -gt 255 || "${PART_B}" -lt 0 || "${PART_B}" -gt 255 || "${PART_C}" -lt 0 || "${PART_C}" -gt 255 || "${PART_D}" -lt 0 || "${PART_D}" -gt 255 ]] \
-    && show_usage_subnet \
+    && show_usage_ipcalc \
     && error_exit
 
   IFS=
@@ -326,12 +324,12 @@ function mr_proper() {
 function trap_handler() {
 
   local YESNO=""
-
+  
   echo
   while [[ ! "${YESNO}" =~ ^[YyNn]$ ]]; do
-		echo -ne "Exit? [y/n] "
+    echo -ne "Exit? [y/n] "
     read -r YESNO &>/dev/null
-	done
+  done
 
   [ "${YESNO}" = "Y" ] && YESNO="y"
   [ "${YESNO}" = "N" ] && YESNO="n"
@@ -346,8 +344,14 @@ function trap_handler() {
 function error_exit() {
 
   [ -z "${1}" ] && clear_line && exit 1 \
-    || [ -z "${2}" ] && clear_line && echo -e "${1}" && exit 1 \
-    || clear_line && echo -e "${SCRIPT_NAME}: invalid option '${2}'" && echo -e "${1}" && exit 1
+    || [ -z "${2}" ] \
+      && clear_line \
+      && echo -e "${1}" \
+      && exit 1 \
+    || clear_line\
+      && echo -e "${SCRIPT_NAME}: invalid option '${2}'" \
+      && echo -e "${1}" && \
+      exit 1
 }
 
 # Background tasks' handler.
@@ -859,12 +863,11 @@ function show_next_hops() {
 }
 
 # Shows broadcast, network address, cisco wildcard mask, class and host range by given IPv4 address and netmask.
-function show_subnetworks() {
+function show_ipcalc() {
 
-  local IFS
-  local CIDR
-  local DECIMAL_POINTS
-  local BITS
+  local NOBINARY HTML
+  local IFS CIDR
+  local DECIMAL_POINTS BITS
   local HOSTS HOST_MINIMUM HOST_MINIMUM_BINARY HOST_MAXIMUM HOST_MAXIMUM_BINARY
   local CLASS CLASS_DESCRIPTION
   local IP IP_BINARY
@@ -875,6 +878,19 @@ function show_subnetworks() {
   local IP_PART_A IP_PART_B IP_PART_C IP_PART_D
   local NETMASK_PART_A NETMASK_PART_B NETMASK_PART_C NETMASK_PART_D
   local PART_A PART_B PART_C PART_D
+
+  NOBINARY=0
+  HTML=0
+
+  case "${1}" in
+    "-b"|"--nobinary") NOBINARY=1; shift ;;
+    "-h"|"--html") HTML=1; shift ;;
+  esac
+
+  case "${1}" in
+    "-b"|"--nobinary") NOBINARY=1; shift ;;
+    "-h"|"--html") HTML=1; shift ;;
+  esac
 
   init_regexes
 
@@ -891,7 +907,7 @@ function show_subnetworks() {
     # check for non numerical CIDR
     [[ ! "${CIDR}" =~ ^[0-9]+$ ]] && error_exit "${DIALOG_NO_VALID_CIDR}"
     # check if cidr is < 0 or > 32
-    [[ "${CIDR}" -lt 1 || "${CIDR}" -gt 32 ]] && "${DIALOG_NO_VALID_CIDR}"
+    [[ "${CIDR}" -lt 1 || "${CIDR}" -gt 32 ]] && error_exit "${DIALOG_NO_VALID_CIDR}"
 
     # calculate netmask
     NETMASK=$(( 0xffffffff ^ (( 1 << ( 32 - CIDR )) -1 ) ))
@@ -969,16 +985,17 @@ function show_subnetworks() {
 
   # calculate host bits
   HOST_BITS=$(echo "${NETMASK_BINARY}" | grep --only-matching 0 | wc --lines) # count how many 0s are there in netmask binary
-  
+
   # calculate first usable IP address
   PART_D=$(( PART_D + 1 )) # add 1 to the last octet of the network address
   HOST_MINIMUM="${PART_A}.${PART_B}.${PART_C}.${PART_D}" # merge decimal parts
   HOST_MINIMUM_BINARY=$(dec_to_bin "${PART_A}").$(dec_to_bin "${PART_B}").$(dec_to_bin "${PART_C}").$(dec_to_bin "${PART_D}") # convert to binary
 
-  BROADCAST_ADDRESS_BINARY="${IP_BINARY//.}" # remove dots
-  BROADCAST_ADDRESS_BINARY="${BROADCAST_ADDRESS_BINARY::-${HOST_BITS}}" # remove last bits, as many as HOST_BITS are
-  
-  BITS=$(( 32 - HOST_BITS )) # append bits to trimmed binary
+  BROADCAST_ADDRESS_BINARY="${IP_BINARY//.}" # remove dots and merge strings together
+  BROADCAST_ADDRESS_BINARY="${BROADCAST_ADDRESS_BINARY:0:${#BROADCAST_ADDRESS_BINARY}-${HOST_BITS}}" # remove last bits, as many as HOST_BITS are
+
+  # append bits to trimmed binary
+  BITS=$(( 32 - HOST_BITS ))
   until [[ "${BITS}" -eq 32 ]]; do
     BROADCAST_ADDRESS_BINARY+="1" # append a bit every loop
     let BITS+=1
@@ -1053,23 +1070,357 @@ function show_subnetworks() {
   esac
 
   IFS=
-  
-  printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address:" "${IP}" "${IP_BINARY}"
-  printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address (dec):" "$(dotted_quad_ip_to_decimal "${IP}")"
-  printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${IP}")")"
-  printf "%-16s${COLORS[4]}%-21s${COLORS[1]}%s${COLORS[0]}\n" "Netmask:" "${NETMASK} = ${CIDR}" "${NETMASK_BINARY}"
-  printf "%-16s${COLORS[4]}%-21s${COLORS[1]}%s${COLORS[0]}\n" "Netmask (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${NETMASK}")")"
-  printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Wildcard:" "${WILDCARD}" "${WILDCARD_BINARY}"
-  printf "=>\n"
-  [ "${CIDR}" -le 31 ] \
-    && printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Network:" "${NETWORK_ADDRESS}/${CIDR}" "${NETWORK_ADDRESS_BINARY}" \
-    && printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "HostMin:" "${HOST_MINIMUM}" "${HOST_MINIMUM_BINARY}" \
-    && printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "HostMax:" "${HOST_MAXIMUM}" "${HOST_MAXIMUM_BINARY}" \
-    || printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Hostroute:" "${IP}" "${IP_BINARY}"
-  [ "${CIDR}" -le 30 ] \
-    && printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Broadcast:" "${BROADCAST_ADDRESS}" "${BROADCAST_ADDRESS_BINARY}"
-  printf "%-16s${COLORS[4]}%-21s${COLORS[5]}%s${COLORS[0]}%-22s${COLORS[4]}\n" "Hosts/Net:" "${HOSTS}" "Class ${CLASS}" " ${CLASS_DESCRIPTION}"
-  echo -e "${COLORS[0]}" # revert color back to normal
+
+  function print_with_binary() {
+
+    printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address:" "${IP}" "${IP_BINARY}"
+    printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address (dec):" "$(dotted_quad_ip_to_decimal "${IP}")"
+    printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${IP}")")"
+    printf "%-16s${COLORS[4]}%-21s${COLORS[1]}%s${COLORS[0]}\n" "Netmask:" "${NETMASK} = ${CIDR}" "${NETMASK_BINARY}"
+    printf "%-16s${COLORS[4]}%-21s${COLORS[1]}%s${COLORS[0]}\n" "Netmask (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${NETMASK}")")"
+    printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Wildcard:" "${WILDCARD}" "${WILDCARD_BINARY}"
+    printf "=>\n"
+    [ "${CIDR}" -le 31 ] \
+      && printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Network:" "${NETWORK_ADDRESS}/${CIDR}" "${NETWORK_ADDRESS_BINARY}" \
+      && printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "HostMin:" "${HOST_MINIMUM}" "${HOST_MINIMUM_BINARY}" \
+      && printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "HostMax:" "${HOST_MAXIMUM}" "${HOST_MAXIMUM_BINARY}" \
+      || printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Hostroute:" "${IP}" "${IP_BINARY}"
+    [ "${CIDR}" -le 30 ] \
+      && printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Broadcast:" "${BROADCAST_ADDRESS}" "${BROADCAST_ADDRESS_BINARY}"
+    printf "%-16s${COLORS[4]}%-21s${COLORS[5]}%s${COLORS[0]}%-22s${COLORS[4]}\n" "Hosts/Net:" "${HOSTS}" "Class ${CLASS}" " ${CLASS_DESCRIPTION}"
+    echo -e "${COLORS[0]}" # revert color back to normal
+  }
+
+  function print_without_binary() {
+    
+    printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n"               "Address:" "${IP}"
+    printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address (dec):" "$(dotted_quad_ip_to_decimal "${IP}")"
+    printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${IP}")")"
+    printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n"               "Netmask:" "${NETMASK} = ${CIDR}"
+    printf "%-16s${COLORS[4]}%-21s${COLORS[1]}%s${COLORS[0]}\n" "Netmask (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${NETMASK}")")"
+    printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n"               "Wildcard:" "${WILDCARD}"
+    printf "=>\n"
+    [ "${CIDR}" -le 31 ] \
+      && printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n" "Network:"   "${NETWORK_ADDRESS}/${CIDR}" \
+      && printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n" "HostMin:"   "${HOST_MINIMUM}" \
+      && printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n" "HostMax:"   "${HOST_MAXIMUM}" \
+      || printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n" "Hostroute:" "${IP}"
+    [ "${CIDR}" -le 30 ] \
+      && printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n"                           "Broadcast:" "${BROADCAST_ADDRESS}"
+    printf "%-16s${COLORS[4]}%-21s${COLORS[5]}%s${COLORS[0]}%-22s${COLORS[4]}\n" "Hosts/Net:" "${HOSTS}" "Class ${CLASS}" " ${CLASS_DESCRIPTION}"
+    echo -e "${COLORS[0]}" # revert color back to normal
+  }
+
+  function print_html_with_binary() {
+
+    cat << EOF
+      <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="UTF-8"/>
+            <title>ship.sh</title>
+            <style>
+              .ascii_art {
+                font-size:   10pt;
+                font-family: "Source Code Pro", Courier, monospace;
+                white-space: pre
+                color:       green;
+              }
+
+              .text {
+                font-size:   13pt;
+                font-family: "Source Code Pro", Courier, monospace;
+                font-weight: light;
+                color:       #F0F0F0;
+              }
+
+              .ip {
+                font-size:   13pt;
+                font-family: "Source Code Pro", Courier, monospace;
+                font-weight: 800;
+                color:       #2F888B;
+              }
+
+              .binary {
+                font-size:   13pt;
+                font-family: "Source Code Pro", Courier, monospace;
+                font-weight: light;
+                color:       #0D5A63;
+              }
+
+              #inlineParagraph {
+                display:     inline;
+              }
+
+              html {
+                position:    relative;
+                min-height:  100%;
+              }
+              
+              body {
+                margin:           0 0 100px;
+                padding:          25px;
+                background-color: #000000;
+              }
+              
+              footer {
+                position:         absolute;
+                left:             0;
+                bottom:           0;
+                height:           100px;
+                width:            100%;
+                overflow:         hidden;
+                color:            #2F888B;
+              }
+
+              table {
+                border-collapse: collapse;
+                border:          1px solid black;
+              }
+
+              td {
+                text-align:       left;
+                padding-left:     7px;
+                padding-right:    7px;
+              }
+            </style>
+        </head>
+        <body>
+        <a href="https://github.com/xtonousou/shIP"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+        <table>
+        <tr>
+          <td class="text">Address:</td>
+          <td class="ip">${IP}</td>
+          <td class="binary">${IP_BINARY}</td>
+        </tr> 
+        <tr>
+          <td class="text">Address (dec):</td>
+          <td class="ip">$(dotted_quad_ip_to_decimal "${IP}")</td>
+        </tr>
+        <tr>
+          <td class="text">Address (hex):</td>
+          <td class="ip">$(dec_to_hex "$(dotted_quad_ip_to_decimal "${IP}")")</td>
+        </tr>
+        <tr>
+          <td class="text">Netmask:</td>
+          <td class="ip">${NETMASK} = ${CIDR}</td>
+          <td class="binary">${NETMASK_BINARY}</td>
+        </tr>
+        <tr>
+          <td class="text">Netmask (hex):</td>
+          <td class="ip">$(dec_to_hex "$(dotted_quad_ip_to_decimal "${NETMASK}")")</td>
+        </tr>
+        <tr>
+          <td class="text">Wildcard:</td>
+          <td class="ip">${WILDCARD}</td>
+          <td class="binary">${WILDCARD_BINARY}</td>
+        </tr>
+        <tr>
+          <td class="text">=></td>
+        </tr>
+EOF
+    [ "${CIDR}" -le 31 ] \
+      && cat << EOF
+        <tr>
+          <td class="text">Network:</td>
+          <td class="ip">${NETWORK_ADDRESS}/${CIDR}</td>
+          <td class="binary">${NETWORK_ADDRESS_BINARY}</td>
+        </tr>
+        <tr>
+          <td class="text">HostMin:</td>
+          <td class="ip">${HOST_MINIMUM}</td>
+          <td class="binary">${HOST_MINIMUM_BINARY}</td>
+        </tr>
+        <tr>
+          <td class="text">HostMax:</td>
+          <td class="ip">${HOST_MAXIMUM}</td>
+          <td class="binary">${HOST_MAXIMUM_BINARY}</td>
+        </tr>
+EOF
+    [ "${CIDR}" -eq 32 ] \
+      && cat << EOF
+        <tr>
+          <td class="text">Hostroute:</td>
+          <td class="ip">${IP}</td>
+          <td class="binary">${IP_BINARY}</td>
+        </tr>
+EOF
+    [ "${CIDR}" -le 30 ] \
+      && cat << EOF
+        <tr>
+          <td class="text">Broadcast:</td>
+          <td class="ip">${BROADCAST_ADDRESS}</td>
+        </tr>
+EOF
+    cat <<- EOF
+      <tr>
+        <td class="text">Hosts/Net:</td>
+        <td class="ip">${HOSTS}</td>
+        <td><p id="inlineParagraph" class="ip">Class ${CLASS}</p><p id="inlineParagraph" class="text">&nbsp;${CLASS_DESCRIPTION}</p></td>
+      </tr>
+      </table>
+      </body>
+      <footer>
+      <p align="center">
+        Made with <3 by Sotirios Roussis (aka. xToNouSou)<br/>
+        Contact information: <a href="mailto:xtonousou@gmail.com">xtonousou@gmail.com</a><br/>
+      </p>
+      </footer>
+      </html>
+EOF
+  }
+
+  function print_html_without_binary() {
+
+    cat << EOF
+      <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="UTF-8"/>
+            <title>ship.sh</title>
+            <style>
+              .ascii_art {
+                font-size:   10pt;
+                font-family: "Source Code Pro", Courier, monospace;
+                white-space: pre
+                color:       green;
+              }
+
+              .text {
+                font-size:   13pt;
+                font-family: "Source Code Pro", Courier, monospace;
+                font-weight: light;
+                color:       #F0F0F0;
+              }
+
+              .ip {
+                font-size:   13pt;
+                font-family: "Source Code Pro", Courier, monospace;
+                font-weight: 800;
+                color:       #2F888B;
+              }
+
+              #inlineParagraph {
+                display:     inline;
+              }
+
+              html {
+                position:    relative;
+                min-height:  100%;
+              }
+              
+              body {
+                margin:           0 0 100px;
+                padding:          25px;
+                background-color: #000000;
+              }
+              
+              footer {
+                position:         absolute;
+                left:             0;
+                bottom:           0;
+                height:           100px;
+                width:            100%;
+                overflow:         hidden;
+                color:            #2F888B;
+              }
+
+              table {
+                border-collapse: collapse;
+                border:          1px solid black;
+              }
+
+              td {
+                text-align:       left;
+                padding-left:     7px;
+                padding-right:    7px;
+              }
+            </style>
+        </head>
+        <body>
+        <a href="https://github.com/xtonousou/shIP"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+        <table>
+        <tr>
+          <td class="text">Address:</td>
+          <td class="ip">${IP}</td>
+        </tr> 
+        <tr>
+          <td class="text">Address (dec):</td>
+          <td class="ip">$(dotted_quad_ip_to_decimal "${IP}")</td>
+        </tr>
+        <tr>
+          <td class="text">Address (hex):</td>
+          <td class="ip">$(dec_to_hex "$(dotted_quad_ip_to_decimal "${IP}")")</td>
+        </tr>
+        <tr>
+          <td class="text">Netmask:</td>
+          <td class="ip">${NETMASK} = ${CIDR}</td>
+        </tr>
+        <tr>
+          <td class="text">Netmask (hex):</td>
+          <td class="ip">$(dec_to_hex "$(dotted_quad_ip_to_decimal "${NETMASK}")")</td>
+        </tr>
+        <tr>
+          <td class="text">Wildcard:</td>
+          <td class="ip">${WILDCARD}</td>
+        </tr>
+        <tr>
+          <td class="text">=></td>
+        </tr>
+EOF
+    [ "${CIDR}" -le 31 ] \
+      && cat << EOF
+        <tr>
+          <td class="text">Network:</td>
+          <td class="ip">${NETWORK_ADDRESS}/${CIDR}</td>
+        </tr>
+        <tr>
+          <td class="text">HostMin:</td>
+          <td class="ip">${HOST_MINIMUM}</td>
+        </tr>
+        <tr>
+          <td class="text">HostMax:</td>
+          <td class="ip">${HOST_MAXIMUM}</td>
+        </tr>
+EOF
+    [ "${CIDR}" -eq 32 ] \
+      && cat << EOF
+        <tr>
+          <td class="text">Hostroute:</td>
+          <td class="ip">${IP}</td>
+        </tr>
+EOF
+    [ "${CIDR}" -le 30 ] \
+      && cat << EOF
+        <tr>
+          <td class="text">Broadcast:</td>
+          <td class="ip">${BROADCAST_ADDRESS}</td>
+        </tr>
+EOF
+    cat <<- EOF
+      <tr>
+        <td class="text">Hosts/Net:</td>
+        <td class="ip">${HOSTS}</td>
+        <td><p id="inlineParagraph" class="ip">Class ${CLASS}</p><p id="inlineParagraph" class="text">&nbsp;${CLASS_DESCRIPTION}</p></td>
+      </tr>
+      </table>
+      </body>
+      <footer>
+      <p align="center">
+        Made with <3 by Sotirios Roussis (aka. xToNouSou)<br/>
+        Contact information: <a href="mailto:xtonousou@gmail.com">xtonousou@gmail.com</a><br/>
+      </p>
+      </footer>
+      </html>
+EOF
+  }
+
+  case "${NOBINARY}:${HTML}" in
+    0:0) print_with_binary ;;
+    0:1) print_html_with_binary ;;
+    1:0) print_without_binary ;;
+    1:1) print_html_without_binary ;;
+  esac
 
   return 0
 }
@@ -1095,7 +1446,8 @@ function show_ips_from_online_documents() {
     HTTP_CODE=$(wget --spider --tries 1 --timeout="${TIMEOUT}" --server-response "${DOCUMENT}" 2>&1 | awk '/HTTP\//{print $2}' | tail --lines=1)
     
     clear_line
-    [ ! "${HTTP_CODE}" -eq 200 ] && error_exit "${COLORS[3]}${DOCUMENT}${COLORS[0]} is unreachable. Input was invalid or server is down or has connection issues. ${DIALOG_ABORTING}"
+    [ ! "${HTTP_CODE}" -eq 200 ] \
+      && error_exit "${COLORS[3]}${DOCUMENT}${COLORS[0]} is unreachable. Input was invalid or server is down or has connection issues. ${DIALOG_ABORTING}"
 
     echo -ne "Downloading ${COLORS[2]}$1${COLORS[0]} ..."
     wget "${DOCUMENT}" --quiet --output-document="${TEMP_FILE_HTML}"
@@ -1236,6 +1588,7 @@ function show_usage() {
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-4 ${COLORS[0]}, ${COLORS[0]}--ipv4 ${COLORS[0]}          shows active interfaces with their IPv4 address"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-6 ${COLORS[0]}, ${COLORS[0]}--ipv6 ${COLORS[0]}          shows active interfaces with their IPv6 address"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-a ${COLORS[0]}, ${COLORS[0]}--all ${COLORS[0]}           shows all information"
+  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-c ${COLORS[0]}, ${COLORS[0]}--calculate ${COLORS[0]}<>   shows calculated IP information"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-d ${COLORS[0]}, ${COLORS[0]}--driver ${COLORS[0]}        shows each active interface's driver"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-e ${COLORS[0]}, ${COLORS[0]}--external ${COLORS[0]}      shows your external IP address"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-e ${COLORS[0]}, ${COLORS[0]}--external ${COLORS[0]}<>    shows external IP addresses"
@@ -1252,7 +1605,6 @@ function show_usage() {
   echo -e "  ${SCRIPT_NAME} ${COLORS[1]}-P ${COLORS[0]}, ${COLORS[1]}--port ${COLORS[0]}<>        shows connections to a port per IP"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-r ${COLORS[0]}, ${COLORS[0]}--route-ipv4 ${COLORS[0]}<>  shows the path to a network host using IPv4"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-r6${COLORS[0]}, ${COLORS[0]}--route-ipv6 ${COLORS[0]}<>  shows the path to a network host using IPv6"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-s ${COLORS[0]}, ${COLORS[0]}--subnet ${COLORS[0]}<>      shows broadcast, network address, wildcard, class, host range"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-u ${COLORS[0]}, ${COLORS[0]}--url ${COLORS[0]}<>         shows valid IP and MAC addresses found on website/s"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-v ${COLORS[0]}, ${COLORS[0]}--version ${COLORS[0]}       shows the version of script"
   echo -e "  ${SCRIPT_NAME} ${COLORS[2]}--cidr-4${COLORS[0]}, ${COLORS[2]}--cidr-ipv4 ${COLORS[0]}shows active interfaces with their IPv4 address and CIDR"
@@ -1265,13 +1617,18 @@ function show_usage() {
   return 0
 }
 
-# Prints the right usage of ship -s | --subnet.
-function show_usage_subnet() {
+# Prints the right usage of ship -c | --calculate.
+function show_usage_ipcalc() {
 
   echo    " usage:"
-  echo -e "  ${SCRIPT_NAME} -s, --subnet ${COLORS[5]}192.168.0.1${COLORS[0]}"
-  echo -e "  ${SCRIPT_NAME} -s, --subnet ${COLORS[5]}192.168.0.1/24${COLORS[0]}"
-  echo -e "  ${SCRIPT_NAME} -s, --subnet ${COLORS[5]}192.168.0.1 255.255.255.0${COLORS[0]}"
+  echo -e "  ${SCRIPT_NAME} -c, --calculate <OPTIONS> ${COLORS[5]}192.168.0.1${COLORS[0]}"
+  echo -e "  ${SCRIPT_NAME} -c, --calculate <OPTIONS> ${COLORS[5]}192.168.0.1/24${COLORS[0]}"
+  echo -e "  ${SCRIPT_NAME} -c, --calculate <OPTIONS> ${COLORS[5]}192.168.0.1 255.255.255.0${COLORS[0]}"
+  echo    " options:"
+  echo -e "  -b, --nobinary ${COLORS[5]}suppress the bitwise output ${COLORS[0]}"
+  echo -e "  -h, --html     ${COLORS[5]}display results as HTML${COLORS[0]}"
+  echo -e "  -s, --split    ${COLORS[5]}split into networks of size n1, n2, n3 ${COLORS[1]}unfinished${COLORS[0]}" #TODO
+  echo -e "  -r, --range    ${COLORS[5]}deaggregate address range ${COLORS[1]}unfinished${COLORS[0]}" #TODO
 
   return 0
 }
@@ -1288,6 +1645,7 @@ function sail() {
       "-4"|"--ipv4") check_connectivity "--local"; show_ipv4; break ;;
       "-6"|"--ipv6") check_connectivity "--local"; show_ipv6; break ;;
       "-a"|"--all") check_connectivity "--local"; show_all; break ;;
+      "-c"|"--calculate") show_ipcalc "${@:2}"; break ;;
       "-d"|"--driver") check_connectivity "--local"; show_driver; break ;;
       "-e"|"--external") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_ip_from "${2}"; shift 2; break ;;
       "-f"|"--find") trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_ips_from_file "${@:2}"; break ;;
@@ -1302,7 +1660,6 @@ function sail() {
       "-P"|"--port") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_port_connections "${2}"; shift 2; break ;;
       "-r"|"--route-ipv4") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_next_hops --ipv4 "${2}"; shift 2; break ;;
       "-r6"|"--route-ipv6") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_next_hops --ipv6 "${2}"; shift 2; break ;;
-      "-s"|"--subnet") show_subnetworks "${@:2}"; break ;;
       "-u"|"--url") check_connectivity "--internet"; trap trap_handler INT &>/dev/null; trap trap_handler SIGTSTP &>/dev/null; show_ips_from_online_documents "${@:2}"; break ;;
       "-v"|"--version") show_version; break ;;
       "--cidr-4"|"--cidr-ipv4") check_connectivity "--local"; show_ipv4_cidr; break ;;
@@ -1317,4 +1674,4 @@ function sail() {
   exit 0
 }
 
-sail "${@}"
+sail "${1+${@}}"

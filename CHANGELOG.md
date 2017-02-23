@@ -1,8 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.5] - 2017-02-22
+## [2.5] - 2017-02-23
+### Added
+* IP calculation feature can now show information without binary (optional).
+* IP calculation feature can now be shown in HTML5 format (optional).
+
 ### Changed
+* **Fixed** ip calculation feature for older bash versions.
 * Minor code clean up.
 * Minor code improvements.
 * Checking functions for **IPv6** compatibility and bash version validation.
