@@ -50,18 +50,19 @@
 
 <details>
 	<summary id="tools"><strong>Required Tools</strong></summary>
- :wrench:   | Package Name 
-:----------:|:------------:
- awk        | awk / gawk   
- grep       | grep         
- ip         | iproute2     
- mtr        | mtr          
- ping       | iputils      
- sed        | sed          
- ss         | iproute2     
- tracepath  | iputils      
- traceroute | traceroute   
- wget       | wget         
+  <table>
+    <tr><th>:wrench:</th><th>Package Name</th></tr>
+    <tr><td>awk</td><td>awk | gawk</td></tr>
+    <tr><td>grep</td><td>grep</td></tr>
+    <tr><td>ip</td><td>iproute2</td></tr>
+    <tr><td>mtr</td><td>mtr</td></tr>
+    <tr><td>ping</td><td>iputils</td></tr>
+    <tr><td>sed</td><td>sed</td></tr>
+    <tr><td>ss</td><td>iproute2</td></tr>
+    <tr><td>tracepath</td><td>iputils</td></tr>
+    <tr><td>traceroute</td><td>traceroute</td></tr>
+    <tr><td>wget</td><td>wget</td></tr>
+  </table>
 </details>
 
 <table>
