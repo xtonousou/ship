@@ -49,7 +49,8 @@
 ### Requirements
 
 <details>
-	<summary id="tools"><strong>Required Tools</strong></summary>
+	<summary id="tools"><strong>Dependencies</strong></summary>
+  <br/>
   <table>
     <tr><th>:wrench:</th><th>Package Name</th></tr>
     <tr><td>awk</td><td>awk | gawk</td></tr>
@@ -87,7 +88,7 @@
  Arch      | 4.7.5-1 - 4.9.8-1  
  Debian    | 7 - 8              
  Kali      | 2016.2             
- Ubuntu    | 14.04.3 - 16.04.1  
+ Ubuntu    | 14.04.3 - 16.04.1
 
 ---
 
