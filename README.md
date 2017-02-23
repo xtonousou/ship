@@ -48,6 +48,8 @@
 
 ### Requirements
 
+<details>
+	<summary id="tools"><strong>Required Tools</strong></summary>
  :wrench:   | Package Name 
 :----------:|:------------:
  awk        | awk / gawk   
@@ -60,7 +62,7 @@
  tracepath  | iputils      
  traceroute | traceroute   
  wget       | wget         
-
+</details>
 
 <table>
   <tr>
