@@ -4,7 +4,7 @@
 <p align="center"><img width=20% src="/imgs/ship-logo.png"></p>
 <p align="center">shIP (aka. show IP) is a simple, handy network addressing multitool with plenty of features.</p>
 <p align="center">
-  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.4-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.5-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
   <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
@@ -46,23 +46,29 @@
 
 ---
 
+### Usage
+
+Read the [Guide]. Usage and some interactive examples are there for you :ship:
+
+---
+
 ### Requirements
 
 <details>
 	<summary id="tools"><strong>Dependencies</strong></summary>
   <br/>
   <table>
-    <tr><th>:wrench:</th><th>Package Name</th></tr>
-    <tr><td>awk</td><td>awk | gawk</td></tr>
-    <tr><td>grep</td><td>grep</td></tr>
-    <tr><td>ip</td><td>iproute2</td></tr>
-    <tr><td>mtr</td><td>mtr</td></tr>
-    <tr><td>ping</td><td>iputils</td></tr>
-    <tr><td>sed</td><td>sed</td></tr>
-    <tr><td>ss</td><td>iproute2</td></tr>
-    <tr><td>tracepath</td><td>iputils</td></tr>
+    <tr><th>:wrench:</th>  <th>Package Name</th></tr>
+    <tr><td>awk</td>       <td>awk | gawk</td></tr>
+    <tr><td>grep</td>      <td>grep</td></tr>
+    <tr><td>ip</td>        <td>iproute2</td></tr>
+    <tr><td>mtr</td>       <td>mtr</td></tr>
+    <tr><td>ping</td>      <td>iputils</td></tr>
+    <tr><td>sed</td>       <td>sed</td></tr>
+    <tr><td>ss</td>        <td>iproute2</td></tr>
+    <tr><td>tracepath</td> <td>iputils</td></tr>
     <tr><td>traceroute</td><td>traceroute</td></tr>
-    <tr><td>wget</td><td>wget</td></tr>
+    <tr><td>wget</td>      <td>wget</td></tr>
   </table>
 </details>
 
@@ -83,18 +89,12 @@
 
 ### Compatibility
 
- :penguin: | Version            
-:---------:|:-----------------:
- Arch      | 4.7.5-1 - 4.9.8-1  
- Debian    | 7 - 8              
- Kali      | 2016.2             
- Ubuntu    | 14.04.3 - 16.04.1
-
----
-
-### Changelog
-
-Read [Changelog] file to review changes.
+ :penguin: | Version           
+:----------|:----------------- 
+ Arch      | 4.7.5-1 - 4.9.8-1 
+ Debian    | 7 - 8             
+ Kali      | 2016.2            
+ Ubuntu    | 14.04.3 - 16.04.1 
 
 ---
 
@@ -133,6 +133,12 @@ Pull requests, issues, suggestions, testing and feedback are all welcome.
 
 ---
 
+### Changelog
+
+Read the [Changelog] file to review changes.
+
+---
+
 ### Contact
 
 Send me an email at [xtonousou@gmail.com].
@@ -145,6 +151,7 @@ Send me an email at [xtonousou@gmail.com].
 This script is under [GPLv3+] license.
 
 <!-- Links -->
+[Guide]: GUIDE.md
 [Changelog]: CHANGELOG.md
 [GPLv3+]: LICENSE.md
 [GPLv3+IMG]: http://gplv3.fsf.org/gplv3-127x51.png
