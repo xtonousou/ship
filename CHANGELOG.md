@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## TODO
+### Remove
+* `dev` from URL in GUIDE.md examples.
+
 ## [2.5] - 2017-02-23
 ### Added
 * IP calculation feature can now show information without binary (optional).

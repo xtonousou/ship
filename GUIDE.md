@@ -81,8 +81,10 @@
 [![asciicast](https://asciinema.org/a/104433.png)](https://asciinema.org/a/104433)
 * `ship -c , --calculate -h , --html 192.168.1.2/24`
 [![asciicast](https://asciinema.org/a/104436.png)](https://asciinema.org/a/104436)
+![alt text](https://raw.githubusercontent.com/xtonousou/shIP/dev/imgs/example1.png "Example One")
 * `ship -c , --calculate -b , --nobinary -h , --html 216.58.205.35`
 [![asciicast](https://asciinema.org/a/104437.png)](https://asciinema.org/a/104437)
+![alt text](https://raw.githubusercontent.com/xtonousou/shIP/dev/imgs/example2.png "Example Two")
 
 ##### More coming soon ... :anchor:
 
