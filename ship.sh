@@ -223,7 +223,7 @@ function check_destination() {
 
   timeout "${LONG_TIMEOUT}" ping -q -c 1 "${CLEAN_DESTINATION}" &>/dev/null || RETURNED_VALUE="${?}"
 
-  [ "${RETURNED_VALUE}" -ge 2 ] || error_exit "${DIALOG_DESTINATION_UNREACHABLE}"
+  [[ "${RETURNED_VALUE}" -ge 2 ]] && error_exit "${DIALOG_DESTINATION_UNREACHABLE}"
 
   return 0
 }

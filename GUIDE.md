@@ -13,7 +13,7 @@
 ## Usage
 #### General Usage
 
-```bash
+```
  usage: ship [OPTION] <ARGUMENT/S>
   ship -4 , --ipv4           shows active interfaces with their IPv4 address
   ship -6 , --ipv6           shows active interfaces with their IPv6 address
@@ -47,7 +47,7 @@
 
 #### IP Calculation Usage
 
-```bash
+```
  usage:
   ship -c, --calculate <OPTIONS> 192.168.0.1
   ship -c, --calculate <OPTIONS> 192.168.0.1/24
@@ -61,7 +61,30 @@
 
 ## Examples
 #### General Examples
+* `ship -e , --external https://github.com/`
+[![asciicast](https://asciinema.org/a/104424.png)](https://asciinema.org/a/104424)
+* `ship -f , --find ~/ipv4 ~/ipv6 ~/mac`
+[![asciicast](https://asciinema.org/a/104427.png)](https://asciinema.org/a/104427)
+* `ship -P , --port 80`
+[![asciicast](https://asciinema.org/a/104428.png)](https://asciinema.org/a/104428)
+* `ship -u , --url https://github.com/ https://en.wikipedia.org/wiki/IPv4 http://askubuntu.com/questions/406792/list-all-mac-addresses-and-their-associated-ip-addresses-in-my-local-network-la https://www.space.net/~gert/RIPE/ipv6-filters.html`
+[![asciicast](https://asciinema.org/a/104429.png)](https://asciinema.org/a/104429)
+
 #### IP Calculation Examples
+* `ship -c , --calculate 192.168.1.1`
+[![asciicast](https://asciinema.org/a/104430.png)](https://asciinema.org/a/104430)
+* `ship -c , --calculate 192.168.6.56/20`
+[![asciicast](https://asciinema.org/a/104431.png)](https://asciinema.org/a/104431)
+* `ship -c , --calculate 10.0.0.56 255.240.0.0`
+[![asciicast](https://asciinema.org/a/104432.png)](https://asciinema.org/a/104432)
+* `ship -c , --calculate -b , --nobinary 127.0.0.1`
+[![asciicast](https://asciinema.org/a/104433.png)](https://asciinema.org/a/104433)
+* `ship -c , --calculate -h , --html 192.168.1.2/24`
+[![asciicast](https://asciinema.org/a/104436.png)](https://asciinema.org/a/104436)
+* `ship -c , --calculate -b , --nobinary -h , --html 216.58.205.35`
+[![asciicast](https://asciinema.org/a/104437.png)](https://asciinema.org/a/104437)
+
+##### More coming soon ... :anchor:
 
 <!-- Anchors -->
 [Usage]: #usage
