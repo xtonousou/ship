@@ -11,7 +11,7 @@
 #set -o xtrace
 
 ### Script's Info
-readonly VERSION="2.4"
+readonly VERSION="2.5"
 readonly SCRIPT_NAME="ship"
 
 ### Author's Info
@@ -1120,6 +1120,8 @@ function show_ipcalc() {
             <meta charset="UTF-8"/>
             <title>ship.sh</title>
             <style>
+              @import url(//fonts.googleapis.com/css?family=Source+Code+Pro);
+
               .ascii_art {
                 font-size:   10pt;
                 font-family: "Source Code Pro", Courier, monospace;
@@ -1250,6 +1252,7 @@ EOF
         <tr>
           <td class="text">Broadcast:</td>
           <td class="ip">${BROADCAST_ADDRESS}</td>
+          <td class="binary">${BROADCAST_ADDRESS_BINARY}</td>
         </tr>
 EOF
     cat <<- EOF
@@ -1279,6 +1282,8 @@ EOF
             <meta charset="UTF-8"/>
             <title>ship.sh</title>
             <style>
+              @import url(//fonts.googleapis.com/css?family=Source+Code+Pro);
+
               .ascii_art {
                 font-size:   10pt;
                 font-family: "Source Code Pro", Courier, monospace;

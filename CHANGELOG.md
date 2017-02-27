@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## TODO
 ### Remove
-* `dev` from URL in GUIDE.md examples.
+* `dev` from URL in GUIDE.md examples on merge `dev` into `master`.
 
 ## [2.5] - 2017-02-23
 ### Added
