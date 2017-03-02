@@ -373,10 +373,12 @@ function handle_jobs() {
 # Prints active network interfaces with their IPv4 address.
 function show_ipv4() {
 
+  local ITEM
+
   declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV4_ARRAY=($(ip address show | awk '/inet/ {print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2))
 
-  for i in "${!INTERFACES_ARRAY[@]}"; do
+  for ITEM in "${!INTERFACES_ARRAY[@]}"; do
     echo "${INTERFACES_ARRAY[i]}" "${IPV4_ARRAY[i]}"
   done
 
@@ -386,12 +388,14 @@ function show_ipv4() {
 # Prints active network interfaces with their IPv6 address.
 function show_ipv6() {
 
+  local ITEM
+
   check_ipv6
 
   declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV6_ARRAY=($(ip address show | awk 'tolower($0) ~ /inet6/{print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2 | awk '{print toupper($0)}'))
 
-  for i in "${!INTERFACES_ARRAY[@]}"; do
+  for ITEM in "${!INTERFACES_ARRAY[@]}"; do
     echo "${INTERFACES_ARRAY[i]}" "${IPV6_ARRAY[i]}"
   done
 
@@ -404,12 +408,13 @@ function show_all() {
   local MAC_OF
   local DRIVER_OF
   local GATEWAY
+  local ITEM
 
   declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV4_ARRAY=($(ip address show | awk '/inet/ {print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2))
   declare IPV6_ARRAY=($(ip address show | awk 'tolower($0) ~ /inet6/{print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2 | awk '{print toupper($0)}'))
 
-  for i in "${!INTERFACES_ARRAY[@]}"; do
+  for ITEM in "${!INTERFACES_ARRAY[@]}"; do
     [ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ] \
       && DRIVER_OF=$(awk --field-separator="=" 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent") \
       || DRIVER_OF=$(awk --field-separator="=" 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent")
@@ -427,10 +432,11 @@ function show_all() {
 function show_driver() {
   
   local DRIVER_OF
+  local ITEM
 
   declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
 
-  for i in "${!INTERFACES_ARRAY[@]}"; do
+  for ITEM in "${!INTERFACES_ARRAY[@]}"; do
     [ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ] \
       && DRIVER_OF=$(awk --field-separator="=" 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent") \
       || DRIVER_OF=$(awk --field-separator="=" 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent")
@@ -446,6 +452,7 @@ function show_ip_from() {
   local HTTP_CODE
   local TEMP_FILE
   local RANDOM_SOURCE
+  local ITEM
 
   RANDOM_SOURCE="${PUBLIC_IP["$(( RANDOM % ${#PUBLIC_IP[@]} ))"]}"
 
@@ -473,7 +480,7 @@ function show_ip_from() {
     INPUT=$(echo "${1}" | sed --expression='s/^http\(\|s\):\/\///g' --expression='s/^`//' --expression='s/`//' --expression='s/`$//' | cut --fields=1 --delimiter="/")
 
     echo -ne "Pinging ${COLORS[2]}$1${COLORS[0]} ..."
-    for i in {1..25}; do
+    for ITEM in {1..25}; do
       ping -c 1 -w "${LONG_TIMEOUT}" "${INPUT}" 2> /dev/null | awk --field-separator='[()]' '/PING/{print $2}' >> "${TEMP_FILE}" &
     done
     handle_jobs
@@ -487,6 +494,8 @@ function show_ip_from() {
 
 # Prints all valid IPv4, IPv6 and MAC addresses extracted from file.
 function show_ips_from_file() {
+
+  local FILE
     
   [ -z "${1}" ] && error_exit "No file was specified. ${DIALOG_ABORTING}"
   for FILE in "${@}"; do
@@ -550,10 +559,11 @@ function show_ips_from_file() {
 function show_gateway() {
   
   local GATEWAY
+  local ITEM
   
   declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
 
-  for i in "${!INTERFACES_ARRAY[@]}"; do
+  for ITEM in "${!INTERFACES_ARRAY[@]}"; do
     GATEWAY=$(ip route | awk "/${INTERFACES_ARRAY[i]}/ && tolower(\$0) ~ /default/ {print \$3}")
     echo "${INTERFACES_ARRAY[i]}" "${GATEWAY}"
   done
@@ -586,7 +596,7 @@ function show_live_hosts() {
   clear_line
   init_regexes
   
-  case "$1" in
+  case "${1}" in
     "--normal")
       ip neighbour | awk 'tolower($0) ~ /reachable|stale|delay|probe/{print $1}' | sort --version-sort --unique
     ;;
@@ -682,10 +692,11 @@ function show_bogon_ips() {
 function show_mac() {
   
   local MAC_OF
+  local ITEM
   
   declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   
-  for i in "${!INTERFACES_ARRAY[@]}"; do
+  for ITEM in "${!INTERFACES_ARRAY[@]}"; do
     MAC_OF=$(awk '{print toupper($0)}' "/sys/class/net/${INTERFACES_ARRAY[i]}/address" 2> /dev/null)
     echo "${INTERFACES_ARRAY[i]}" "${MAC_OF}"
   done
@@ -1435,7 +1446,7 @@ function show_ips_from_online_documents() {
 
   check_for_missing_args "No URL was specified. ${DIALOG_ABORTING}" "${1}"
 
-  local HTTP_CODE   
+  local HTTP_CODE DOCUMENT
   local TEMP_FILE_IPV4 TEMP_FILE_IPV6 TEMP_FILE_MAC TEMP_FILE_HTML
   local IS_TEMP_FILE_IPV4_EMPTY IS_TEMP_FILE_IPV6_EMPTY IS_TEMP_FILE_MAC_EMPTY
 
@@ -1534,10 +1545,12 @@ function show_version() {
 # Prints active network interfaces with their IPv4 address and CIDR suffix.
 function show_ipv4_cidr() {
 
+  local ITEM
+
   declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV4_CIDR_ARRAY=($(ip address show | awk '$1 ~ /inet$/{print $2}' | tail --lines=+2))
   
-  for i in "${!IPV4_CIDR_ARRAY[@]}"; do
+  for ITEM in "${!IPV4_CIDR_ARRAY[@]}"; do
     echo "${INTERFACES_ARRAY[i]}" "${IPV4_CIDR_ARRAY[i]}"
   done
 
@@ -1547,12 +1560,14 @@ function show_ipv4_cidr() {
 # Prints active network interfaces with their IPv6 address and CIDR suffix.
 function show_ipv6_cidr() {
 
+  local ITEM
+
   check_ipv6
   
   declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV6_CIDR_ARRAY=($(ip address show | awk '$1 ~ /inet6$/{print toupper($2)}' | tail --lines=+2))
 
-  for i in "${!IPV6_CIDR_ARRAY[@]}"; do
+  for ITEM in "${!IPV6_CIDR_ARRAY[@]}"; do
     echo "${INTERFACES_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
   done
 
@@ -1566,12 +1581,13 @@ function show_all_cidr() {
   local DRIVER_OF
   local GATEWAY
   local CIDR
+  local ITEM
   
   declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV4_CIDR_ARRAY=($(ip address show | awk '$1 ~ /inet$/{print $2}' | tail --lines=+2))
   declare IPV6_CIDR_ARRAY=($(ip address show | awk '$1 ~ /inet6$/{print toupper($2)}' | tail --lines=+2))
   
-  for i in "${!INTERFACES_ARRAY[@]}"; do
+  for ITEM in "${!INTERFACES_ARRAY[@]}"; do
     [ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ] \
       && DRIVER_OF=$(awk --field-separator="=" 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent") \
       || DRIVER_OF=$(awk --field-separator="=" 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent")
