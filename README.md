@@ -45,22 +45,7 @@
 * Cleaning temp files and handling remaining tasks on exit
 * Exiting on long running tasks needs confirmation
 
----
-
-### Requirements
-
- :wrench:   | Package Name 
-:----------:|:------------:
- awk        | awk / gawk   
- grep       | grep         
- ip         | iproute2     
- mtr        | mtr          
- ping       | iputils      
- sed        | sed          
- ss         | iproute2     
- tracepath  | iputils      
- traceroute | traceroute   
- wget       | wget         
+---      
 
 ### Usage
 
@@ -114,26 +99,6 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 
 ---
 
-### Changelog
-
-Read [Changelog] file to review changes.
-
-* Kernel must support non-raw ICMP sockets
-* User must be allowed to create ICMPs echo sockets
-
----
-
-### Compatibility
-
- :penguin: | Version           
-:----------|:----------------- 
- Arch      | 4.7.5-1 - 4.9.8-1 
- Debian    | 7 - 8             
- Kali      | 2016.2            
- Ubuntu    | 14.04.3 - 16.04.1 
-
----
-
 ### Getting Started
 
 * Method one (**recommended**)
@@ -151,10 +116,6 @@ Read [Changelog] file to review changes.
 Replace `master` on URL with the preferred branch.
 
 ---
-
-### Contribution
-
-Pull requests, issues, suggestions, testing and feedback are all welcome.
 
 ### Contribution
 
