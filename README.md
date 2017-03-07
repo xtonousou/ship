@@ -4,7 +4,11 @@
 <p align="center"><img width=20% src="/imgs/ship-logo.png"></p>
 <p align="center">shIP (aka. show IP) is a simple, handy network addressing multitool with plenty of features.</p>
 <p align="center">
+<<<<<<< HEAD
   <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.4-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+=======
+  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.5-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+>>>>>>> 368c69e93b6d7537a7e56eda2a80dc47863b9658
     &nbsp;
   <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
@@ -36,6 +40,11 @@
  * **IPv6** (*if possible*)
 * Show the **broadcast** and **network** address, cisco **wildcard** mask, **class** and **host range** by giving the IP address and CIDR or netmask
  * **IPv4**
+<<<<<<< HEAD
+=======
+ * optionally suppress the bitwise output
+ * display results as HTML
+>>>>>>> 368c69e93b6d7537a7e56eda2a80dc47863b9658
 * Show list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
 * Compatible with most of the common linux distributions
 * Drag and drop URLs or file paths on console window
@@ -44,6 +53,7 @@
 
 ---
 
+<<<<<<< HEAD
 ### Requirements
 
  :wrench:   | Package Name 
@@ -59,6 +69,33 @@
  traceroute | traceroute   
  wget       | wget         
 
+=======
+### Usage
+
+Read the [Guide]. Usage and some interactive examples are there for you :ship:
+
+---
+
+### Requirements
+
+<details>
+	<summary id="tools"><strong>Dependencies</strong></summary>
+  <br/>
+  <table>
+    <tr><th>:wrench:</th>  <th>Package Name</th></tr>
+    <tr><td>awk</td>       <td>awk | gawk</td></tr>
+    <tr><td>grep</td>      <td>grep</td></tr>
+    <tr><td>ip</td>        <td>iproute2</td></tr>
+    <tr><td>mtr</td>       <td>mtr</td></tr>
+    <tr><td>ping</td>      <td>iputils</td></tr>
+    <tr><td>sed</td>       <td>sed</td></tr>
+    <tr><td>ss</td>        <td>iproute2</td></tr>
+    <tr><td>tracepath</td> <td>iputils</td></tr>
+    <tr><td>traceroute</td><td>traceroute</td></tr>
+    <tr><td>wget</td>      <td>wget</td></tr>
+  </table>
+</details>
+>>>>>>> 368c69e93b6d7537a7e56eda2a80dc47863b9658
 
 <table>
   <tr>
@@ -69,6 +106,7 @@
     </td>
   </tr>
 </table>
+<<<<<<< HEAD
 
 * Kernel must support non-raw ICMP sockets
 * User must be allowed to create ICMPs echo sockets
@@ -89,6 +127,22 @@
 ### Changelog
 
 Read [Changelog] file to review changes.
+=======
+
+* Kernel must support non-raw ICMP sockets
+* User must be allowed to create ICMPs echo sockets
+
+---
+
+### Compatibility
+
+ :penguin: | Version           
+:----------|:----------------- 
+ Arch      | 4.7.5-1 - 4.9.8-1 
+ Debian    | 7 - 8             
+ Kali      | 2016.2            
+ Ubuntu    | 14.04.3 - 16.04.1 
+>>>>>>> 368c69e93b6d7537a7e56eda2a80dc47863b9658
 
 ---
 
@@ -109,11 +163,19 @@ Read [Changelog] file to review changes.
 Replace `master` on URL with the preferred branch.
 
 ---
+<<<<<<< HEAD
 
 ### Contribution
 
 Pull requests, issues, suggestions, testing and feedback are all welcome.
 
+=======
+
+### Contribution
+
+Pull requests, issues, suggestions, testing and feedback are all welcome.
+
+>>>>>>> 368c69e93b6d7537a7e56eda2a80dc47863b9658
 * Fork the repo
 * Create a new branch
  * `git checkout -b my-new-feature`
@@ -127,6 +189,15 @@ Pull requests, issues, suggestions, testing and feedback are all welcome.
 
 ---
 
+<<<<<<< HEAD
+=======
+### Changelog
+
+Read the [Changelog] file to review changes.
+
+---
+
+>>>>>>> 368c69e93b6d7537a7e56eda2a80dc47863b9658
 ### Contact
 
 Send me an email at [xtonousou@gmail.com].
@@ -139,6 +210,10 @@ Send me an email at [xtonousou@gmail.com].
 This script is under [GPLv3+] license.
 
 <!-- Links -->
+<<<<<<< HEAD
+=======
+[Guide]: GUIDE.md
+>>>>>>> 368c69e93b6d7537a7e56eda2a80dc47863b9658
 [Changelog]: CHANGELOG.md
 [GPLv3+]: LICENSE.md
 [GPLv3+IMG]: http://gplv3.fsf.org/gplv3-127x51.png
