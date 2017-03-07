@@ -101,19 +101,13 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 
 ### Getting Started
 
-* Method one (**recommended**)
-  * `wget -q https://raw.githubusercontent.com/xtonousou/shIP/master/ship.sh`
-  * `bash ship.sh`
-* Method two
-  * `wget -q https://raw.githubusercontent.com/xtonousou/shIP/master/ship.sh`
-  * `chmod +x ship.sh` (need **root** privileges)
-  * `./ship.sh`
-* Method three (clone repository)
-  * `git clone https://github.com/xtonousou/shIP.git`
-  * `cd /path/to/shIP`
-  * `bash ship.sh`
+```bash
+$ git clone --branch=master https://github.com/xtonousou/shIP.git
+$ cd /path/to/shIP
+$ bash ship.sh
+```
 
-Replace `master` on URL with the preferred branch.
+Replace *branch* if appropriate.
 
 ---
 
@@ -123,13 +117,13 @@ Pull requests, issues, suggestions, testing and feedback are all welcome.
 
 * Fork the repo
 * Create a new branch
- * `git checkout -b my-new-feature`
+ * `$ git checkout -b my-new-feature`
 * Make the appropriate changes in the files
 * Add changes to reflect the changes made
 * Commit your changes
- * `git commit -am 'Added some feature'`
+ * `$ git commit -am 'Added some feature'`
 * Push to the branch
- * `git push origin my-new-feature`
+ * `$ git push origin my-new-feature`
 * Create a Pull Request
 
 ---
