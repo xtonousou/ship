@@ -86,7 +86,7 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 ### Compatibility
 
  :penguin: | Version            
-:---------:|:------------------:
+:----------|:-------------------
  Arch      | 4.7.5-1 - 4.10.3-1 
  Debian    | 7 - 8              
  Kali      | 2016.2             
