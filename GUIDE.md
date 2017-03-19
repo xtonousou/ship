@@ -1,14 +1,13 @@
 # Guide
 
-<details>
-	<summary id="toc"><strong>Table Of Contents</strong></summary>
+## Table of Contents
+
 * [Usage]
- * [General Usage]
- * [IP Calculation Usage]
+  * [General Usage]
+  * [IP Calculation Usage]
 * [Examples]
- * [General Examples]
- * [IP Calculation Examples]
-</details>
+  * [General Examples]
+  * [IP Calculation Examples]
 
 ## Usage
 #### General Usage
