@@ -1,14 +1,22 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## TODO
-### Add
-* Subnetting feature.
- * Split networks and such.
+## [2.5] - 2017-03-07
+### Added
+* IP calculation feature can now show information without binary (optional).
+* IP calculation feature can now be shown in HTML5 format (optional).
 
-### Change
-* Clean code.
- * Match the line breaking column **80**, as much as it is possible.
+### Changed
+* **Fixed** `ss` output.
+* **Fixed** IP address outputs on different distributions.
+* **Fixed** `awk` outputs on Kali Linux.
+* **Fixed** ip calculation feature for older bash versions.
+* Minor code clean up.
+* Minor code improvements.
+* Checking functions for **IPv6** compatibility and bash version validation.
+
+### Removed
+* Warnings with `shellcheck`.
 
 ## [2.4] - 2017-02-17
 ### Added
