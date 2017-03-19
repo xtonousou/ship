@@ -4,7 +4,6 @@
 <p align="center"><img width=20% src="/imgs/ship-logo.png"></p>
 <p align="center">shIP (aka. show IP) is a simple, handy network addressing multitool with plenty of features.</p>
 <p align="center">
-  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.4-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
   <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.5-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
   <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
@@ -22,23 +21,23 @@
 * Show the **driver** used of each active network interface
 * Show the **gateway** of each online interface
 * Show the addresses of each active network interface with or without CIDR notation
- * **IPv4**
- * **IPv6** (*if possible*)
- * **MAC**
+  * **IPv4**
+  * **IPv6** (*if possible*)
+  * **MAC**
 * Show the **public/external IP/s**
- * of user
- * of website / domain
+  * of user
+  * of website / domain
 * Show **active hosts** on current network with or without MAC address
 * Show all valid addresses (IPv4, IPv6, MAC) extracted
- * from **file** or multiple **files** at once
- * from **website** or multiple **websites** at once
+  * from **file** or multiple **files** at once
+  * from **website** or multiple **websites** at once
 * Show the **route** to a network host using three most common tools. `ship` checks which are installed and decides to run the fastest one for each case scenario
- * **IPv4**
- * **IPv6** (*if possible*)
+  * **IPv4**
+  * **IPv6** (*if possible*)
 * Show the **broadcast** and **network** address, cisco **wildcard** mask, **class** and **host range** by giving the IP address and CIDR or netmask
- * **IPv4**
- * optionally suppress the bitwise output
- * display results as HTML
+  * **IPv4**
+  * optionally suppress the bitwise output
+  * display results as HTML
 * Show list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
 * Compatible with most of the common linux distributions
 * Drag and drop URLs or file paths on console window
@@ -91,8 +90,8 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 ### Compatibility
 
  :penguin: | Version            
-:---------:|:-----------------:
- Arch      | 4.7.5-1 - 4.9.8-1  
+:---------:|:------------------:
+ Arch      | 4.7.5-1 - 4.10.3-1 
  Debian    | 7 - 8              
  Kali      | 2016.2             
  Ubuntu    | 14.04.3 - 16.04.1  
@@ -107,7 +106,7 @@ $ cd /path/to/shIP
 $ bash ship.sh
 ```
 
-Replace *branch* if appropriate.
+Replace *branch* if desired.
 
 ---
 
@@ -117,13 +116,13 @@ Pull requests, issues, suggestions, testing and feedback are all welcome.
 
 * Fork the repo
 * Create a new branch
- * `$ git checkout -b my-new-feature`
+  * `$ git checkout -b my-new-feature`
 * Make the appropriate changes in the files
 * Add changes to reflect the changes made
 * Commit your changes
- * `$ git commit -am 'Added some feature'`
+  * `$ git commit -am 'Added some feature'`
 * Push to the branch
- * `$ git push origin my-new-feature`
+  * `$ git push origin my-new-feature`
 * Create a Pull Request
 
 ---
