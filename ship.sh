@@ -2,8 +2,8 @@
 ## Title........: ship.sh
 ## Description..: A simple, handy network addressing multitool with plenty of features.
 ## Author.......: Sotirios Roussis aka. xtonousou - xtonousou@gmail.com
-## Date.........: 20170307
-## Version......: 2.5
+## Date.........: 20170429
+## Version......: 2.6
 ## Usage........: bash ship.sh
 ## Bash Version.: 3.2 or later
 
@@ -1690,4 +1690,3 @@ function sail() {
 }
 
 sail "${1+${@}}"
-
