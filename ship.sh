@@ -2,8 +2,8 @@
 ## Title........: ship.sh
 ## Description..: A simple, handy network addressing multitool with plenty of features.
 ## Author.......: Sotirios Roussis aka. xtonousou - xtonousou@gmail.com
-## Date.........: 20170429
-## Version......: 2.5
+## Date.........: 20170430
+## Version......: 2.6
 ## Usage........: bash ship.sh
 ## Bash Version.: 3.2 or later
 
@@ -11,7 +11,7 @@
 #set -o xtrace
 
 ### Script's Info
-readonly VERSION="2.5"
+readonly VERSION="2.6"
 readonly SCRIPT_NAME="ship"
 
 ### Author's Info
@@ -48,6 +48,7 @@ readonly TIMEOUT="6"
 readonly LONG_TIMEOUT="17"
 
 ### Dialogs
+readonly DIALOG_UNDER_DEVELOPMENT="${COLORS[1]}under development${COLORS[0]}"
 readonly DIALOG_PRESS_CTRL_C="Press [CTRL+C] to stop"
 readonly DIALOG_ERROR="Try ${SCRIPT_NAME} ${COLORS[2]}-h${COLORS[0]} or ${SCRIPT_NAME} ${COLORS[2]}--help${COLORS[0]} for more information."
 readonly DIALOG_ABORTING="${COLORS[1]}Aborting${COLORS[0]}."
@@ -147,7 +148,8 @@ function bin_to_dec() {
   return 0
 }
 
-# Returns the integer representation of an IP arg, passed in ascii dotted-decimal notation (x.x.x.x).
+# Returns the integer representation of an IP arg,
+# passed in ascii dotted-decimal notation (x.x.x.x).
 function dotted_quad_ip_to_decimal {
 
   local IFS A B C D IP="${1}"
@@ -178,6 +180,8 @@ function clear_line() {
 # Prints a list of most common ports with protocols.
 function print_port_protocol_list() {
 
+  local ITEM
+
   declare -r PORTS_ARRAY=(
     "20-21" "22" "23" "25" "53" "67-68" "69" "80" "110" "123" "137-139" "143"
     "161-162" "179" "389" "443" "636" "989-990"
@@ -193,8 +197,8 @@ function print_port_protocol_list() {
     "NetBIOS" "IMAP" "SNMP" "BGP" "LDAP" "HTTPS" "LDAPS" "FTP over TLS/SSL"
   )
 
-  for i in "${!PORTS_ARRAY[@]}"; do
-    printf "%-17s%-8s%s\n" "${PORTS_PROTOCOL_ARRAY[i]}" "${PORTS_TCP_UDP_ARRAY[i]}" "${PORTS_ARRAY[i]}"
+  for ITEM in "${!PORTS_ARRAY[@]}"; do
+    printf "%-17s%-8s%s\n" "${PORTS_PROTOCOL_ARRAY[ITEM]}" "${PORTS_TCP_UDP_ARRAY[ITEM]}" "${PORTS_ARRAY[ITEM]}"
   done
 
   return 0
@@ -263,19 +267,13 @@ function check_dotted_quad_address() {
   return 0
 }
 
-# Returns true if ipb6 is available else returns false.
-function is_ipv6_available() {
-
-  ip -family inet6 address show | grep --extended-regexp "${REGEX_IPV6}" &> /dev/null
-
-  return 0
-}
-
 # Checks if IPv6 is available, if not exit.
 function check_ipv6() {
 
-  ! is_ipv6_available \
-    && error_exit "${DIALOG_IPV6_UNAVAILABLE}"
+  grep -i "ipv6" "/proc/modules" &> /dev/null \
+    || echo "IPv6 is supported but the 'ipv6' module is not loaded"
+  
+  test -f "/proc/net/if_inet6" || error_exit "${DIALOG_IPV6_UNAVAILABLE}"
 
   return 0
 }
@@ -381,7 +379,7 @@ function show_ipv4() {
   declare IPV4_ARRAY=($(ip address show | awk '/inet\ / {print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2))
 
   for ITEM in "${!INTERFACES_ARRAY[@]}"; do
-    echo "${INTERFACES_ARRAY[i]}" "${IPV4_ARRAY[i]}"
+    echo "${INTERFACES_ARRAY[ITEM]}" "${IPV4_ARRAY[ITEM]}"
   done
 
   return 0
@@ -390,15 +388,15 @@ function show_ipv4() {
 # Prints active network interfaces with their IPv6 address.
 function show_ipv6() {
 
-  local ITEM
+  check_ipv6
 
-  #check_ipv6
+  local ITEM
 
   declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV6_ARRAY=($(ip address show | awk 'tolower($0) ~ /inet6/{print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2 | awk '{print toupper($0)}'))
 
   for ITEM in "${!INTERFACES_ARRAY[@]}"; do
-    echo "${INTERFACES_ARRAY[i]}" "${IPV6_ARRAY[i]}"
+    echo "${INTERFACES_ARRAY[ITEM]}" "${IPV6_ARRAY[ITEM]}"
   done
 
   return 0
@@ -406,6 +404,8 @@ function show_ipv6() {
 
 # Prints all "basic" info.
 function show_all() {
+
+  check_ipv6
 
   local MAC_OF
   local DRIVER_OF
@@ -417,12 +417,12 @@ function show_all() {
   declare IPV6_ARRAY=($(ip address show | awk 'tolower($0) ~ /inet6/{print $2}' | cut --delimiter="/" --fields=1 | tail --lines=+2 | awk '{print toupper($0)}'))
 
   for ITEM in "${!INTERFACES_ARRAY[@]}"; do
-    [ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ] \
-      && DRIVER_OF=$(awk -F '=' 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent") \
-      || DRIVER_OF=$(awk -F '=' 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent")
-    MAC_OF=$(awk '{print toupper($0)}' "/sys/class/net/${INTERFACES_ARRAY[i]}/address" 2> /dev/null)
-    GATEWAY=$(ip route | awk "/${INTERFACES_ARRAY[i]}/ && tolower(\$0) ~ /default/ {print \$3}")
-    echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${GATEWAY}" "${IPV4_ARRAY[i]}" "${IPV6_ARRAY[i]}"
+    [ -f "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/phy80211/device/uevent" ] \
+      && DRIVER_OF=$(awk -F '=' 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/phy80211/device/uevent") \
+      || DRIVER_OF=$(awk -F '=' 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/device/uevent")
+    MAC_OF=$(awk '{print toupper($0)}' "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/address" 2> /dev/null)
+    GATEWAY=$(ip route | awk "/${INTERFACES_ARRAY[ITEM]}/ && tolower(\$0) ~ /default/ {print \$3}")
+    echo "${INTERFACES_ARRAY[ITEM]}" "${DRIVER_OF}" "${MAC_OF}" "${GATEWAY}" "${IPV4_ARRAY[ITEM]}" "${IPV6_ARRAY[ITEM]}"
   done
 
   return 0
@@ -437,10 +437,10 @@ function show_driver() {
   declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
 
   for ITEM in "${!INTERFACES_ARRAY[@]}"; do
-    [ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ] \
-      && DRIVER_OF=$(awk -F '=' 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent") \
-      || DRIVER_OF=$(awk -F '=' 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent")
-    echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" 
+    [ -f "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/phy80211/device/uevent" ] \
+      && DRIVER_OF=$(awk -F '=' 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/phy80211/device/uevent") \
+      || DRIVER_OF=$(awk -F '=' 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/device/uevent")
+    echo "${INTERFACES_ARRAY[ITEM]}" "${DRIVER_OF}" 
   done
 
   return 0
@@ -563,8 +563,8 @@ function show_gateway() {
   declare -r INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
 
   for ITEM in "${!INTERFACES_ARRAY[@]}"; do
-    GATEWAY=$(ip route | awk "/${INTERFACES_ARRAY[i]}/ && tolower(\$0) ~ /default/ {print \$3}")
-    echo "${INTERFACES_ARRAY[i]}" "${GATEWAY}"
+    GATEWAY=$(ip route | awk "/${INTERFACES_ARRAY[ITEM]}/ && tolower(\$0) ~ /default/ {print \$3}")
+    echo "${INTERFACES_ARRAY[ITEM]}" "${GATEWAY}"
   done
 
   return 0
@@ -693,8 +693,8 @@ function show_mac() {
   declare -r INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   
   for ITEM in "${!INTERFACES_ARRAY[@]}"; do
-    MAC_OF=$(awk '{print toupper($0)}' "/sys/class/net/${INTERFACES_ARRAY[i]}/address" 2> /dev/null)
-    echo "${INTERFACES_ARRAY[i]}" "${MAC_OF}"
+    MAC_OF=$(awk '{print toupper($0)}' "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/address" 2> /dev/null)
+    echo "${INTERFACES_ARRAY[ITEM]}" "${MAC_OF}"
   done
 
   return 0
@@ -1547,7 +1547,7 @@ function show_ipv4_cidr() {
   declare IPV4_CIDR_ARRAY=($(ip address show | awk '$1 ~ /inet$/{print $2}' | tail --lines=+2))
   
   for ITEM in "${!IPV4_CIDR_ARRAY[@]}"; do
-    echo "${INTERFACES_ARRAY[i]}" "${IPV4_CIDR_ARRAY[i]}"
+    echo "${INTERFACES_ARRAY[ITEM]}" "${IPV4_CIDR_ARRAY[ITEM]}"
   done
 
   return 0
@@ -1556,15 +1556,15 @@ function show_ipv4_cidr() {
 # Prints active network interfaces with their IPv6 address and CIDR suffix.
 function show_ipv6_cidr() {
 
-  local ITEM
-
   check_ipv6
+
+  local ITEM
   
   declare INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare IPV6_CIDR_ARRAY=($(ip address show | awk '$1 ~ /inet6$/{print toupper($2)}' | tail --lines=+2))
 
   for ITEM in "${!IPV6_CIDR_ARRAY[@]}"; do
-    echo "${INTERFACES_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
+    echo "${INTERFACES_ARRAY[ITEM]}" "${IPV6_CIDR_ARRAY[ITEM]}"
   done
 
   return 0
@@ -1572,6 +1572,8 @@ function show_ipv6_cidr() {
 
 # Prints all info and CIDR suffix.
 function show_all_cidr() {
+
+  check_ipv6
   
   local MAC_OF
   local DRIVER_OF
@@ -1584,13 +1586,13 @@ function show_all_cidr() {
   declare IPV6_CIDR_ARRAY=($(ip address show | awk '$1 ~ /inet6$/{print toupper($2)}' | tail --lines=+2))
   
   for ITEM in "${!INTERFACES_ARRAY[@]}"; do
-    [ -f "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent" ] \
-      && DRIVER_OF=$(awk -F '=' 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/phy80211/device/uevent") \
-      || DRIVER_OF=$(awk -F '=' 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[i]}/device/uevent")
-    MAC_OF=$(awk '{print toupper($0)}' "/sys/class/net/${INTERFACES_ARRAY[i]}/address" 2> /dev/null)
-    GATEWAY=$(ip route | awk "/${INTERFACES_ARRAY[i]}/ && tolower(\$0) ~ /default/ {print \$3}")
-    CIDR=$(echo -n "${IPV4_CIDR_ARRAY[i]}" | sed 's/^.*\//\//')
-    echo "${INTERFACES_ARRAY[i]}" "${DRIVER_OF}" "${MAC_OF}" "${GATEWAY}${CIDR}" "${IPV4_CIDR_ARRAY[i]}" "${IPV6_CIDR_ARRAY[i]}"
+    [ -f "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/phy80211/device/uevent" ] \
+      && DRIVER_OF=$(awk -F '=' 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/phy80211/device/uevent") \
+      || DRIVER_OF=$(awk -F '=' 'tolower($0) ~ /driver/{print $2}' "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/device/uevent")
+    MAC_OF=$(awk '{print toupper($0)}' "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/address" 2> /dev/null)
+    GATEWAY=$(ip route | awk "/${INTERFACES_ARRAY[ITEM]}/ && tolower(\$0) ~ /default/ {print \$3}")
+    CIDR=$(echo -n "${IPV4_CIDR_ARRAY[ITEM]}" | sed 's/^.*\//\//')
+    echo "${INTERFACES_ARRAY[ITEM]}" "${DRIVER_OF}" "${MAC_OF}" "${GATEWAY}${CIDR}" "${IPV4_CIDR_ARRAY[ITEM]}" "${IPV6_CIDR_ARRAY[ITEM]}"
   done
 
   return 0
@@ -1642,8 +1644,8 @@ function show_usage_ipcalc() {
   echo    " options:"
   echo -e "  -b, --nobinary ${COLORS[5]}suppress the bitwise output ${COLORS[0]}"
   echo -e "  -h, --html     ${COLORS[5]}display results as HTML${COLORS[0]}"
-  echo -e "  -s, --split    ${COLORS[5]}split into networks of size n1, n2, n3 ${COLORS[1]}unfinished${COLORS[0]}" #TODO
-  echo -e "  -r, --range    ${COLORS[5]}deaggregate address range ${COLORS[1]}unfinished${COLORS[0]}" #TODO
+  echo -e "  -s, --split    ${COLORS[5]}split into networks of size n1, n2, n3 ${DIALOG_UNDER_DEVELOPMENT}" #TODO
+  echo -e "  -r, --range    ${COLORS[5]}deaggregate address range ${DIALOG_UNDER_DEVELOPMENT}" #TODO
 
   return 0
 }
