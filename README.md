@@ -86,11 +86,11 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 ### Compatibility
 
  :penguin: | Version            
-:----------|:-------------------
- Arch      | 4.7.5-1 - 4.10.3-1 
- Debian    | 7 - 8              
- Kali      | 2016.2             
- Ubuntu    | 14.04.3 - 16.04.1  
+:----------|:--------------------
+ Arch      | 4.7.5-1 - 4.10.13-1 
+ Debian    | 7 - 8               
+ Kali      | 2016.2              
+ Ubuntu    | 14.04.3 - 16.04.1   
 
 ---
 
