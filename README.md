@@ -17,6 +17,7 @@
 
 ### Features
 
+* Show all network **interfaces**
 * Show all active network **interfaces**
 * Show the **driver** used of each active network interface
 * Show the **gateway** of each online interface

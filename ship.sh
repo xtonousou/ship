@@ -430,6 +430,18 @@ function show_all() {
   return 0
 }
 
+# Prints all network interfaces.
+function show_all_interfaces() {
+
+  local ITEM
+  
+  declare ALL_INTERFACES_ARRAY=($(ip link show | awk '/^[0-9]/{print $2}' | sed 's/://g'))
+
+  for ITEM in "${!ALL_INTERFACES_ARRAY[@]}"; do
+    echo "${ALL_INTERFACES_ARRAY[ITEM]}"
+  done
+}
+
 # Prints the driver used of active interface.
 function show_driver() {
   

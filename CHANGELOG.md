@@ -1,13 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.6] - 2017-04-30
+## [2.6] - 2017-05-11
 ### Added
 * Message to show that the **ipv6** module is not loaded.
+* Feature to show all network interfaces.
 
 ### Changed
 * **Fixed** wrong outputs of IPv6 addresses.
 * **Fixed** wrong way to check IPv6 availability.
+* Refactored code a bit.
 
 ## [2.5] - 2017-03-07
 ### Added
