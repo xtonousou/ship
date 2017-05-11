@@ -1676,6 +1676,7 @@ function show_usage() {
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-4 ${COLORS[0]}, ${COLORS[0]}--ipv4 ${COLORS[0]}          shows active interfaces with their IPv4 address"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-6 ${COLORS[0]}, ${COLORS[0]}--ipv6 ${COLORS[0]}          shows active interfaces with their IPv6 address"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-a ${COLORS[0]}, ${COLORS[0]}--all ${COLORS[0]}           shows all information"
+  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-A ${COLORS[0]}, ${COLORS[0]}--all-interfaces ${COLORS[0]}shows all available network interfaces"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-c ${COLORS[0]}, ${COLORS[0]}--calculate ${COLORS[0]}<>   shows calculated IP information"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-d ${COLORS[0]}, ${COLORS[0]}--driver ${COLORS[0]}        shows each active interface's driver"
   echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-e ${COLORS[0]}, ${COLORS[0]}--external ${COLORS[0]}      shows your external IP address"
@@ -1733,24 +1734,30 @@ function sail() {
       "-4"|"--ipv4")
         check_connectivity "--local"
         show_ipv4
+        break
         ;;
       "-6"|"--ipv6")
         check_connectivity "--local"
         show_ipv6
+        break
         ;;
       "-a"|"--all")
         check_connectivity "--local"
         show_all
+        break
         ;;
       "-A"|"--all-interfaces")
         show_all_interfaces
+        break
         ;;
       "-c"|"--calculate")
         show_ipcalc "${@:2}"
+        break
         ;;
       "-d"|"--driver")
         check_connectivity "--local"
         show_driver
+        break
         ;;
       "-e"|"--external")
         check_connectivity "--internet"
@@ -1758,45 +1765,55 @@ function sail() {
         trap trap_handler SIGTSTP &>/dev/null
         show_ip_from "${2}"
         shift 2
+        break
         ;;
       "-f"|"--find")
         trap trap_handler INT &>/dev/null
         trap trap_handler SIGTSTP &>/dev/null
         show_ips_from_file "${@:2}"
+        break
         ;;
       "-g"|"--gateway")
         check_connectivity "--local"
         show_gateway
+        break
         ;;
       "-h"|"--help")
         show_usage
+        break
         ;;
       "-H"|"--hosts")
         check_connectivity "--local"
         trap trap_handler INT &>/dev/null
         trap trap_handler SIGTSTP &>/dev/null
         show_live_hosts "--normal"
+        break
         ;;
       "-HM"|"--hosts-mac")
         check_connectivity "--local"
         trap trap_handler INT &>/dev/null
         trap trap_handler SIGTSTP &>/dev/null
         show_live_hosts "--mac"
+        break
         ;;
       "-i"|"--interfaces")
         check_connectivity "--local"
         show_interfaces
+        break
         ;;
       "-l"|"--list")
         show_bogon_ips "--normal"
+        break
         ;;
       "-m"|"--mac")
         check_connectivity "--local"
         show_mac
+        break
         ;;
       "-n"|"--neighbor")
         check_connectivity "--local"
         show_neighbor_cache
+        break
         ;;
       "-P"|"--port")
         check_connectivity "--internet"
@@ -1804,6 +1821,7 @@ function sail() {
         trap trap_handler SIGTSTP &>/dev/null
         show_port_connections "${2}"
         shift 2
+        break
         ;;
       "-r"|"--route-ipv4")
         check_connectivity "--internet"
@@ -1811,6 +1829,7 @@ function sail() {
         trap trap_handler SIGTSTP &>/dev/null
         show_next_hops "--ipv4" "${2}"
         shift 2
+        break
         ;;
       "-r6"|"--route-ipv6")
         check_connectivity "--internet"
@@ -1818,30 +1837,37 @@ function sail() {
         trap trap_handler SIGTSTP &>/dev/null
         show_next_hops "--ipv6" "${2}"
         shift 2
+        break
         ;;
       "-u"|"--url")
         check_connectivity "--internet"
         trap trap_handler INT &>/dev/null
         trap trap_handler SIGTSTP &>/dev/null
         show_ips_from_online_documents "${@:2}"
+        break
         ;;
       "-v"|"--version")
         show_version
+        break
         ;;
       "--cidr-4"|"--cidr-ipv4")
         check_connectivity "--local"
         show_ipv4_cidr
+        break
         ;;
       "--cidr-6"|"--cidr-ipv6")
         check_connectivity "--local"
         show_ipv6_cidr
+        break
         ;;
       "--cidr-a"|"--cidr-all")
         check_connectivity "--local"
         show_all_cidr
+        break
         ;;
       "--cidr-l"|"--cidr-list")
         show_bogon_ips "--cidr"
+        break
         ;;
       *)
         error_exit "${DIALOG_ERROR}" "${1}"
