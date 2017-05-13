@@ -1,6 +1,20 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.6] - 2017-05-13
+### Added
+* Message to show that the **ipv6** module is not loaded.
+  * This can be suppressed by piping `tail -n+2`
+* Feature to show all network interfaces.
+
+### Changed
+* **Fixed** wrong outputs of IPv6 addresses.
+* **Fixed** wrong way to check IPv6 availability.
+* **Fixed** issues with temporary files and background jobs.
+* Logo on version output.
+* MAC and IPv6 addresses are now printed in lower case for better readability.
+* Refactored code a bit.
+
 ## [2.5] - 2017-03-07
 ### Added
 * IP calculation feature can now show information without binary (optional).
@@ -23,7 +37,7 @@ All notable changes to this project will be documented in this file.
 * Converting functions (Binary to Decimal, Binary to Hexadecimal, Decimal to Binary) to be used in other functions.
 * "Show network, broadcast address, netmask, CIDR, Cisco wildcard, class, host range, maximum hosts from given IP address".
  * Seriously why need to install `ipcalc sipcalc`, when you can do this with pure Bash? :smirk:
-* Show a list of private and reserved IP addreses (IPv4 and IPv6) with or without CIDR notation (Bogon IPs).
+* Show a list of private and reserved IP addresses (IPv4 and IPv6) with or without CIDR notation (Bogon IPs).
 * More sources to grab user's public IP.
   * Randomly choose from 6 different web sources to grab the IP.
 
