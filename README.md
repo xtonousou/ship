@@ -140,7 +140,7 @@ Send me an email at [xtonousou@gmail.com]
 ### Licenses
 
  :page_with_curl:                                          | Description                                    
-----------------------------------------------------------:|:----------------------------------------------- 
+:---------------------------------------------------------:|:----------------------------------------------:
  [![GPLv3+IMG]](LICENSE.md)                                | This script is under [GPLv3+] license          
  [![CC3+IMG]](http://creativecommons.org/licenses/by/4.0/) | Graphic made by [madebyoliver] from [Flaticon] 
 
