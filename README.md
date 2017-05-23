@@ -69,9 +69,9 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 <table>
   <tr>
     <td>
-      It is required to have at least one of the following tools: <b>mtr</b> | <b>tracepath</b> | <b>traceroute</b>.
-      The script uses standard commands included in <b>coreutils</b> and shell builtins so they are not checked.
-      It also uses <b>ping</b> to check, test and validate connection and network hosts, it requires <b>CAP_NET_RAW</b> capability to be executed.
+      It is required to have at least one of the following tools: <b>mtr</b> | <b>tracepath</b> | <b>traceroute</b>
+      The script uses standard commands included in <b>coreutils</b> and shell builtins so they are not checked
+      It also uses <b>ping</b> to check, test and validate connection and network hosts, it requires <b>CAP_NET_RAW</b> capability to be executed
     </td>
   </tr>
 </table>
@@ -110,7 +110,7 @@ $ yaourt -S ship
 
 ### Contribution
 
-Pull requests, issues, suggestions, testing and feedback are all welcome.
+Pull requests, issues, suggestions, testing and feedback are all welcome
 
 * Fork the repo
 * Create a new branch
@@ -127,25 +127,29 @@ Pull requests, issues, suggestions, testing and feedback are all welcome.
 
 ### Changelog
 
-Read the [Changelog] file to review changes.
+Read the [Changelog] file to review changes
 
 ---
 
 ### Contact
 
-Send me an email at [xtonousou@gmail.com].
+Send me an email at [xtonousou@gmail.com]
 
 ----
 
 ### License
 
 [![GPLv3+IMG]](LICENSE.md)
-This script is under [GPLv3+] license.
+This script is under [GPLv3+] license
 
-Transport graphic by <a href="http://www.flaticon.com/authors/madebyoliver">madebyoliver</a> from <a href="http://www.flaticon.com/">Flaticon</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>
+[![CC3+IMG]](http://creativecommons.org/licenses/by/4.0/)
+Graphic made by [madebyoliver] from [Flaticon]
 
 <!-- Links -->
 [Guide]: GUIDE.md
 [Changelog]: CHANGELOG.md
+[madebyoliver]: http://www.flaticon.com/authors/madebyoliver
+[Flaticon]: http://www.flaticon.com/
 [GPLv3+]: LICENSE.md
 [GPLv3+IMG]: http://gplv3.fsf.org/gplv3-127x51.png
+[CC3+IMG]: https://licensebuttons.net/l/by/3.0/88x31.png
