@@ -1,16 +1,13 @@
-<!-- Color Scheme: Dark=13818d Light=44c2c7 -->
-
-<p align="center"><img width=10% src="/imgs/ship-text.png"></img></p>
-<p align="center"><img width=20% src="/imgs/ship-logo.png"></p>
-<p align="center">shIP (aka. show IP) is a simple, handy network addressing multitool with plenty of features.</p>
+<p align="center"><img width=10% src="/imgs/ship-logo.png"></img></p>
+<p align="center">ship is a simple, handy network addressing multitool with plenty of features</p>
 <p align="center">
-  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
     &nbsp;
-  <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
     &nbsp;
-  <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img src="https://img.shields.io/badge/bash-3.2+-lightgrey.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img src="https://img.shields.io/badge/bash-3.2+-lightgrey.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
     &nbsp;
-  <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
 </p>
 
 ---
@@ -98,12 +95,16 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 ### Getting Started
 
 ```bash
-$ git clone --branch=master https://github.com/xtonousou/shIP.git
-$ cd /path/to/shIP
+$ git clone --branch=master https://github.com/xtonousou/ship.git
+$ cd /path/to/ship
 $ bash ship.sh
 ```
 
-Replace *branch* if desired.
+#### Arch Linux
+
+```bash
+$ yaourt -S ship
+```
 
 ---
 
@@ -140,6 +141,8 @@ Send me an email at [xtonousou@gmail.com].
 
 [![GPLv3+IMG]](LICENSE.md)
 This script is under [GPLv3+] license.
+
+Transport graphic by <a href="http://www.flaticon.com/authors/madebyoliver">madebyoliver</a> from <a href="http://www.flaticon.com/">Flaticon</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>
 
 <!-- Links -->
 [Guide]: GUIDE.md
