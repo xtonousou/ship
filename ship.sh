@@ -1620,7 +1620,7 @@ function show_version() {
   echo -e " ▀▄▄▄▄▀    █   █ ▐█ █ \t\t ${COLORS[0]}Github .: ${COLORS[4]}${GITHUB}"
   echo -e "              █   ▐  █ \t\t ${COLORS[0]}Version : ${COLORS[4]}${VERSION}"
   echo -e "             ▀        ▀"
-  echo -e "${COLORS[4]}"
+  echo -e "${COLORS[0]}"
 
   return 0
 }
