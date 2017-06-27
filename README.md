@@ -10,6 +10,13 @@
   <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
 </p>
 
+
+<p align="center">
+  <a href="https://repology.org/metapackage/ship">
+    <img src="https://repology.org/badge/vertical-allrepos/ship.svg" alt="AUR packaging status">
+  </a>
+</p>
+
 ---
 
 ### Features
