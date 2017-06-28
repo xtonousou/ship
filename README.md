@@ -1,4 +1,4 @@
-<p align="center"><img width=45% src="/imgs/ship-small.gif"></img></p>
+<p align="center"><img width=30% src="/imgs/ship-small.gif"></img></p>
 <p align="center">ship is a simple, handy network addressing multitool with plenty of features</p>
 <p align="center">
   <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
