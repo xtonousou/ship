@@ -1,5 +1,5 @@
 <p align="center"><img width=10% src="/imgs/ship.png"></img></p>
-<p align="center">ship is a simple, handy network addressing multitool with plenty of features</p>
+<p align="center">a simple, handy network addressing multitool with plenty of features</p>
 <p align="center">
   <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
     &nbsp;
@@ -139,18 +139,13 @@ Send me an email at [xtonousou@gmail.com]
 
 ----
 
-### Licenses
+### License
 
- :page_with_curl:                                          | Description                                    
-:---------------------------------------------------------:|:----------------------------------------------:
- [![GPLv3+IMG]](LICENSE.md)                                | This script is under [GPLv3+] license          
- [![CC3+IMG]](http://creativecommons.org/licenses/by/4.0/) | Graphic made by [madebyoliver] from [Flaticon] 
+Copyright (c) **2017** by **Sotirios M. Roussis**. Some rights reserved
+`ship` is under the terms of the GPLv3+ License, following all clarifications stated in the [license] file
 
 <!-- Links -->
+
 [Guide]: GUIDE.md
 [Changelog]: CHANGELOG.md
-[madebyoliver]: http://www.flaticon.com/authors/madebyoliver
-[Flaticon]: http://www.flaticon.com/
-[GPLv3+]: LICENSE.md
-[GPLv3+IMG]: http://gplv3.fsf.org/gplv3-127x51.png
-[CC3+IMG]: https://licensebuttons.net/l/by/3.0/88x31.png
+[license]: LICENSE.md
