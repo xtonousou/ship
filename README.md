@@ -1,4 +1,4 @@
-<p align="center"><img width=23% src="/imgs/ship-small.gif"></img></p>
+<p align="center"><img width=23% src="/imgs/ship.png"></img></p>
 <p align="center">ship is a simple, handy network addressing multitool with plenty of features</p>
 <p align="center">
   <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
@@ -8,13 +8,7 @@
   <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img src="https://img.shields.io/badge/bash-3.2+-lightgrey.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
     &nbsp;
   <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
-</p>
-
-
-<p align="center">
-  <a href="https://repology.org/metapackage/ship">
-    <img src="https://repology.org/badge/vertical-allrepos/ship.svg" alt="AUR packaging status">
-  </a>
+  <a href="https://aur.archlinux.org/packages/ship/"><img src="https://img.shields.io/aur/version/ship.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
 </p>
 
 ---
