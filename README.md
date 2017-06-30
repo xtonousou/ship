@@ -142,6 +142,8 @@ Send me an email at [xtonousou@gmail.com]
 ### License
 
 Copyright (c) **2017** by **Sotirios M. Roussis**. Some rights reserved
+
+
 `ship` is under the terms of the GPLv3+ License, following all clarifications stated in the [license] file
 
 <!-- Links -->
