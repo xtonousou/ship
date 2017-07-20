@@ -1,5 +1,4 @@
-<p align="center"><img width=10% src="/imgs/ship-text.png"></img></p>
-<p align="center"><img width=10% src="/imgs/ship-logo.png"></img></p>
+<p align="center"><img width=20% src="/imgs/ship-logo.png"></img></p>
 <p align="center">a simple, handy network addressing multitool with plenty of features</p>
 <p align="center">
   <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
@@ -55,19 +54,18 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 
 ### Requirements
 
-<table>
-  <tr><th>:wrench:</th>  <th>Package Name</th></tr>
-  <tr><td>awk</td>       <td>awk | gawk</td></tr>
-  <tr><td>grep</td>      <td>grep</td></tr>
-  <tr><td>ip</td>        <td>iproute2</td></tr>
-  <tr><td>mtr</td>       <td>mtr</td></tr>
-  <tr><td>ping</td>      <td>iputils</td></tr>
-  <tr><td>sed</td>       <td>sed</td></tr>
-  <tr><td>ss</td>        <td>iproute2</td></tr>
-  <tr><td>tracepath</td> <td>iputils</td></tr>
-  <tr><td>traceroute</td><td>traceroute</td></tr>
-  <tr><td>wget</td>      <td>wget</td></tr>
-</table>
+ :wrench:   | Package    
+:-----------|:-----------
+ awk        | awk | gawk 
+ grep       | grep       
+ ip         | iproute2   
+ mtr        | mtr        
+ ping       | iputils    
+ sed        | sed        
+ ss         | iproute2   
+ tracepath  | iputils    
+ traceroute | traceroute 
+ wget       | wget       
 
 <table>
   <tr>
