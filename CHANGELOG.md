@@ -1,11 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.6] - 2017-05-13
+## [2.6] - 2017-06-15
 ### Added
 * Message to show that the **ipv6** module is not loaded.
   * This can be suppressed by piping `tail -n+2`
 * Feature to show all network interfaces.
+* **Fixed** wrong color output on version message.
 
 ### Changed
 * **Fixed** wrong outputs of IPv6 addresses.

@@ -1,16 +1,15 @@
-<!-- Color Scheme: Dark=13818d Light=44c2c7 -->
-
-<p align="center"><img width=10% src="/imgs/ship-text.png"></img></p>
-<p align="center"><img width=20% src="/imgs/ship-logo.png"></p>
-<p align="center">shIP (aka. show IP) is a simple, handy network addressing multitool with plenty of features.</p>
+<p align="center"><img width=10% src="/imgs/ship.png"></img></p>
+<p align="center">a simple, handy network addressing multitool with plenty of features</p>
 <p align="center">
-  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
     &nbsp;
-  <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
     &nbsp;
-  <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img src="https://img.shields.io/badge/bash-3.2+-lightgrey.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img src="https://img.shields.io/badge/bash-3.2+-lightgrey.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
     &nbsp;
-  <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
+    &nbsp;
+  <a href="https://aur.archlinux.org/packages/ship/"><img src="https://img.shields.io/aur/version/ship.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
 </p>
 
 ---
@@ -72,9 +71,9 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 <table>
   <tr>
     <td>
-      It is required to have at least one of the following tools: <b>mtr</b> | <b>tracepath</b> | <b>traceroute</b>.
-      The script uses standard commands included in <b>coreutils</b> and shell builtins so they are not checked.
-      It also uses <b>ping</b> to check, test and validate connection and network hosts, it requires <b>CAP_NET_RAW</b> capability to be executed.
+      It is required to have at least one of the following tools: <b>mtr</b> | <b>tracepath</b> | <b>traceroute</b>
+      The script uses standard commands included in <b>coreutils</b> and shell builtins so they are not checked
+      It also uses <b>ping</b> to check, test and validate connection and network hosts, it requires <b>CAP_NET_RAW</b> capability to be executed
     </td>
   </tr>
 </table>
@@ -88,7 +87,7 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 
  :penguin: | Version            
 :----------|:--------------------
- Arch      | 4.7.5-1 - 4.10.13-1 
+ Arch      | 4.7.5-1 - 4.11.6-3  
  Debian    | 7 - 8               
  Kali      | 2016.2              
  Ubuntu    | 14.04.3 - 16.04.1   
@@ -98,18 +97,22 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 ### Getting Started
 
 ```bash
-$ git clone --branch=master https://github.com/xtonousou/shIP.git
-$ cd /path/to/shIP
+$ git clone --branch=master https://github.com/xtonousou/ship.git
+$ cd /path/to/ship
 $ bash ship.sh
 ```
 
-Replace *branch* if desired.
+#### Arch Linux
+
+```bash
+$ yaourt -S ship
+```
 
 ---
 
 ### Contribution
 
-Pull requests, issues, suggestions, testing and feedback are all welcome.
+Pull requests, issues, suggestions, testing and feedback are all welcome
 
 * Fork the repo
 * Create a new branch
@@ -126,23 +129,25 @@ Pull requests, issues, suggestions, testing and feedback are all welcome.
 
 ### Changelog
 
-Read the [Changelog] file to review changes.
+Read the [Changelog] file to review changes
 
 ---
 
 ### Contact
 
-Send me an email at [xtonousou@gmail.com].
+Send me an email at [xtonousou@gmail.com]
 
 ----
 
 ### License
 
-[![GPLv3+IMG]](LICENSE.md)
-This script is under [GPLv3+] license.
+Copyright (c) **2017** by **Sotirios M. Roussis**. Some rights reserved
+
+
+`ship` is under the terms of the GPLv3+ License, following all clarifications stated in the [license] file
 
 <!-- Links -->
+
 [Guide]: GUIDE.md
 [Changelog]: CHANGELOG.md
-[GPLv3+]: LICENSE.md
-[GPLv3+IMG]: http://gplv3.fsf.org/gplv3-127x51.png
+[license]: LICENSE.md
