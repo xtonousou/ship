@@ -1,4 +1,4 @@
-<p align="center"><img width=20% src="/imgs/ship-logo.png"></img></p>
+<p align="center"><img width=25% src="/imgs/ship-logo.png"></img></p>
 <p align="center">a simple, handy network addressing multitool with plenty of features</p>
 <p align="center">
   <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
@@ -70,8 +70,8 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 <table>
   <tr>
     <td>
-      It is required to have at least one of the following tools: <b>mtr</b> | <b>tracepath</b> | <b>traceroute</b>
-      The script uses standard commands included in <b>coreutils</b> and shell builtins so they are not checked
+      It is required to have at least one of the following tools: <b>mtr</b> | <b>tracepath</b> | <b>traceroute</b></br>
+      The script uses standard commands included in <b>coreutils</b> and shell builtins so they are not checked</b></br>
       It also uses <b>ping</b> to check, test and validate connection and network hosts, it requires <b>CAP_NET_RAW</b> capability to be executed
     </td>
   </tr>
