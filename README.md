@@ -1,4 +1,4 @@
-<p align="center"><img width=25% src="/imgs/ship-logo.png"></img></p>
+<p align="center"><img width=25% src="/imgs/logo-with-text.png"></img></p>
 <p align="center">a simple, handy network addressing multitool with plenty of features</p>
 <p align="center">
   <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=4488BB&colorB=95A5A5"></a>
@@ -54,18 +54,18 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 
 ### Requirements
 
- :wrench:   | Package    
-:-----------|:-----------
- awk        | awk | gawk 
- grep       | grep       
- ip         | iproute2   
- mtr        | mtr        
- ping       | iputils    
- sed        | sed        
- ss         | iproute2   
- tracepath  | iputils    
- traceroute | traceroute 
- wget       | wget       
+ :wrench:   | Package     
+:-----------|:------------
+ awk        | awk | gawk  
+ grep       | grep        
+ ip         | iproute2    
+ mtr        | mtr         
+ ping       | iputils     
+ sed        | sed         
+ ss         | iproute2    
+ tracepath  | iputils     
+ traceroute | traceroute  
+ wget       | wget        
 
 <table>
   <tr>
@@ -84,7 +84,7 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 
 ### Compatibility
 
- :penguin: | Version            
+ :penguin: | Version             
 :----------|:--------------------
  Arch      | 4.7.5-1 - 4.11.6-3  
  Debian    | 7 - 8               
