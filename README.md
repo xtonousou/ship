@@ -38,6 +38,8 @@
   * **IPv4**
   * optionally suppress the bitwise output
   * display results as HTML
+  * split into networks of size n1, n2, n3 :construction:
+  * deaggregate address range :construction:
 * Show list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
 * Compatible with most of the common linux distributions
 * Drag and drop URLs or file paths on console window
@@ -55,20 +57,22 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 ### Requirements
 
  :wrench:   | Package     | Severity       
-:-----------|:------------|:---------------
- awk        | awk | gawk  | :bangbang:     
- grep       | grep        | :bangbang:     
- ip         | iproute2    | :bangbang:     
- mtr        | mtr         | :interrobang:  
- ping       | iputils     | :bangbang:     
- sed        | sed         | :bangbang:     
- ss         | iproute2    | :bangbang:     
- tracepath  | iputils     | :interrobang:  
- traceroute | traceroute  | :interrobang:  
- wget       | wget        | :bangbang:     
+:-----------|:------------|:---------------------
+ awk        | awk | gawk  | :large_blue_circle:  
+ grep       | grep        | :large_blue_circle:  
+ ip         | iproute2    | :large_blue_circle:  
+ mtr        | mtr         | :small_red_triangle: 
+ ping       | iputils     | :large_blue_circle:  
+ sed        | sed         | :large_blue_circle:  
+ ss         | iproute2    | :large_blue_circle:  
+ tracepath  | iputils     | :small_red_triangle: 
+ traceroute | traceroute  | :small_red_triangle: 
+ wget       | wget        | :large_blue_circle:  
 
-:bangbang: the script doesn't work without them
-:interrobang: there should be installed at least one of those packages
+ Symbol               | Meaning
+:---------------------|:---------------------------------------------------------
+ :large_blue_circle:  | the script doesn't work without them                     
+ :small_red_triangle: | there should be installed at least one of those packages 
 
 Of course, the script uses some of the tools included in **coreutils** and shell builtins
 
