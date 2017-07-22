@@ -10,7 +10,7 @@
 #set -o xtrace
 
 ### Script's Info
-readonly VERSION="2.7"
+readonly VERSION="2.6.1"
 readonly SCRIPT_NAME="ship"
 
 ### Author's Info
