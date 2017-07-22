@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.7] - 2017-07-22
+### Changed
+* Refactored `README.md`
+
 ## [2.6] - 2017-06-15
 ### Added
 * Message to show that the **ipv6** module is not loaded.

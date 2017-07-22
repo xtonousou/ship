@@ -54,31 +54,31 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 
 ### Requirements
 
- :wrench:   | Package     
-:-----------|:------------
- awk        | awk | gawk  
- grep       | grep        
- ip         | iproute2    
- mtr        | mtr         
- ping       | iputils     
- sed        | sed         
- ss         | iproute2    
- tracepath  | iputils     
- traceroute | traceroute  
- wget       | wget        
+ :wrench:   | Package     | Severity       
+:-----------|:------------|:---------------
+ awk        | awk | gawk  | :bangbang:     
+ grep       | grep        | :bangbang:     
+ ip         | iproute2    | :bangbang:     
+ mtr        | mtr         | :interrobang:  
+ ping       | iputils     | :bangbang:     
+ sed        | sed         | :bangbang:     
+ ss         | iproute2    | :bangbang:     
+ tracepath  | iputils     | :interrobang:  
+ traceroute | traceroute  | :interrobang:  
+ wget       | wget        | :bangbang:     
 
-<table>
-  <tr>
-    <td>
-      It is required to have at least one of the following tools: <b>mtr</b> | <b>tracepath</b> | <b>traceroute</b></br>
-      The script uses standard commands included in <b>coreutils</b> and shell builtins so they are not checked</b></br>
-      It also uses <b>ping</b> to check, test and validate connection and network hosts, it requires <b>CAP_NET_RAW</b> capability to be executed
-    </td>
-  </tr>
-</table>
+:bangbang: the script doesn't work without them
+:interrobang: there should be installed at least one of those packages
 
+Of course, the script uses some of the tools included in **coreutils** and shell builtins
+
+#### NOTE
+
+`ship` utilizes the functionality of `ping` to check and validate LAN and WAN connections
+
+* **CAP_NET_RAW** capability should be permitted
 * Kernel must support non-raw ICMP sockets
-* User must be allowed to create ICMPs echo sockets
+* User must be allowed to create ICMP echo sockets
 
 ---
 
@@ -86,7 +86,7 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 
  :penguin: | Version             
 :----------|:--------------------
- Arch      | 4.7.5-1 - 4.11.6-3  
+ Arch      | 4.7.5-1 - 4.11.9-1  
  Debian    | 7 - 8               
  Kali      | 2016.2              
  Ubuntu    | 14.04.3 - 16.04.1   
@@ -105,6 +105,7 @@ $ bash ship.sh
 
 ```bash
 $ yaourt -S ship
+$ ship
 ```
 
 ---
@@ -122,7 +123,7 @@ Pull requests, issues, suggestions, testing and feedback are all welcome
   * `$ git commit -am 'Added some feature'`
 * Push to the branch
   * `$ git push origin my-new-feature`
-* Create a Pull Request
+* Create a Pull Request on `contributors`
 
 ---
 
