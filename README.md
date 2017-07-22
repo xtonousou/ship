@@ -56,23 +56,23 @@ Read the [Guide]. Usage and some interactive examples are there for you :ship:
 
 ### Requirements
 
- :wrench:   | Package     | Severity       
-:-----------|:------------|:---------------------
- awk        | awk | gawk  | :large_blue_circle:  
- grep       | grep        | :large_blue_circle:  
- ip         | iproute2    | :large_blue_circle:  
- mtr        | mtr         | :small_red_triangle: 
- ping       | iputils     | :large_blue_circle:  
- sed        | sed         | :large_blue_circle:  
- ss         | iproute2    | :large_blue_circle:  
- tracepath  | iputils     | :small_red_triangle: 
- traceroute | traceroute  | :small_red_triangle: 
- wget       | wget        | :large_blue_circle:  
+ :wrench:   | Package      | Severity       
+:-----------|:-------------|:---------------------
+ awk        | awk \| gawk  | :small_red_triangle: 
+ grep       | grep         | :small_red_triangle: 
+ ip         | iproute2     | :small_red_triangle: 
+ mtr        | mtr          | :large_blue_circle:  
+ ping       | iputils      | :small_red_triangle: 
+ sed        | sed          | :small_red_triangle: 
+ ss         | iproute2     | :small_red_triangle: 
+ tracepath  | iputils      | :large_blue_circle:  
+ traceroute | traceroute   | :large_blue_circle:  
+ wget       | wget         | :small_red_triangle: 
 
  Symbol               | Meaning
 :---------------------|:---------------------------------------------------------
- :large_blue_circle:  | the script doesn't work without them                     
- :small_red_triangle: | there should be installed at least one of those packages 
+ :small_red_triangle: | the script doesn't work without them                     
+ :large_blue_circle:  | there should be installed at least one of those packages 
 
 Of course, the script uses some of the tools included in **coreutils** and shell builtins
 
