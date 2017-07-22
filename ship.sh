@@ -1,21 +1,20 @@
 #!/usr/bin/env bash
 ## Title........: ship.sh
 ## Description..: A simple, handy network addressing multitool with plenty of features.
-## Author.......: Sotirios Roussis aka. xtonousou - xtonousou@gmail.com
-## Date.........: 20170513
-## Version......: 2.6
-## Usage........: bash ship.sh
+## Author.......: Sotirios M. Roussis a.k.a. xtonousou - xtonousou@gmail.com
+## Date.........: 20170722
+## Usage........: bash ship.sh [options]? [arguments]?
 ## Bash Version.: 3.2 or later
 
 ### Debugging
 #set -o xtrace
 
 ### Script's Info
-readonly VERSION="2.6"
+readonly VERSION="2.6.1"
 readonly SCRIPT_NAME="ship"
 
 ### Author's Info
-readonly AUTHOR="Sotirios Roussis"
+readonly AUTHOR="Sotirios M. Roussis"
 readonly AUTHOR_NICKNAME="xtonousou"
 readonly GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 readonly GITHUB="https://github.com/${AUTHOR_NICKNAME}"

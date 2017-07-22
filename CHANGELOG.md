@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.6.1] - 2017-07-22
+### Added
+* [Official website](https://xtonousou.github.io/ship).
+
+### Changed
+* Refactored `README.md`.
+* Minor changes on code.
+
 ## [2.6] - 2017-06-15
 ### Added
 * Message to show that the **ipv6** module is not loaded.
