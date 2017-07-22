@@ -1,1 +1,4 @@
 theme: jekyll-theme-hacker
+title: 'ship'
+description: "Official support website for the 'ship' project"
+show_downloads: 'true'
