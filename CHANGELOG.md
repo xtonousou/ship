@@ -1,9 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.7] - 2017-07-22
+## [2.6.1] - 2017-07-22
+### Added
+* [Official website](https://xtonousou.github.io/ship).
+
 ### Changed
-* Refactored `README.md`
+* Refactored `README.md`.
+* Minor changes on code.
 
 ## [2.6] - 2017-06-15
 ### Added
