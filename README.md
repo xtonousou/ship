@@ -90,10 +90,11 @@ Of course, the script uses some of the tools included in **coreutils** and shell
 
  :penguin: | Version             
 :----------|:--------------------
- Arch      | 4.7.5-1 - 4.11.9-1  
- Debian    | 7 - 8               
- Kali      | 2016.2              
- Ubuntu    | 14.04.3 - 16.04.1   
+ Arch      | 4.7.5-1 - 4.11.9-1   
+ CentOS    | 7                    
+ Debian    | 7 - 8                
+ Kali      | 2016.2               
+ Ubuntu    | 14.04.3 - 16.04.1    
 
 ---
 
