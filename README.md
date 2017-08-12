@@ -1,7 +1,7 @@
 <p align="center"><img width=50% src="/imgs/logo-with-text.png"></img></p>
 <p align="center">a simple, handy network addressing multitool with plenty of features</p>
 <p align="center">
-  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6.1-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6.2-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
   <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
