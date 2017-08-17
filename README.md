@@ -50,31 +50,35 @@
 
 ### Usage
 
-Read the [Guide]. Usage and some interactive examples are there for you :ship:
+Read the [Guide] :mortar_board:
 
 ---
 
 ### Requirements
 
- :wrench:   | Package      | Severity       
-:-----------|:-------------|:---------------------
- awk        | awk \| gawk  | :small_red_triangle: 
- grep       | grep         | :small_red_triangle: 
- ip         | iproute2     | :small_red_triangle: 
- mtr        | mtr          | :large_blue_circle:  
- ping       | iputils      | :small_red_triangle: 
- sed        | sed          | :small_red_triangle: 
- ss         | iproute2     | :small_red_triangle: 
- tracepath  | iputils      | :large_blue_circle:  
- traceroute | traceroute   | :large_blue_circle:  
- wget       | wget         | :small_red_triangle: 
+`ship` uses some of the tools included in **coreutils** and shell builtins
 
- Symbol               | Meaning
-:---------------------|:---------------------------------------------------------
- :small_red_triangle: | the script doesn't work without them                     
- :large_blue_circle:  | there should be installed at least one of those packages 
+#### Mandatory
 
-Of course, the script uses some of the tools included in **coreutils** and shell builtins
+ :wrench:   | Package      
+:-----------|:-------------
+ awk        | awk \| gawk  
+ grep       | grep         
+ ip         | iproute2     
+ ping       | iputils      
+ sed        | sed          
+ ss         | iproute2     
+ wget       | wget         
+
+#### Mandatory Choice
+
+One or more of the following tools must be installed
+
+ :wrench:   | Package      
+:-----------|:-------------
+ mtr        | mtr          
+ tracepath  | iputils      
+ traceroute | traceroute   
 
 #### NOTE
 
@@ -90,11 +94,11 @@ Of course, the script uses some of the tools included in **coreutils** and shell
 
  :penguin: | Version             
 :----------|:--------------------
- Arch      | 4.7.5-1 - 4.11.9-1   
- CentOS    | 7                    
- Debian    | 7 - 8                
- Kali      | 2016.2               
- Ubuntu    | 14.04.3 - 16.04.1    
+ Arch      | 4.7.5-1 - 4.12.6-1  
+ CentOS    | 7                   
+ Debian    | 7 - 8               
+ Kali      | 2016.2              
+ Ubuntu    | 14.04.3 - 16.04.1   
 
 ---
 
@@ -117,7 +121,8 @@ $ ship
 
 ### Contribution
 
-Pull requests, issues, suggestions, testing and feedback are all welcome
+Pull requests, issues, suggestions, testing and feedback are all welcome :octocat:
+Please read [this] article first, about code of conduct
 
 * Fork the repo
 * Create a new branch
@@ -128,19 +133,19 @@ Pull requests, issues, suggestions, testing and feedback are all welcome
   * `$ git commit -am 'Added some feature'`
 * Push to the branch
   * `$ git push origin my-new-feature`
-* Create a Pull Request on `contributors`
+* Create a Pull Request on `dev`
 
 ---
 
 ### Changelog
 
-Read the [Changelog] file to review changes
+Read the [Changelog] file to review changes :scroll:
 
 ---
 
 ### Contact
 
-Send me an email at [xtonousou@gmail.com]
+Send me an email at [xtonousou@gmail.com] :e-mail:
 
 ----
 
@@ -153,6 +158,7 @@ Copyright (c) **2017** by **Sotirios M. Roussis**. Some rights reserved
 
 <!-- Links -->
 
+[this]: CODE_OF_CONDUCT.md
 [Guide]: GUIDE.md
 [Changelog]: CHANGELOG.md
 [license]: LICENSE.md
