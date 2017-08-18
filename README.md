@@ -25,8 +25,8 @@
   * **IPv6** (*if possible*)
   * **MAC**
 * Show the **public/external IP/s**
-  * of user
-  * of website / domain
+  * of current user
+  * of website/s or domain/s
 * Show **active hosts** on current network with or without MAC address
 * Show all valid addresses (IPv4, IPv6, MAC) extracted
   * from **file** or multiple **files** at once
@@ -122,6 +122,7 @@ $ ship
 ### Contribution
 
 Pull requests, issues, suggestions, testing and feedback are all welcome :octocat:
+
 Please read [this] article first, about code of conduct
 
 * Fork the repo

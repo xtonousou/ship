@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.6.2] - 2017-08-17
+### Added
+* `ship -e` now can handle more than one domain.
+  * e.g. `ship -e github.com google.com facebook.com`
+
+### Changed
+* Refactored `README.md`.
+* Refactored `GUIDE.md`.
+* Minor changes on code.
+
 ## [2.6.1] - 2017-07-22
 ### Added
 * [Official website](https://xtonousou.github.io/ship).

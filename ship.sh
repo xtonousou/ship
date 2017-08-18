@@ -30,7 +30,6 @@ declare -ra COLORS=(
 )
 
 ### Locations
-declare -r TEMP="/tmp"
 declare -r GOOGLE_DNS="8.8.8.8"
 declare -ra PUBLIC_IP=(
   "icanhazip.com"
@@ -196,11 +195,28 @@ function print_port_protocol_list() {
     "NetBIOS" "IMAP" "SNMP" "BGP" "LDAP" "HTTPS" "LDAPS" "FTP over TLS/SSL"
   )
 
-  for ITEM in "${!PORTS_ARRAY[@]}"; do
+  for ITEM in "${!PORTS_ARRAY[@]}"
+  do
     printf "%-17s%-8s%s\n" "${PORTS_PROTOCOL_ARRAY[ITEM]}" "${PORTS_TCP_UDP_ARRAY[ITEM]}" "${PORTS_ARRAY[ITEM]}"
   done
 
   return 0
+}
+
+# Used with zero parameters: exit 1.
+# Used with one parameter  : echoes parameter, usually error dialogs.
+# Used with two parameters : invalid option, then echoes first parameter, usually error dialogs.
+function error_exit() {
+
+  [ -z "${1}" ] && clear_line && exit 1 \
+    || [ -z "${2}" ] \
+      && clear_line \
+      && echo -e "${1}" \
+      && exit 1 \
+    || clear_line\
+      && echo -e "${SCRIPT_NAME}: invalid option '${2}'" \
+      && echo -e "${1}" && \
+      exit 1
 }
 
 # Checks network connection (local or internet).
@@ -323,7 +339,7 @@ function check_bash_version() {
 # Deletes every file that is created by this script. Usually in /tmp.
 function mr_proper() {
 
-  rm --recursive --force "${TEMP:?}/${SCRIPT_NAME}"* &>/dev/null
+  rm --recursive --force "/tmp/${SCRIPT_NAME^^}"*
 
   return 0
 }
@@ -339,22 +355,6 @@ function handle_jobs() {
   done
 
   return 0
-}
-
-# Used with zero parameters: exit 1.
-# Used with one parameter  : echoes parameter, usually error dialogs.
-# Used with two parameters : invalid option, then echoes first parameter, usually error dialogs.
-function error_exit() {
-
-  [ -z "${1}" ] && clear_line && exit 1 \
-    || [ -z "${2}" ] \
-      && clear_line \
-      && echo -e "${1}" \
-      && exit 1 \
-    || clear_line\
-      && echo -e "${SCRIPT_NAME}: invalid option '${2}'" \
-      && echo -e "${1}" && \
-      exit 1
 }
 
 # Traps INT and SIGTSTP.
@@ -470,49 +470,49 @@ function show_driver() {
   return 0
 }
 
-# Prints the external IP address/es. If $1 is empty prints user's public IP, if not, $1 should be like example.com.
+# Prints the external IP address/es. If $1 is empty prints user's public IP, if not, $1 should be like example.com. Otherwise, if more arguments are passed, it prints their external IPs with their domain name at right.
 function show_ip_from() {
 
   declare HTTP_CODE
   declare TEMP_FILE
   declare RANDOM_SOURCE
+  declare INPUT
   declare ITEM
+  declare HOST
 
   RANDOM_SOURCE="${PUBLIC_IP["$(( RANDOM % ${#PUBLIC_IP[@]} ))"]}"
+  TEMP_FILE="/tmp/${SCRIPT_NAME^^}.ips"
+  
+  touch "${TEMP_FILE}"
 
   if [ -z "${1}" ]
   then
     print_check "${RANDOM_SOURCE}"
     HTTP_CODE=$(wget --spider --tries=1 --timeout="${TIMEOUT}" --server-response "${RANDOM_SOURCE}" 2>&1 | awk '/HTTP\//{print $2}' | tail --lines=1)
 
-    [ ! "${HTTP_CODE}" = "200" ] && error_exit "${DIALOG_SERVER_IS_DOWN}"
+    if [ "${HTTP_CODE}" -ne 200 ]
+    then
+      error_exit "${DIALOG_SERVER_IS_DOWN}"
+    fi
 
     clear_line
-    TEMP_FILE=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
-
     echo -ne "Grabbing ${COLORS[2]}IP${COLORS[0]} ..."
     wget "${RANDOM_SOURCE}" --quiet --output-document="${TEMP_FILE}"
 
-    # Ensure that TEMP_FILE is written on /tmp
-    while [ ! -f "${TEMP_FILE}" ]
-    do
-      wget "${RANDOM_SOURCE}" --quiet --output-document="${TEMP_FILE}"
-    done
-
     clear_line
     awk '{print $0}' "${TEMP_FILE}"
-  else
+  elif [ "${#}" -eq 1 ]
+  then
     print_check "${1}"
     check_destination "${1}"
 
-    clear_line
-    TEMP_FILE=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
-    
+    clear_line    
     INPUT=$(echo "${1}" | sed --expression='s/^http\(\|s\):\/\///g' --expression='s/^`//' --expression='s/`//' --expression='s/`$//' | cut --fields=1 --delimiter="/")
 
     function ping_source() {
       
-      for ITEM in {1..25}; do
+      for ITEM in {1..10}
+      do
         ping -c 1 -w "${LONG_TIMEOUT}" "${INPUT}" 2> /dev/null | awk -F '[()]' '/PING/{print $2}' >> "${TEMP_FILE}" &
       done
       handle_jobs
@@ -520,14 +520,35 @@ function show_ip_from() {
 
     echo -ne "Pinging ${COLORS[2]}${1}${COLORS[0]} ..."
     ping_source
-    
-    # Ensure that TEMP_FILE is written on /tmp
-    while [ ! -f "${TEMP_FILE}" ]
-    do
-      ping_source
-    done
 
     clear_line
+    sort --version-sort --unique "${TEMP_FILE}"
+  elif [ "${#}" -gt 1 ]
+  then
+    for HOST in "${@}"
+    do
+      print_check "${HOST}"
+      check_destination "${HOST}"
+
+      clear_line    
+      INPUT=$(echo "${HOST}" | sed --expression='s/^http\(\|s\):\/\///g' --expression='s/^`//' --expression='s/`//' --expression='s/`$//' | cut --fields=1 --delimiter="/")
+
+      function ping_source() {
+
+        declare IP
+
+        for ITEM in {1..10}
+        do
+          (IP=$(ping -c 1 -w "${LONG_TIMEOUT}" "${INPUT}" 2> /dev/null | awk -F '[()]' '/PING/{print $2}'); echo "${IP} ${INPUT}" >> "${TEMP_FILE}") &
+        done
+        handle_jobs
+      }
+
+      echo -ne "Pinging ${COLORS[2]}${INPUT}${COLORS[0]} ..."
+      ping_source
+
+      clear_line
+    done
     sort --version-sort --unique "${TEMP_FILE}"
   fi
 
@@ -552,9 +573,13 @@ function show_ips_from_file() {
   declare IS_TEMP_FILE_IPV6_EMPTY
   declare IS_TEMP_FILE_MAC_EMPTY
 
-  TEMP_FILE_IPV4=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
-  TEMP_FILE_IPV6=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
-  TEMP_FILE_MAC=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
+  TEMP_FILE_IPV4="/tmp/${SCRIPT_NAME^^}.ipv4"
+  TEMP_FILE_IPV6="/tmp/${SCRIPT_NAME^^}.ipv6"
+  TEMP_FILE_MAC="/tmp/${SCRIPT_NAME^^}.mac"
+
+  touch "${TEMP_FILE_IPV4}"
+  touch "${TEMP_FILE_IPV6}"
+  touch "${TEMP_FILE_MAC}"
 
   init_regexes
 
@@ -775,8 +800,10 @@ function show_mac() {
 function show_neighbor_cache() {
   
   declare TEMP_FILE
-  
-  TEMP_FILE=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
+
+  TEMP_FILE="/tmp/${SCRIPT_NAME^^}.file"
+
+  touch "${TEMP_FILE}"
 
   ip neigh | awk 'tolower($0) ~ /permanent|noarp|stale|reachable|incomplete|delay|probe/{printf ("%-16s%-20s%s\n", $1, $5, $6)}' >> "${TEMP_FILE}"
   
@@ -821,7 +848,9 @@ function show_next_hops() {
   declare MTR_CMD
   declare TEMP_FILE
 
-  TEMP_FILE=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
+  TEMP_FILE="/tmp/${SCRIPT_NAME^^}.file"
+
+  touch "${TEMP_FILE}"
 
   hash tracepath &>/dev/null && TRACEPATH_CMD=1 || TRACEPATH_CMD=0
   hash traceroute &>/dev/null && TRACEROUTE_CMD=1 || TRACEROUTE_CMD=0
@@ -1603,30 +1632,33 @@ function show_ips_from_online_documents() {
   declare IS_TEMP_FILE_IPV6_EMPTY
   declare IS_TEMP_FILE_MAC_EMPTY
 
-  TEMP_FILE_IPV4=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
-  TEMP_FILE_IPV6=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
-  TEMP_FILE_MAC=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
-  TEMP_FILE_HTML=$(mktemp "${TEMP}"/"${SCRIPT_NAME}".XXXXXXXXXX)
+  TEMP_FILE_IPV4="/tmp/${SCRIPT_NAME^^}.ipv4"
+  TEMP_FILE_IPV6="/tmp/${SCRIPT_NAME^^}.ipv6"
+  TEMP_FILE_MAC="/tmp/${SCRIPT_NAME^^}.mac"
+  TEMP_FILE_HTML="/tmp/${SCRIPT_NAME^^}.html"
+
+  touch "${TEMP_FILE_IPV4}"
+  touch "${TEMP_FILE_IPV6}"
+  touch "${TEMP_FILE_MAC}"
+  touch "${TEMP_FILE_HTML}"
 
   init_regexes
 
-  for DOCUMENT in "${@}"; do
+  for DOCUMENT in "${@}"
+  do
     print_check "${DOCUMENT}"
     HTTP_CODE=$(wget --spider --tries 1 --timeout="${TIMEOUT}" --server-response "${DOCUMENT}" 2>&1 | awk '/HTTP\//{print $2}' | tail --lines=1)
     
     clear_line
-    [ ! "${HTTP_CODE}" = "200" ] \
-      && error_exit "${COLORS[3]}${DOCUMENT}${COLORS[0]} is unreachable. Input was invalid or server is down or has connection issues. ${DIALOG_ABORTING}"
+    if [ "${HTTP_CODE}" -ne 200 ]
+    then
+      error_exit "${COLORS[3]}${DOCUMENT}${COLORS[0]} is unreachable. Input was invalid or server is down or has connection issues. ${DIALOG_ABORTING}"
+    fi
 
     echo -ne "Downloading ${COLORS[2]}$1${COLORS[0]} ..."
-    wget "${DOCUMENT}" --quiet --output-document="${TEMP_FILE_HTML}"
-
-    # Ensure that TEMP_FILE_HTML is written on /tmp
-    while [ ! -f "${TEMP_FILE_HTML}" ]; do
-      wget "${DOCUMENT}" --quiet --output-document="${TEMP_FILE_HTML}"
-    done
-
+    wget "${DOCUMENT}" -qO- >> "${TEMP_FILE_HTML}"
     clear_line
+
     grep --extended-regexp --only-matching "${REGEX_IPV4}" "${TEMP_FILE_HTML}" >> "${TEMP_FILE_IPV4}"
     grep --extended-regexp --only-matching "${REGEX_IPV6}" "${TEMP_FILE_HTML}" >> "${TEMP_FILE_IPV6}"
     grep --extended-regexp --only-matching "${REGEX_MAC}" "${TEMP_FILE_HTML}" >> "${TEMP_FILE_MAC}"
@@ -1699,7 +1731,8 @@ function show_ipv4_cidr() {
   declare -ra INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare -a IPV4_CIDR_ARRAY
   
-  for ITEM in "${!INTERFACES_ARRAY[@]}"; do
+  for ITEM in "${!INTERFACES_ARRAY[@]}"
+  do
     IPV4_CIDR_ARRAY[ITEM]=$(ip -4 address show dev "${INTERFACES_ARRAY[ITEM]}" | awk -v family=inet '$0 ~ family {print $2}')
     echo "${INTERFACES_ARRAY[ITEM]}" "${IPV4_CIDR_ARRAY[ITEM]}"
   done
@@ -1716,7 +1749,8 @@ function show_ipv6_cidr() {
   declare -ra INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
   declare -a IPV6_CIDR_ARRAY
 
-  for ITEM in "${!INTERFACES_ARRAY[@]}"; do
+  for ITEM in "${!INTERFACES_ARRAY[@]}"
+  do
     IPV6_CIDR_ARRAY[ITEM]=$(ip -6 address show dev "${INTERFACES_ARRAY[ITEM]}" | awk -v family="inet6" 'tolower($0) ~ family {print $2}')
     echo "${INTERFACES_ARRAY[ITEM]}" "${IPV6_CIDR_ARRAY[ITEM]}"
   done
@@ -1738,7 +1772,8 @@ function show_all_cidr() {
   declare -a IPV4_CIDR_ARRAY
   declare -a IPV6_CIDR_ARRAY
   
-  for ITEM in "${!INTERFACES_ARRAY[@]}"; do
+  for ITEM in "${!INTERFACES_ARRAY[@]}"
+  do
     IPV4_CIDR_ARRAY[ITEM]=$(ip -4 address show dev "${INTERFACES_ARRAY[ITEM]}" | awk -v family=inet '$0 ~ family {print $2}')
     IPV6_CIDR_ARRAY[ITEM]=$(ip -6 address show dev "${INTERFACES_ARRAY[ITEM]}" | awk -v family="inet6" 'tolower($0) ~ family {print $2}')
     [ -f "/sys/class/net/${INTERFACES_ARRAY[ITEM]}/phy80211/device/uevent" ] \
@@ -1847,7 +1882,7 @@ function sail() {
         check_connectivity "--internet"
         trap trap_handler INT &>/dev/null
         trap trap_handler SIGTSTP &>/dev/null
-        show_ip_from "${2}"
+        show_ip_from "${@:2}"
         shift 2
         break
         ;;
