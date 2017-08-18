@@ -240,83 +240,83 @@ You can use them to configure your :fire: firewall, or even identify ranges
 <!-- Anchors -->
 
 [ipv4]: #--ipv4
-[ipv4-img]: /imgs/asciicast/ipv4.gif
+[ipv4-img]: /imgs/asciicasts/ipv4.gif
 
 [ipv6]: #--ipv6
-[ipv6-img]: /imgs/asciicast/ipv6.gif
+[ipv6-img]: /imgs/asciicasts/ipv6.gif
 
 [all]: #--all
-[all-img]: /imgs/asciicast/all.gif
+[all-img]: /imgs/asciicasts/all.gif
 
 [all-interfaces]: #--all-interfaces
-[all-interfaces-img]: /imgs/asciicast/all-interfaces.gif
+[all-interfaces-img]: /imgs/asciicasts/all-interfaces.gif
 
 [calculate-with-arg]: #--calculate-
-[calculate-with-arg-img]: /imgs/asciicast/calculate-with-arg.gif
-[calculate-with-arg-html-img]: /imgs/asciicast/calculate-with-arg-html.gif
+[calculate-with-arg-img]: /imgs/asciicasts/calculate-with-arg.gif
+[calculate-with-arg-html-img]: /imgs/asciicasts/calculate-with-arg-html.gif
 
 [driver]: #--driver
-[driver-img]: /imgs/asciicast/driver.gif
+[driver-img]: /imgs/asciicasts/driver.gif
 
 [external]: #--external
-[external-img]: /imgs/asciicast/external.gif
+[external-img]: /imgs/asciicasts/external.gif
 
 [external-with-arg]: #--external-
-[external-with-arg-img]: /imgs/asciicast/external-with-arg.gif
+[external-with-arg-img]: /imgs/asciicasts/external-with-arg.gif
 
 [find-with-arg]: #--find-
-[find-with-arg-img]: /imgs/asciicast/find-with-arg.gif
+[find-with-arg-img]: /imgs/asciicasts/find-with-arg.gif
 
 [gateway]: #--gateway
-[gateway-img]: /imgs/asciicast/gateway.gif
+[gateway-img]: /imgs/asciicasts/gateway.gif
 
 [help]: #--help
-[help-img]: /imgs/asciicast/help.gif
+[help-img]: /imgs/asciicasts/help.gif
 
 [hosts]: #--hosts
-[hosts-img]: /imgs/asciicast/hosts.gif
+[hosts-img]: /imgs/asciicasts/hosts.gif
 
 [hosts-mac]: #--hosts-mac
-[hosts-mac-img]: /imgs/asciicast/hosts-mac.gif
+[hosts-mac-img]: /imgs/asciicasts/hosts-mac.gif
 
 [interfaces]: #--interfaces
-[interfaces-img]: /imgs/asciicast/interfaces.gif
+[interfaces-img]: /imgs/asciicasts/interfaces.gif
 
 [list]: #--list
-[list-img]: /imgs/asciicast/list.gif
+[list-img]: /imgs/asciicasts/list.gif
 
 [mac]: #--mac
-[mac-img]: /imgs/asciicast/mac.gif
+[mac-img]: /imgs/asciicasts/mac.gif
 
 [neighbor]: #--neighbor
-[neighbor-img]: /imgs/asciicast/neighbor.gif
+[neighbor-img]: /imgs/asciicasts/neighbor.gif
 
 [port]: #--port
-[port-img]: /imgs/asciicast/port.gif
+[port-img]: /imgs/asciicasts/port.gif
 
 [port-with-arg]: #--port-
-[port-with-arg-img]: /imgs/asciicast/port-with-arg.gif
+[port-with-arg-img]: /imgs/asciicasts/port-with-arg.gif
 
 [route-ipv4-with-arg]: #--route-ipv4-
-[route-ipv4-with-arg-img]: /imgs/asciicast/route-ipv4-with-arg.gif
+[route-ipv4-with-arg-img]: /imgs/asciicasts/route-ipv4-with-arg.gif
 
 [route-ipv6-with-arg]: #--route-ipv6-
-[route-ipv6-with-arg-img]: /imgs/asciicast/route-ipv6-with-arg.gif
+[route-ipv6-with-arg-img]: /imgs/asciicasts/route-ipv6-with-arg.gif
 
 [url-with-arg]: #--url-
-[url-with-arg-img]: /imgs/asciicast/url-with-arg.gif
+[url-with-arg-img]: /imgs/asciicasts/url-with-arg.gif
 
 [version]: #--version
-[version-img]: /imgs/asciicast/version.gif
+[version-img]: /imgs/asciicasts/version.gif
 
 [cidr-ipv4]: #--cidr-ipv4
-[cidr-ipv4-img]: /imgs/asciicast/cidr-ipv4.gif
+[cidr-ipv4-img]: /imgs/asciicasts/cidr-ipv4.gif
 
 [cidr-ipv6]: #--cidr-ipv6
-[cidr-ipv6-img]: /imgs/asciicast/cidr-ipv6.gif
+[cidr-ipv6-img]: /imgs/asciicasts/cidr-ipv6.gif
 
 [cidr-all]: #--cidr-all
-[cidr-all-img]: /imgs/asciicast/cidr-all.gif
+[cidr-all-img]: /imgs/asciicasts/cidr-all.gif
 
 [cidr-list]: #--cidr-list
-[cidr-list-img]: /imgs/asciicast/cidr-list.gif
+[cidr-list-img]: /imgs/asciicasts/cidr-list.gif

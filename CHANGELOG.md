@@ -1,15 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.6.2] - 2017-08-17
+## [2.6.2] - 2017-08-18
 ### Added
 * `ship -e` now can handle more than one domain.
   * e.g. `ship -e github.com google.com facebook.com`
 
 ### Changed
+* **Fixed** an issue displaying weird output when parsing HTML.
+  * e.g. `ship -u github.com google.com facebook.com`
+* Minor changes on code.
 * Refactored `README.md`.
 * Refactored `GUIDE.md`.
-* Minor changes on code.
 
 ## [2.6.1] - 2017-07-22
 ### Added
