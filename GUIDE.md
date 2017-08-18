@@ -109,7 +109,7 @@ Extracts all addresses (IPv4, IPv6 and MAC) from the files specified and pretty 
 
 Returns the gateway IP address of each active network interface
 
-![find with argument example][find-with-arg-img]
+![gateway example][gateway-img]
 
 #### Additional Info
 
