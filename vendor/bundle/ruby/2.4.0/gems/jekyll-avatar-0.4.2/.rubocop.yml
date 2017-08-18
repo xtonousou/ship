@@ -1,9 +1,0 @@
-inherit_gem:
-  jekyll: .rubocop.yml
-
-Style/FileName:
-  Enabled: false
-
-Metrics/LineLength:
-  Exclude:
-    - spec/*/**
