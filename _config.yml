@@ -1,6 +1,7 @@
-theme: jekyll-theme-midnight
+theme: ship-theme
 url: "http://xtonousou.github.io"
 baseurl: "/ship"
 title: ship.sh
 description: Official support webpage for the 'ship' project.
 timezone: "Europe/Athens"
+show_downloads: "true"
