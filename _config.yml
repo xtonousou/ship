@@ -1,7 +1,15 @@
-theme: ship-theme
-url: "http://xtonousou.github.io"
-baseurl: "/ship"
-title: ship.sh
-description: Official support webpage for the 'ship' project.
-timezone: "Europe/Athens"
-show_downloads: "true"
+title: "ship.sh"
+description: "Official support webpage for the project 'ship'"
+show_downloads: true
+google_analytics:
+theme: "ship-theme"
+lang: "en-US"
+
+github:
+  repository_name: "ship"
+  project_tagline: "A simple, handy network addressing multitool with plenty of features"
+  owner_name: "xtonousou"
+  owner_url: "https://github.com/xtonousou"
+  repository_url: "https://github.com/xtonousou/ship"
+  zip_url: "https://github.com/xtonousou/ship/archive/v2.6.zip"
+  tar_url: "https://github.com/xtonousou/ship/archive/v2.6.tar.gz"
