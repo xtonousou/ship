@@ -2,6 +2,9 @@
 @import "fonts";
 @import "rouge-base16-dark.scss";
 
+$duration: .20;
+$easing: ease-in-out;
+
 body {
   padding:0px 0 20px 0px;
   margin: 0px;
@@ -50,7 +53,7 @@ h3 {
 
 a {
   color:#FFFFFF;
-  font-weight:400;
+  font-weight:bold;
   text-decoration:underline;
 
   &:hover {
@@ -91,6 +94,7 @@ blockquote {
 code {
   font-family: Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, monospace;
   color:#EFEFEF;
+  background: #13818D;
   font-size:13px;
   margin: 0 4px;
   padding: 4px 6px;
@@ -107,8 +111,9 @@ pre {
   overflow-y: hidden;
 
   code {
-    color: #efefef;
+    color: #EFEFEF;
     text-shadow: 0px 1px 0px #000;
+    background: #191919;
     margin: 0;
     padding: 0;
   }
@@ -123,7 +128,7 @@ th {
   text-align:left;
   padding:5px 10px;
   border-bottom:1px solid #434343;
-  color: #b6b6b6;
+  color: #B6B6B6;
   font-family: 'OpenSansSemibold', "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-weight: normal;
 }
@@ -169,38 +174,27 @@ dt {
 
     li {
       font-family: 'OpenSansLight', "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-weight: normal;
+      font-weight: bolder;
       list-style: none;
-      display: inline;
       color: white;
       line-height: 50px;
       text-shadow: 0px 1px 0px rgba(0,0,0,.2);
       font-size: 14px;
 
       a {
-        color: #C7E2E3;
-        font-weight: bold;
+        color: #FFFFFF;
+        font-weight: bolder;
         text-decoration: none;
-        border: 1px solid #09A4AA;
-        background: linear_gradient(#20B6BD, #106B9E);
-        border-radius: 2px;
-        box-shadow: inset 0px 1px 0px rgba(255,255,255,.3), 0px 3px 7px rgba(0,0,0,.7);
 
-        background-color: #44C2C7;
+        background-color: #30A7AD;
         padding: 10px 12px;
         margin-top: 6px;
         line-height:14px;
         font-size:14px;
-        display:inline-block;
         text-align:center;
 
         &:hover {
-          color: #C7E2E3;
-          font-weight: bold;
-          text-decoration: none;
           background-color: #13818D;
-          border: 1px solid #006F7B;
-          box-shadow: inset 0px 1px 1px rgba(0,0,0,.2), 0px 1px 0px rgba(0,0,0,.0);
         }
       }
 
@@ -270,7 +264,6 @@ section {
         float: right;
       }
     }
-
   }
 }
 

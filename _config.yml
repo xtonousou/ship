@@ -5,9 +5,26 @@ google_analytics:
 theme: "ship-theme"
 lang: "en-US"
 
+project:
+  version: "2.6"
+  license: "GPL v3+"
+  bash: "3.2+"
+  main_url: "https://raw.githubusercontent.com/xtonousou/ship/master/ship.sh"
+  license_url: "license.md"
+  bash_url: "http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"
+  paypal_url: "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"
+  aur_url: "https://aur.archlinux.org/packages/ship"
+
+shield:
+  version_shield: "https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
+  license_shield: "https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
+  bash_shield: "https://img.shields.io/badge/bash-3.2+-lightgrey.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
+  paypal_shield: "https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
+  aur_shield: "https://img.shields.io/aur/version/ship.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
+
 github:
   repository_name: "ship"
-  project_tagline: "A simple, handy network addressing multitool with plenty of features"
+  tagline: "A simple, handy network addressing multitool with plenty of features"
   owner_name: "xtonousou"
   owner_url: "https://github.com/xtonousou"
   repository_url: "https://github.com/xtonousou/ship"

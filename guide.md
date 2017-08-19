@@ -243,84 +243,84 @@ You can use them to configure your :fire: firewall, or even identify ranges
 
 <!-- Anchors -->
 
-[ipv4]: #--ipv4
-[ipv4-img]: /imgs/asciicasts/ipv4.gif
+[ipv4]: #-ipv4
+[ipv4-img]: assets/images/asciicasts/ipv4.gif
 
-[ipv6]: #--ipv6
-[ipv6-img]: /imgs/asciicasts/ipv6.gif
+[ipv6]: #-ipv6
+[ipv6-img]: assets/images/asciicasts/ipv6.gif
 
-[all]: #--all
-[all-img]: /imgs/asciicasts/all.gif
+[all]: #-all
+[all-img]: assets/images/asciicasts/all.gif
 
-[all-interfaces]: #--all-interfaces
-[all-interfaces-img]: /imgs/asciicasts/all-interfaces.gif
+[all-interfaces]: #-all-interfaces
+[all-interfaces-img]: assets/images/asciicasts/all-interfaces.gif
 
-[calculate-with-arg]: #--calculate-
-[calculate-with-arg-img]: /imgs/asciicasts/calculate-with-arg.gif
-[calculate-with-arg-html-img]: /imgs/asciicasts/calculate-with-arg-html.gif
+[calculate-with-arg]: #-calculate-
+[calculate-with-arg-img]: assets/images/asciicasts/calculate-with-arg.gif
+[calculate-with-arg-html-img]: assets/images/asciicasts/calculate-with-arg-html.gif
 
-[driver]: #--driver
-[driver-img]: /imgs/asciicasts/driver.gif
+[driver]: #-driver
+[driver-img]: assets/images/asciicasts/driver.gif
 
-[external]: #--external
-[external-img]: /imgs/asciicasts/external.gif
+[external]: #-external
+[external-img]: assets/images/asciicasts/external.gif
 
-[external-with-arg]: #--external-
-[external-with-arg-img]: /imgs/asciicasts/external-with-arg.gif
+[external-with-arg]: #-external-
+[external-with-arg-img]: assets/images/asciicasts/external-with-arg.gif
 
-[find-with-arg]: #--find-
-[find-with-arg-img]: /imgs/asciicasts/find-with-arg.gif
+[find-with-arg]: #-find-
+[find-with-arg-img]: assets/images/asciicasts/find-with-arg.gif
 
-[gateway]: #--gateway
-[gateway-img]: /imgs/asciicasts/gateway.gif
+[gateway]: #-gateway
+[gateway-img]: assets/images/asciicasts/gateway.gif
 
-[help]: #--help
-[help-img]: /imgs/asciicasts/help.gif
+[help]: #-help
+[help-img]: assets/images/asciicasts/help.gif
 
-[hosts]: #--hosts
-[hosts-img]: /imgs/asciicasts/hosts.gif
+[hosts]: #-hosts
+[hosts-img]: assets/images/asciicasts/hosts.gif
 
-[hosts-mac]: #--hosts-mac
-[hosts-mac-img]: /imgs/asciicasts/hosts-mac.gif
+[hosts-mac]: #-hosts-mac
+[hosts-mac-img]: assets/images/asciicasts/hosts-mac.gif
 
-[interfaces]: #--interfaces
-[interfaces-img]: /imgs/asciicasts/interfaces.gif
+[interfaces]: #-interfaces
+[interfaces-img]: assets/images/asciicasts/interfaces.gif
 
-[list]: #--list
-[list-img]: /imgs/asciicasts/list.gif
+[list]: #-list
+[list-img]: assets/images/asciicasts/list.gif
 
-[mac]: #--mac
-[mac-img]: /imgs/asciicasts/mac.gif
+[mac]: #-mac
+[mac-img]: assets/images/asciicasts/mac.gif
 
-[neighbor]: #--neighbor
-[neighbor-img]: /imgs/asciicasts/neighbor.gif
+[neighbor]: #-neighbor
+[neighbor-img]: assets/images/asciicasts/neighbor.gif
 
-[port]: #--port
-[port-img]: /imgs/asciicasts/port.gif
+[port]: #-port
+[port-img]: assets/images/asciicasts/port.gif
 
-[port-with-arg]: #--port-
-[port-with-arg-img]: /imgs/asciicasts/port-with-arg.gif
+[port-with-arg]: #-port-
+[port-with-arg-img]: assets/images/asciicasts/port-with-arg.gif
 
-[route-ipv4-with-arg]: #--route-ipv4-
-[route-ipv4-with-arg-img]: /imgs/asciicasts/route-ipv4-with-arg.gif
+[route-ipv4-with-arg]: #-route-ipv4-
+[route-ipv4-with-arg-img]: assets/images/asciicasts/route-ipv4-with-arg.gif
 
-[route-ipv6-with-arg]: #--route-ipv6-
-[route-ipv6-with-arg-img]: /imgs/asciicasts/route-ipv6-with-arg.gif
+[route-ipv6-with-arg]: #-route-ipv6-
+[route-ipv6-with-arg-img]: assets/images/asciicasts/route-ipv6-with-arg.gif
 
-[url-with-arg]: #--url-
-[url-with-arg-img]: /imgs/asciicasts/url-with-arg.gif
+[url-with-arg]: #-url-
+[url-with-arg-img]: assets/images/asciicasts/url-with-arg.gif
 
-[version]: #--version
-[version-img]: /imgs/asciicasts/version.gif
+[version]: #-version
+[version-img]: assets/images/asciicasts/version.gif
 
-[cidr-ipv4]: #--cidr-ipv4
-[cidr-ipv4-img]: /imgs/asciicasts/cidr-ipv4.gif
+[cidr-ipv4]: #-cidr-ipv4
+[cidr-ipv4-img]: assets/images/asciicasts/cidr-ipv4.gif
 
-[cidr-ipv6]: #--cidr-ipv6
-[cidr-ipv6-img]: /imgs/asciicasts/cidr-ipv6.gif
+[cidr-ipv6]: #-cidr-ipv6
+[cidr-ipv6-img]: assets/images/asciicasts/cidr-ipv6.gif
 
-[cidr-all]: #--cidr-all
-[cidr-all-img]: /imgs/asciicasts/cidr-all.gif
+[cidr-all]: #-cidr-all
+[cidr-all-img]: assets/images/asciicasts/cidr-all.gif
 
-[cidr-list]: #--cidr-list
-[cidr-list-img]: /imgs/asciicasts/cidr-list.gif
+[cidr-list]: #-cidr-list
+[cidr-list-img]: assets/images/asciicasts/cidr-list.gif

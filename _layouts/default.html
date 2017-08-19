@@ -5,14 +5,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
 
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico"/>
+    <link rel="stylesheet" href="assets/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="{{ '/assets/js/respond.js' | relative_url }}"></script>
+    <script src="assets/js/respond.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <!--[if lt IE 8]>
-    <link rel="stylesheet" href="{{ '/assets/css/ie.css' | relative_url }}">
+    <link rel="stylesheet" href="assets/css/ie.css">
     <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
@@ -27,25 +28,52 @@
             <li class="title">⏬ download</li>
           {% endif %}
         </nav>
-      </div><!-- end header -->
+      </div>
+
+      <!---                       _____|\                     -->
+      <!---                  _.--| xT  |:                     -->
+      <!---                 <____|.----||                     -->
+      <!---                        .---''---,                 -->
+      <!---                         ;..__..'    _...          -->
+      <!---                       ,'/  ;|/..--''    \         -->
+      <!---                     ,'_/.-/':            :        -->
+      <!---                _..-'''/  /  |  \    \   _|/|      -->
+      <!---               \      /-./_ \;   \    \,;'   \     -->
+      <!---               ,\    / \:  `:\    \   //    `:`.   -->
+      <!---             ,'  \  /-._;   | :    : ::    ,.   .  -->
+      <!---           ,'     ::   /`-._| |    | || ' :  `.`.) -->
+      <!---        _,'       |;._:: |  | |    | `|   :    `'  -->
+      <!---      ,'   `.     /   |`-:_ ; |    |  |  : \       -->
+      <!---      `--.   )   /|-._:    :          |   \ \      -->
+      <!---         /  /   :_|   ;`-._;   __..--';    : :     -->
+      <!---        /  (    ;|;-./_  _/.-:'o |   /     ' |     -->
+      <!---       /  , \._/_/_./--''/_|:|___|_,'        |     -->
+      <!---      :  /   `'-'--'----'---------'          |     -->
+      <!---      | :     O ._O   O_. O ._O   O_.      ; ;     -->
+      <!---      : `.      //    //    //    //     ,' /      -->
+      <!---    ~~~`.______//____//____//____//_______,'~      -->
+      <!---              //    //~   //    //                 -->
+      <!---       ~~   _//   _//   _// ~ _//     ~            -->
+      <!---     ~     / /   / /   / /   / /  ~      ~~        -->
+      <!---          ~~~   ~~~   ~~~   ~~~                    -->
 
     <div class="wrapper">
 
       <section>
         <div id="title">
-          <p align="center"><img width=50% src="/imgs/logo-with-text.png"></img></p>
           <p align="center">
-            <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6.2-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+            <a href="/ship"><img width=50% src="assets/images/logo-with-text.png"></img></a></br>
+            <a href="{{ site.project.main_url }}"><img src="{{ site.shield.version_shield }}"></a>
               &nbsp;
-            <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+            <a href="{{ site.project.license_url }}"><img src="{{ site.shield.license_shield }}"></a>
               &nbsp;
-            <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img src="https://img.shields.io/badge/bash-3.2+-lightgrey.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+            <a href="{{ site.project.bash_url }}"><img src="{{ site.shield.bash_shield }}"></a>
               &nbsp;
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+            <a href="{{ site.project.paypal_url }}"><img src="{{ site.shield.paypal_shield }}"></a>
               &nbsp;
-            <a href="https://aur.archlinux.org/packages/ship/"><img src="https://img.shields.io/aur/version/ship.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+            <a href="{{ site.project.aur_url }}"><img src="{{ site.shield.aur_shield }}"></a>
           </p>
-          <p class="smaller_par">{{ site.github.project_tagline }}</p>
+          <p class="smaller_par">{{ site.github.tagline }}</p>
           <hr>
           <span class="credits left">Project maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></span>
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></span>
