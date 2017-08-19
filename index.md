@@ -1,20 +1,8 @@
-<p align="center"><img width=50% src="/imgs/logo-with-text.png"></img></p>
-<p align="center">a simple, handy network addressing multitool with plenty of features</p>
-<p align="center">
-  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6.2-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
-    &nbsp;
-  <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
-    &nbsp;
-  <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img src="https://img.shields.io/badge/bash-3.2+-lightgrey.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
-    &nbsp;
-  <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
-    &nbsp;
-  <a href="https://aur.archlinux.org/packages/ship/"><img src="https://img.shields.io/aur/version/ship.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
-</p>
-
+---
+layout: default
 ---
 
-### Features
+### [](#header-3) Features
 
 * Show all network **interfaces**
 * Show all active network **interfaces**
@@ -38,8 +26,8 @@
   * **IPv4**
   * optionally suppress the bitwise output
   * display results as HTML
-  * split into networks of size n1, n2, n3 :construction:
-  * deaggregate address range :construction:
+  * split into networks of size n1, n2, n3 🚧
+  * deaggregate address range 🚧
 * Show list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
 * Compatible with most of the common linux distributions
 * Drag and drop URLs or file paths on console window
@@ -48,39 +36,39 @@
 
 ---      
 
-### Usage
+### [](#header-3) Usage
 
-Read the [Guide] :mortar_board:
+Read the [Guide](guide)
 
 ---
 
-### Requirements
+### [](#header-3) Requirements
 
 `ship` uses some of the tools included in **coreutils** and shell builtins
 
-#### Mandatory
+#### [](#header-4) Mandatory
 
- :wrench:   | Package      
-:-----------|:-------------
- awk        | awk \| gawk  
- grep       | grep         
- ip         | iproute2     
- ping       | iputils      
- sed        | sed          
- ss         | iproute2     
- wget       | wget         
+ 🔧   | Package      
+:-----|:-------------
+ awk  | awk \| gawk  
+ grep | grep         
+ ip   | iproute2     
+ ping | iputils      
+ sed  | sed          
+ ss   | iproute2     
+ wget | wget         
 
-#### Mandatory Choice
+#### [](#header-4) Mandatory Choice
 
 One or more of the following tools must be installed
 
- :wrench:   | Package      
+ 🔧         | Package      
 :-----------|:-------------
  mtr        | mtr          
  tracepath  | iputils      
  traceroute | traceroute   
 
-#### NOTE
+#### [](#header-4) NOTE
 
 `ship` utilizes the functionality of `ping` to check and validate LAN and WAN connections
 
@@ -90,15 +78,15 @@ One or more of the following tools must be installed
 
 ---
 
-### Compatibility
+### [](#header-3) Compatibility
 
- :penguin: | Version             
-:----------|:--------------------
- Arch      | 4.7.5-1 - 4.12.6-1  
- CentOS    | 7                   
- Debian    | 7 - 8               
- Kali      | 2016.2              
- Ubuntu    | 14.04.3 - 16.04.1   
+ 🐧     | Version             
+:-------|:--------------------
+ Arch   | 4.7.5-1 - 4.12.6-1  
+ CentOS | 7                   
+ Debian | 7 - 8               
+ Kali   | 2016.2              
+ Ubuntu | 14.04.3 - 16.04.1   
 
 ---
 
@@ -121,9 +109,9 @@ $ ship
 
 ### Contribution
 
-Pull requests, issues, suggestions, testing and feedback are all welcome :octocat:
+Pull requests, issues, suggestions, testing and feedback are all welcome
 
-Please read [this] article first, about code of conduct
+Please read [this](contributing) article first, about code of conduct
 
 * Fork the repo
 * Create a new branch
@@ -140,13 +128,13 @@ Please read [this] article first, about code of conduct
 
 ### Changelog
 
-Read the [Changelog] file to review changes :scroll:
+Read the [Changelog](changelog) file to review changes
 
 ---
 
 ### Contact
 
-Send me an email at [xtonousou@gmail.com] :e-mail:
+Send me an email at [xtonousou@gmail.com](mailto:xtonousou@gmail.com)
 
 ----
 
@@ -155,11 +143,4 @@ Send me an email at [xtonousou@gmail.com] :e-mail:
 Copyright (c) **2017** by **Sotirios M. Roussis**. Some rights reserved
 
 
-`ship` is under the terms of the GPLv3+ License, following all clarifications stated in the [license] file
-
-<!-- Links -->
-
-[this]: CODE_OF_CONDUCT.md
-[Guide]: GUIDE.md
-[Changelog]: CHANGELOG.md
-[license]: LICENSE.md
+`ship` is under the terms of the GPLv3+ License, following all clarifications stated in the [license](license.md) file
