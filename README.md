@@ -94,7 +94,7 @@ One or more of the following tools must be installed
 
  :penguin: | Version             
 :----------|:--------------------
- Arch      | 4.7.5-1 - 4.12.6-1  
+ Arch      | 4.7.5-1 - 4.12.8-1  
  CentOS    | 7                   
  Debian    | 7 - 8               
  Kali      | 2016.2              
@@ -160,6 +160,6 @@ Copyright (c) **2017** by **Sotirios M. Roussis**. Some rights reserved
 <!-- Links -->
 
 [this]: CODE_OF_CONDUCT.md
-[Guide]: GUIDE.md
+[Guide]: https://xtonousou.github.io/ship/guide
 [Changelog]: CHANGELOG.md
 [license]: LICENSE.md
