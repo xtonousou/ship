@@ -4,9 +4,11 @@
     <title>{{ site.title }}</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
+    <meta name="keywords" content="linux, bash, system, network, networking"/>
+    <meta name="description" content="{{ site.description }}"/>
     <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico"/>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="assets/js/respond.js"></script>
     <!--[if lt IE 9]>
@@ -16,8 +18,8 @@
     <link rel="stylesheet" href="assets/css/ie.css">
     <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
   </head>
+  
   <body>
       <div id="header">
         <nav>
@@ -62,7 +64,7 @@
       <section>
         <div id="title">
           <p align="center">
-            <a href="/ship"><img class="jackInTheBox" width=50% src="assets/images/logo-with-text.png"></img></a></br>
+            <a href="/ship"><img class="animated bounceIn" width=50% src="assets/images/logo-with-text.png"></img></a></br>
             <a href="{{ site.project.main_url }}"><img src="{{ site.shield.version_shield }}"></a>
               &nbsp;
             <a href="{{ site.project.license_url }}"><img src="{{ site.shield.license_shield }}"></a>
