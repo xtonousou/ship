@@ -3,66 +3,73 @@
 @import "rouge-base16-dark.scss";
 
 body {
-  padding:0px 0 20px 0px;
+  padding: 0px 0 20px 0px;
   margin: 0px;
-  font:14px/1.5 "OpenSansRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color:#D7FDFF;
+  font: 14px/1.5 "OpenSansRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #D7FDFF;
   font-weight: normal;
   background: #252525;
   background-attachment: fixed !important;
   background: linear_gradient(#2a2a29, #1c1c1c);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color:#E8E8E8;
-  margin:0 0 10px;
-  font-family: 'OpenSansRegular', "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: normal;
-}
-
 p, ul, ol, table, pre, dl {
-  margin:0 0 20px;
+  margin: 0 0 20px;
 }
 
-h1, h2, h3 {
-  line-height:1.1;
+h1, h2, h3, h4, h5, h6 {
+  color: #30A7AD;
+  margin: 0 0 10px;
+  font-family: 'OpenSansRegular', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: bolder;
+  padding-bottom: 10px;
 }
 
 h1 {
-  font-size:28px;
+  line-height:2.5;
+  font-size: 28px;
 }
 
 h2 {
+  line-height:2;
   font-size: 24px;
 }
 
-h4, h5, h6 {
-  color:#E8E8E8;
+h3 {
+  line-height:1.75;
+  font-size: 18px;
 }
 
-h3 {
-  font-size: 18px;
-  line-height: 24px;
-  font-family: 'OpenSansRegular', "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-  font-weight: normal;
-  color: #B6B6B6;
+h4 {
+  line-height:1.5;
+  font-size: 16px;
+}
+
+h5 {
+  line-height:1.25;
+  font-size: 14px;
+}
+
+h6 {
+  line-height:1.1;
+  font-size: 12px;
 }
 
 a {
-  color:#FFFFFF;
-  font-weight:bold;
-  text-decoration:underline;
+  color: #FFFFFF;
+  text-decoration: underline;
 
   &:hover {
     color: #44C2C7;
+    text-decoration: none;
   }
 }
 
 a small {
-  font-size:11px;
-  color:#666;
-  margin-top:-0.6em;
-  display:block;
+  font-size: 11px;
+  color: #666;
+  margin-top: -0.6em;
+  display: block;
 }
 
 strong {
@@ -71,9 +78,9 @@ strong {
 }
 
 .wrapper {
-  max-width:650px;
-  margin:0 auto;
-  position:relative;
+  max-width: 650px;
+  margin: 0 auto;
+  position: relative;
   padding: 0 20px;
 }
 
@@ -82,58 +89,56 @@ section img {
 }
 
 blockquote {
-  border-left:3px solid #44C2C7;
-  margin:0;
-  padding:0 0 0 20px;
-  font-style:italic;
+  border-left: 3px solid #44C2C7;
+  margin: 0;
+  padding: 0 0 0 20px;
+  font-style: italic;
 }
 
 code {
   font-family: Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, monospace;
-  color:#EFEFEF;
+  color: #EFEFEF;
   background: #13818D;
-  font-size:13px;
+  font-size: 12px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.3);
   margin: 0 4px;
-  padding: 4px 6px;
-  border-radius: 2px;
+  padding: 2px 4px;
 }
 
 pre {
-  padding:8px 15px;
-  background: #191919;
-  border-radius: 2px;
-  border:1px solid #121212;
+  padding: 10px 15px;
+  background: #171717;
   box-shadow: inset 0 1px 3px rgba(0,0,0,.3);
   overflow: auto;
   overflow-y: hidden;
 
   code {
     color: #EFEFEF;
-    text-shadow: 0px 1px 0px #000;
-    background: #191919;
+    background: #171717;
+    box-shadow: none;
     margin: 0;
     padding: 0;
   }
 }
 
 table {
-  width:100%;
-  border-collapse:collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 th {
-  text-align:left;
+  text-align: left;
   padding:5px 10px;
-  border-bottom:1px solid #434343;
+  border-bottom: 1px solid #434343;
   color: #B6B6B6;
   font-family: 'OpenSansSemibold', "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-weight: normal;
 }
 
 td {
-  text-align:left;
+  text-align: left;
   padding:5px 10px;
-  border-bottom:1px solid #434343;
+  border-bottom: 1px solid #434343;
 }
 
 hr {
@@ -145,7 +150,7 @@ hr {
 }
 
 dt {
-  color:#C7E2E3;
+  color: #C7E2E3;
   font-family: 'OpenSansSemibold', "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-weight: normal;
 }
@@ -153,7 +158,7 @@ dt {
 
 #header {
   z-index: 100;
-  left:0;
+  left: 0;
   top: 0px;
   height: 60px;
   width: 100%;
@@ -186,9 +191,9 @@ dt {
         background-color: #30A7AD;
         padding: 10px 12px;
         margin-top: 6px;
-        line-height:14px;
-        font-size:14px;
-        text-align:center;
+        line-height: 14px;
+        font-size: 14px;
+        text-align: center;
 
         &:hover {
           background-color: #13818D;
@@ -215,7 +220,7 @@ dt {
 }
 
 section {
-  max-width:650px;
+  max-width: 650px;
   padding: 30px 0px 50px 0px;
   margin: 20px 0;
   margin-top: 70px;
@@ -262,6 +267,12 @@ section {
       }
     }
   }
+}
+
+img:not(.title-img) {
+  display: block;
+  margin: auto;
+  width: 75%;
 }
 
 @media print, screen and (max-width: 720px) {

@@ -1,19 +1,19 @@
-title: "ship.sh"
+title:       "ship.sh"
 description: "Official support webpage for the project 'ship'. Developed and maintained by xtonousou."
 show_downloads: true
-google_analytics:
+google_analytics: "UA-104956050-1"
 theme: "ship-theme"
-lang: "en-US"
+lang:  "en-US"
 
 project:
-  version: "2.6"
-  license: "GPL v3+"
-  bash: "3.2+"
-  main_url: "https://raw.githubusercontent.com/xtonousou/ship/master/ship.sh"
+  version:     "2.6"
+  license:     "GPL v3+"
+  bash:        "3.2+"
+  main_url:    "https://raw.githubusercontent.com/xtonousou/ship/master/ship.sh"
   license_url: "license.md"
-  bash_url: "http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"
-  paypal_url: "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"
-  aur_url: "https://aur.archlinux.org/packages/ship"
+  bash_url:    "http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"
+  paypal_url:  "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"
+  aur_url:     "https://aur.archlinux.org/packages/ship"
 
 shield:
   version_shield: "https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
@@ -24,9 +24,21 @@ shield:
 
 github:
   repository_name: "ship"
-  tagline: "A simple, handy network addressing multitool with plenty of features"
-  owner_name: "xtonousou"
-  owner_url: "https://github.com/xtonousou"
-  repository_url: "https://github.com/xtonousou/ship"
-  zip_url: "https://github.com/xtonousou/ship/zipball/master"
-  tar_url: "https://github.com/xtonousou/ship/tarball/master"
+  tagline:         "A simple, handy network addressing multitool with plenty of features"
+  owner_name:      "xtonousou"
+  owner_url:       "https://github.com/xtonousou"
+  repository_url:  "https://github.com/xtonousou/ship"
+  zip_url:         "https://github.com/xtonousou/ship/zipball/master"
+  tar_url:         "https://github.com/xtonousou/ship/tarball/master"
+
+compatibility:
+  arch_from:   "4.7.5-1"
+  arch_to:     "4.12.8-2"
+  centos_from: "7"
+  centos_to:   "7"
+  debian_from: "7"
+  debian_to:   "8"
+  kali_from:   "2016.2"
+  kali_to:     "2016.2"
+  ubuntu_from: "14.04.3"
+  ubuntu_to:   "16.04.1"

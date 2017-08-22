@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: 'en-US' }}">
+  
   <head>
+    
     <title>{{ site.title }}</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -64,16 +66,16 @@
       <section>
         <div id="title">
           <p align="center">
-            <a href="/ship"><img class="animated bounceIn" width=50% src="assets/images/logo-with-text.png"></img></a></br>
-            <a href="{{ site.project.main_url }}"><img src="{{ site.shield.version_shield }}"></a>
+            <a href="/ship"><img class="title-img animated bounceIn" width=50% src="assets/images/logo-with-text.png"></img></a></br>
+            <a href="{{ site.project.main_url }}"><img class="title-img" src="{{ site.shield.version_shield }}"></a>
               &nbsp;
-            <a href="{{ site.project.license_url }}"><img src="{{ site.shield.license_shield }}"></a>
+            <a href="{{ site.project.license_url }}"><img class="title-img" src="{{ site.shield.license_shield }}"></a>
               &nbsp;
-            <a href="{{ site.project.bash_url }}"><img src="{{ site.shield.bash_shield }}"></a>
+            <a href="{{ site.project.bash_url }}"><img class="title-img" src="{{ site.shield.bash_shield }}"></a>
               &nbsp;
-            <a href="{{ site.project.paypal_url }}"><img src="{{ site.shield.paypal_shield }}"></a>
+            <a href="{{ site.project.paypal_url }}"><img class="title-img" src="{{ site.shield.paypal_shield }}"></a>
               &nbsp;
-            <a href="{{ site.project.aur_url }}"><img src="{{ site.shield.aur_shield }}"></a>
+            <a href="{{ site.project.aur_url }}"><img class="title-img" src="{{ site.shield.aur_shield }}"></a>
           </p>
           <p class="smaller_par">{{ site.github.tagline }}</p>
           <hr>
@@ -84,7 +86,6 @@
         {{ content }}
 
       </section>
-
     </div>
 
     {% if site.google_analytics %}
@@ -98,4 +99,5 @@
       </script>
     {% endif %}
   </body>
+
 </html>

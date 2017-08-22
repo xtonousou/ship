@@ -82,7 +82,7 @@ One or more of the following tools must be installed
 
  🐧     | Version             
 :-------|:--------------------
- Arch   | 4.7.5-1 - 4.12.6-1  
+ Arch   | 4.7.5-1 - 4.12.8-2  
  CentOS | 7                   
  Debian | 7 - 8               
  Kali   | 2016.2              
