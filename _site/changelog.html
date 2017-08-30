@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  
+  <head>
+    
+    <title>ship.sh</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="keywords" content="linux, bash, system, network, networking"/>
+    <meta name="description" content="Official support webpage for the project 'ship'. Developed and maintained by xtonousou."/>
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico"/>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="assets/js/respond.js"></script>
+    <script src="assets/js/totop.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  </head>
+  
+  <body>
+      <div id="header">
+        <nav>
+            <li class="fork"><a href="https://github.com/xtonousou/ship">View On GitHub</a></li>
+            
+            <li class="downloads"><a href="https://github.com/xtonousou/ship/zipball/master">.zip</a></li>
+            <li class="downloads"><a href="https://github.com/xtonousou/ship/tarball/master">.tar.gz</a></li>
+            <li class="title"><i class="fa fa-download" aria-hidden="true"></i> download</li>
+          
+        </nav>
+      </div>
+
+      <!---                       _____|\                     -->
+      <!---                  _.--| xT  |:                     -->
+      <!---                 <____|.----||                     -->
+      <!---                        .---''---,                 -->
+      <!---                         ;..__..'    _...          -->
+      <!---                       ,'/  ;|/..--''    \         -->
+      <!---                     ,'_/.-/':            :        -->
+      <!---                _..-'''/  /  |  \    \   _|/|      -->
+      <!---               \      /-./_ \;   \    \,;'   \     -->
+      <!---               ,\    / \:  `:\    \   //    `:`.   -->
+      <!---             ,'  \  /-._;   | :    : ::    ,.   .  -->
+      <!---           ,'     ::   /`-._| |    | || ' :  `.`.) -->
+      <!---        _,'       |;._:: |  | |    | `|   :    `'  -->
+      <!---      ,'   `.     /   |`-:_ ; |    |  |  : \       -->
+      <!---      `--.   )   /|-._:    :          |   \ \      -->
+      <!---         /  /   :_|   ;`-._;   __..--';    : :     -->
+      <!---        /  (    ;|;-./_  _/.-:'o |   /     ' |     -->
+      <!---       /  , \._/_/_./--''/_|:|___|_,'        |     -->
+      <!---      :  /   `'-'--'----'---------'          |     -->
+      <!---      | :     O ._O   O_. O ._O   O_.      ; ;     -->
+      <!---      : `.      //    //    //    //     ,' /      -->
+      <!---    ~~~`.______//____//____//____//_______,'~      -->
+      <!---              //    //~   //    //                 -->
+      <!---       ~~   _//   _//   _// ~ _//     ~            -->
+      <!---     ~     / /   / /   / /   / /  ~      ~~        -->
+      <!---          ~~~   ~~~   ~~~   ~~~                    -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <p align="center">
+            <a href="/ship"><img class="title-img animated bounceIn" width=50% src="assets/images/logo-with-text.png"></img></a></br>
+            <a href="https://raw.githubusercontent.com/xtonousou/ship/master/ship.sh"><img class="title-img" src="https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+              &nbsp;
+            <a href="license.md"><img class="title-img" src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+              &nbsp;
+            <a href="http://tldp.org/LDP/abs/html/bashver3.html#AEN20987"><img class="title-img" src="https://img.shields.io/badge/bash-3.2+-lightgrey.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+              &nbsp;
+            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img class="title-img" src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+              &nbsp;
+            <a href="https://aur.archlinux.org/packages/ship"><img class="title-img" src="https://img.shields.io/aur/version/ship.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+          </p>
+          <p class="smaller_par">A simple, handy network addressing multitool with plenty of features</p>
+          <hr>
+          <span class="credits left"><i class="fa fa-ship" aria-hidden="true"> project</i> maintained by <a href="https://github.com/xtonousou">xtonousou</a></span>
+          <span class="credits right">theme by <a href="https://github.com/xtonousou">xtonousou</a></span>
+        </div>
+
+        <h1 id="change-log">Change Log</h1>
+<p>All notable changes to this project will be documented in this file.</p>
+
+<h2 id="262---2017-08-18">[2.6.2] - 2017-08-18</h2>
+<h3 id="added">Added</h3>
+<ul>
+  <li><code class="highlighter-rouge">ship -e</code> now can handle more than one domain.
+    <ul>
+      <li>e.g. <code class="highlighter-rouge">ship -e github.com google.com facebook.com</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="changed">Changed</h3>
+<ul>
+  <li><strong>Fixed</strong> an issue displaying weird output when parsing HTML.
+    <ul>
+      <li>e.g. <code class="highlighter-rouge">ship -u github.com google.com facebook.com</code></li>
+    </ul>
+  </li>
+  <li>Minor changes on code.</li>
+  <li>Refactored <code class="highlighter-rouge">README.md</code>.</li>
+  <li>Refactored <code class="highlighter-rouge">GUIDE.md</code>.</li>
+</ul>
+
+<h2 id="261---2017-07-22">[2.6.1] - 2017-07-22</h2>
+<h3 id="added-1">Added</h3>
+<ul>
+  <li><a href="https://xtonousou.github.io/ship">Official website</a>.</li>
+</ul>
+
+<h3 id="changed-1">Changed</h3>
+<ul>
+  <li>Refactored <code class="highlighter-rouge">README.md</code>.</li>
+  <li>Minor changes on code.</li>
+</ul>
+
+<h2 id="26---2017-06-15">[2.6] - 2017-06-15</h2>
+<h3 id="added-2">Added</h3>
+<ul>
+  <li>Message to show that the <strong>ipv6</strong> module is not loaded.
+    <ul>
+      <li>This can be suppressed by piping <code class="highlighter-rouge">tail -n+2</code></li>
+    </ul>
+  </li>
+  <li>Feature to show all network interfaces.</li>
+  <li><strong>Fixed</strong> wrong color output on version message.</li>
+</ul>
+
+<h3 id="changed-2">Changed</h3>
+<ul>
+  <li><strong>Fixed</strong> wrong outputs of IPv6 addresses.</li>
+  <li><strong>Fixed</strong> wrong way to check IPv6 availability.</li>
+  <li><strong>Fixed</strong> issues with temporary files and background jobs.</li>
+  <li>Logo on version output.</li>
+  <li>MAC and IPv6 addresses are now printed in lower case for better readability.</li>
+  <li>Refactored code a bit.</li>
+</ul>
+
+<h2 id="25---2017-03-07">[2.5] - 2017-03-07</h2>
+<h3 id="added-3">Added</h3>
+<ul>
+  <li>IP calculation feature can now show information without binary (optional).</li>
+  <li>IP calculation feature can now be shown in HTML5 format (optional).</li>
+</ul>
+
+<h3 id="changed-3">Changed</h3>
+<ul>
+  <li><strong>Fixed</strong> <code class="highlighter-rouge">ss</code> output.</li>
+  <li><strong>Fixed</strong> IP address outputs on different distributions.</li>
+  <li><strong>Fixed</strong> <code class="highlighter-rouge">awk</code> outputs on Kali Linux.</li>
+  <li><strong>Fixed</strong> ip calculation feature for older bash versions.</li>
+  <li>Minor code clean up.</li>
+  <li>Minor code improvements.</li>
+  <li>Checking functions for <strong>IPv6</strong> compatibility and bash version validation.</li>
+</ul>
+
+<h3 id="removed">Removed</h3>
+<ul>
+  <li>Warnings with <code class="highlighter-rouge">shellcheck</code>.</li>
+</ul>
+
+<h2 id="24---2017-02-17">[2.4] - 2017-02-17</h2>
+<h3 id="added-4">Added</h3>
+<ul>
+  <li>Converting functions (Binary to Decimal, Binary to Hexadecimal, Decimal to Binary) to be used in other functions.</li>
+  <li>“Show network, broadcast address, netmask, CIDR, Cisco wildcard, class, host range, maximum hosts from given IP address”.</li>
+  <li>Seriously why need to install <code class="highlighter-rouge">ipcalc sipcalc</code>, when you can do this with pure Bash?</li>
+  <li>Show a list of private and reserved IP addresses (IPv4 and IPv6) with or without CIDR notation (Bogon IPs).</li>
+  <li>More sources to grab user’s public IP.
+    <ul>
+      <li>Randomly choose from 6 different web sources to grab the IP.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="changed-4">Changed</h3>
+<ul>
+  <li><strong>Fixed</strong> wrong output of active connection/s based on port.</li>
+  <li><strong>Fixed</strong> “Show neighbor cache” feature.</li>
+  <li><strong>Fixed</strong> file/s and online document/s sorting methods and output.</li>
+  <li>“Usage” output.</li>
+  <li>“Show version” output.</li>
+  <li>Beautified README.</li>
+</ul>
+
+<h2 id="23---2017-01-27">[2.3] - 2017-01-27</h2>
+<h3 id="added-5">Added</h3>
+<ul>
+  <li>Functionality to pass multiple arguments at the same time.</li>
+  <li><code class="highlighter-rouge">ship -f file1 file2 fileN</code> or drag and drop each file.</li>
+  <li><code class="highlighter-rouge">ship -u url1 url2 urlN</code>.</li>
+  <li><code class="highlighter-rouge">set -o xtrace</code> for debugging.</li>
+  <li><code class="highlighter-rouge">trap</code> for cleaning temp files.</li>
+</ul>
+
+<h3 id="changed-5">Changed</h3>
+<ul>
+  <li><strong>Fixed</strong> issues when ‘pinging’ the host from complex URL (stream edit).</li>
+  <li><strong>Fixed</strong> issues when ‘pinging’ a network host who does not accept ICMP packets.</li>
+  <li><strong>Fixed</strong> issues when ‘pinging’ an invalid network host.</li>
+  <li><strong>Fixed</strong> weird behavior when showing wireless driver used.</li>
+  <li><strong>Fixed</strong> wrong IPv6 checking.</li>
+  <li>Timeout values to match slow connections.</li>
+  <li>Speed and performance improvements.</li>
+  <li>Code improvements.</li>
+  <li>Shebang for better portability.</li>
+  <li>Commands’ parameters to long ones for better readability.</li>
+  <li>Static references to dynamic ones (e.g. script’s name).</li>
+  <li>Avoid piping <code class="highlighter-rouge">grep</code> to <code class="highlighter-rouge">awk</code>.</li>
+  <li>Variable groups to arrays.</li>
+  <li>Concatenation methods.</li>
+  <li>README.</li>
+</ul>
+
+<h3 id="removed-1">Removed</h3>
+<ul>
+  <li>Errors and warnings using <code class="highlighter-rouge">shellcheck</code>.</li>
+  <li>Unused functions.</li>
+</ul>
+
+<h2 id="22---2017-01-14">[2.2] - 2017-01-14</h2>
+<h3 id="added-6">Added</h3>
+<ul>
+  <li>Driver info on <code class="highlighter-rouge">ship --all</code> and <code class="highlighter-rouge">ship --cidr-a</code>.</li>
+</ul>
+
+<h3 id="changed-6">Changed</h3>
+<ul>
+  <li>Fixed <code class="highlighter-rouge">ship --external</code>.</li>
+  <li>Replaced <code class="highlighter-rouge">printf</code> with <code class="highlighter-rouge">echo</code> on some options for better quality and external use.</li>
+  <li>Usage for better readability.</li>
+  <li>README.</li>
+</ul>
+
+<h2 id="21---2017-01-11">[2.1] - 2017-01-11</h2>
+<h3 id="changed-7">Changed</h3>
+<ul>
+  <li>Code flow a bit.</li>
+  <li>Issue template <code class="highlighter-rouge">.github/ISSUE_TEMPLATE.md</code>.</li>
+  <li><strong>Fixed</strong> <a href="https://github.com/xtonousou/shIP/issues/26">#26</a>.</li>
+  <li>Compressed head.png for less usage.</li>
+  <li>README.</li>
+</ul>
+
+<h2 id="20---2017-01-03">[2.0] - 2017-01-03</h2>
+<h3 id="added-7">Added</h3>
+<ul>
+  <li>Created issue template <code class="highlighter-rouge">.github/ISSUE_TEMPLATE.md</code> (thanks v1s1t0r1sh3r3 for the tip).</li>
+  <li>Created pull request template <code class="highlighter-rouge">.github/PULL_REQUEST_TEMPLATE.md</code>.</li>
+</ul>
+
+<h3 id="changed-8">Changed</h3>
+<ul>
+  <li>Usage.</li>
+  <li>Simplified everything.</li>
+  <li>Smoother code flow.</li>
+  <li>Many features of <code class="highlighter-rouge">ship</code> like location, avg RTT, bandwidth can be found on <a href="https://github.com/xtonousou/shIP/tree/old">old</a> branch.</li>
+  <li><strong>Fixed</strong> weird permissions’ bug while creating-deleting <code class="highlighter-rouge">/tmp/ship</code> files.</li>
+  <li><strong>Fixed</strong> different issues while searching for network addresses in a file or a website.</li>
+</ul>
+
+<h3 id="removed-2">Removed</h3>
+<ul>
+  <li>Spinner on long running tasks.</li>
+  <li>Tools: <code class="highlighter-rouge">kill bc ping6</code>.</li>
+  <li>Many of <code class="highlighter-rouge">ship</code> actions:
+    <ul>
+      <li>shows connection bandwidth to different locations.</li>
+      <li>shows results of scans for malicious activities of {URL}.</li>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td>shows location info of {USER</td>
+              <td>DOMAIN}.</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li>shows the download and upload speed in kB/s.</li>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td>shows the average RTT to {IPV4</td>
+              <td>DOMAIN}.</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td>shows the average RTT to {IPV6</td>
+              <td>DOMAIN}.</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="19---2016-11-20">[1.9] - 2016-11-20</h2>
+<h3 id="added-8">Added</h3>
+<ul>
+  <li>Spinner on long running tasks (requires <code class="highlighter-rouge">kill</code> from <code class="highlighter-rouge">util-linux</code>).</li>
+  <li>More tested <em>Arch Linux</em> versions.</li>
+</ul>
+
+<h3 id="changed-9">Changed</h3>
+<ul>
+  <li><em>README.md</em>.</li>
+  <li>Minor code improvements.</li>
+  <li>Shortened timeout to <em>20sec</em> while checking with <code class="highlighter-rouge">wget --spider</code>.</li>
+  <li><strong>Fixed</strong> file permissions.</li>
+</ul>
+
+<h2 id="18---2016-11-14">[1.8] - 2016-11-14</h2>
+<h3 id="added-9">Added</h3>
+<ul>
+  <li>Find valid IPv4, IPv6 and MAC addresses from a URL <code class="highlighter-rouge">ship -U &lt;URL&gt;</code> or <code class="highlighter-rouge">ship --url &lt;URL&gt;</code>.</li>
+  <li>Find valid IPv4, IPv6 and MAC addresses from a file <code class="highlighter-rouge">ship -f &lt;file&gt;</code> or <code class="highlighter-rouge">ship --find &lt;file&gt;</code>.</li>
+  <li>Comments to explain logic on complicated statements.</li>
+</ul>
+
+<h3 id="changed-10">Changed</h3>
+<ul>
+  <li>Usage.</li>
+  <li>Cleaning on exit function.</li>
+  <li>Some strings.</li>
+  <li>Appearance of <code class="highlighter-rouge">ship -S</code> or <code class="highlighter-rouge">ship --speed</code>.</li>
+  <li>Minimum bash requirement from <code class="highlighter-rouge">4.0</code> to <code class="highlighter-rouge">3.2</code>.</li>
+  <li>Minor code improvements e.g. <code class="highlighter-rouge">sort -V | uniq</code> to <code class="highlighter-rouge">sort -Vu</code>.</li>
+</ul>
+
+<h3 id="removed-3">Removed</h3>
+<ul>
+  <li>Ugly dialogs and the space on start of each line.</li>
+  <li>Root permission for scanning alive hosts with MAC <code class="highlighter-rouge">ship -HM</code> or <code class="highlighter-rouge">ship --hosts-mac</code>.</li>
+  <li>Tools: <code class="highlighter-rouge">arping</code>, <code class="highlighter-rouge">pr</code>.</li>
+</ul>
+
+<h2 id="17---2016-10-29">[1.7] - 2016-10-29</h2>
+<h3 id="added-10">Added</h3>
+<ul>
+  <li>Method to print the driver used of each active network interface: <code class="highlighter-rouge">ship -d</code> , <code class="highlighter-rouge">ship --driver</code>.</li>
+  <li>Timeout while getting http code, in <code class="highlighter-rouge">wget</code> commands.</li>
+  <li>Extract IPv4 and IPv6 addresses from a file.</li>
+  <li>Bash version checking function.</li>
+  <li><strong>INT</strong> and <strong>SIGTSTP</strong> trapping (exit confirmation).</li>
+</ul>
+
+<h2 id="changed-11">Changed</h2>
+<ul>
+  <li>Code is now completely clean. Using <code class="highlighter-rouge">shellcheck</code> tool.</li>
+  <li>Code improvements.</li>
+  <li>Method to store active network interfaces into arrays.</li>
+  <li>Some dialogs on bandwidth testing functions.</li>
+</ul>
+
+<h2 id="16---2016-10-25">[1.6] - 2016-10-25</h2>
+<h3 id="added-11">Added</h3>
+<ul>
+  <li>More locations to test bandwidth.</li>
+  <li>Monitor <strong>download</strong> and <strong>upload speed</strong> of online network interface.</li>
+  <li>Increased performance by handling background tasks properly.</li>
+  <li>Show results of scans for <strong>malicious activities</strong> of a domain.</li>
+  <li>Show internet connection <strong>bandwidth</strong> to CDN and different locations.</li>
+  <li>Show the path to a network host (IPv4 or IPv6).</li>
+</ul>
+
+<h2 id="changed-12">Changed</h2>
+<ul>
+  <li>README.</li>
+  <li>Usage.</li>
+  <li>Some dialogs.</li>
+  <li>Uppercase MAC and IPv6 addresses.</li>
+  <li><code class="highlighter-rouge">ship -F {DOMAIN|IP}</code> now shows multiple IPs (maximum 15).</li>
+  <li><strong>Fixed</strong> issue <a href="https://github.com/xtonousou/shIP/issues/17">#17</a>.</li>
+  <li><strong>Fixed</strong> when <code class="highlighter-rouge">ship -L</code> or <code class="highlighter-rouge">ship -F</code> input had a lot of suffixes with slashes, it showed user’s info.</li>
+  <li><strong>Fixed</strong> some issues when IPv6 is used.</li>
+</ul>
+
+<h2 id="removed-4">Removed</h2>
+<ul>
+  <li>Tools: <code class="highlighter-rouge">lsmod</code> now using <code class="highlighter-rouge">cat /proc/modules</code>.</li>
+</ul>
+
+<h2 id="15---2016-10-09">[1.5] - 2016-10-09</h2>
+<h3 id="added-12">Added</h3>
+<ul>
+  <li>Function to handle sleeping time (depends on number of CPU cores).</li>
+</ul>
+
+<h2 id="changed-13">Changed</h2>
+<ul>
+  <li>Usage.</li>
+  <li>Dialogs.</li>
+  <li>Increase performance.</li>
+  <li>Method to find active hosts on network. Multithreaded <code class="highlighter-rouge">ping arping</code>.</li>
+  <li>Method to find external IP or location.</li>
+  <li>Regex to extract IPv4 and MAC address in some functions.</li>
+  <li><strong>Fixed</strong> Ubuntu cannot grab info with <code class="highlighter-rouge">ip</code>.</li>
+  <li><strong>Fixed</strong> Ubuntu cannot parse domain to find location info.</li>
+  <li><strong>Fixed</strong> Kali prints other info with <code class="highlighter-rouge">arping</code>.</li>
+</ul>
+
+<h3 id="removed-5">Removed</h3>
+<ul>
+  <li>Tools: <code class="highlighter-rouge">nmap netstat netcat</code>.</li>
+</ul>
+
+<h2 id="14---2016-10-07">[1.4] - 2016-10-07</h2>
+<h3 id="added-13">Added</h3>
+<ul>
+  <li>Show ARP cache.</li>
+  <li>Show location info of a domain. Map location image provided.</li>
+</ul>
+
+<h3 id="changed-14">Changed</h3>
+<ul>
+  <li>Usage.</li>
+  <li><code class="highlighter-rouge">gawk</code> to <code class="highlighter-rouge">awk</code></li>
+  <li>Method for grabbing IPv4 address of user, domain. Now using <code class="highlighter-rouge">netcat</code>.</li>
+  <li><strong>Fixed</strong> some user input ‘bugs’.</li>
+  <li><strong>Fixed</strong> regex for domain and IP validation.</li>
+  <li>Order of commands in functions.</li>
+  <li>Execution speed increased by a little.</li>
+  <li>Checking methods.</li>
+  <li>Dialogs and messages.</li>
+  <li>Position of functions based on usage for better readability.</li>
+</ul>
+
+<h2 id="13---2016-10-05">[1.3] - 2016-10-05</h2>
+<h3 id="added-14">Added</h3>
+<ul>
+  <li>Get the local IPv6 directly.</li>
+  <li>Get full location info of a domain or IP in same command.</li>
+  <li>Get the quantity of connections to a port per IP with <code class="highlighter-rouge">netstat</code>.</li>
+</ul>
+
+<h3 id="changed-15">Changed</h3>
+<ul>
+  <li>Usage.</li>
+  <li>Get external IPv4 and resolve domain’s IPv4 in same command.</li>
+  <li>Code is cleaner and more user-friendly.</li>
+</ul>
+
+<h2 id="12---2016-10-04">[1.2] - 2016-10-04</h2>
+<h3 id="added-15">Added</h3>
+<ul>
+  <li>Get the IP address from a domain.</li>
+  <li>Get the local IP address directly.</li>
+  <li>New dialogs.</li>
+  <li>Some functions for better flow.</li>
+  <li>Comments.</li>
+</ul>
+
+<h3 id="changed-16">Changed</h3>
+<ul>
+  <li>Usage.</li>
+  <li>Method to check connectivity (local or network).</li>
+  <li>Source to ping.</li>
+  <li>Parameter passing.</li>
+  <li>Clean up code.</li>
+</ul>
+
+<h3 id="removed-6">Removed</h3>
+<ul>
+  <li>Tools: <code class="highlighter-rouge">curl route</code>.</li>
+</ul>
+
+<h2 id="11---2016-10-01">[1.1] - 2016-10-01</h2>
+<h3 id="added-16">Added</h3>
+<ul>
+  <li>Display script’s version.</li>
+  <li>Display of default gateway of online interfaces.</li>
+  <li>Host discovery (two methods).</li>
+</ul>
+
+<h3 id="changed-17">Changed</h3>
+<ul>
+  <li>Usage.</li>
+  <li>Renamed some things.</li>
+  <li>Fixed some quotes and brackets.</li>
+</ul>
+
+<h2 id="10---2016-09-29">[1.0] - 2016-09-29</h2>
+<h3 id="added-17">Added</h3>
+<ul>
+  <li>Display of active interfaces.</li>
+  <li>Display of IPv4, IPv6 and MAC addresses of active interfaces with or without CIDR.</li>
+  <li>Display of public IP.</li>
+  <li>Measure the response time from google.com.</li>
+</ul>
+
+
+      </section>
+    </div>
+
+    
+      <script type="text/javascript">
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-104956050-1', 'auto');
+        ga('send', 'pageview');
+      </script>
+    
+  </body>
+
+  <footer>
+    <a href="#" id="go-top">
+      <i class="fa fa-arrow-circle-up go-top" aria-hidden="true"></i>
+    </a>
+    <div class="wrapper footer">
+      <i class="fa fa-flask" aria-hidden="true">powered by <a href="https://jekyllrb.com/">Jekyll</a></i> <i class="fa fa-github" aria-hidden="true"> hosted on <a href="https://pages.github.com">GitHub</a></i> <i class="fa fa-font-awesome" aria-hidden="true"> icons by <a href="http://fontawesome.io">Font Awesome</a></i> <i class="fa fa-eye" aria-hidden="true"> animated with <a href="https://daneden.github.io/animate.css/">Animate.css</a></i> <i class="fa fa-diamond" aria-hidden="true"> blessed by <a href="https://www.ruby-lang.org/en">Ruby</a></i>
+    </div>
+  </footer>
+
+</html>
