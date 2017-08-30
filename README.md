@@ -117,7 +117,9 @@ $ yaourt -S ship
 $ ship
 ```
 
-##### Verify (optional)
+---
+
+### Verify (optional)
 
 ```bash
 $ gpg --verify ship.sh.asc ship.sh
