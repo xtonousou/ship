@@ -94,7 +94,7 @@ One or more of the following tools must be installed
 
  :penguin: | Version             
 :----------|:--------------------
- Arch      | 4.7.5-1 - 4.12.8-1  
+ Arch      | 4.7.5-1 - 4.12.8-2  
  CentOS    | 7                   
  Debian    | 7 - 8               
  Kali      | 2016.2              
@@ -116,6 +116,18 @@ $ bash ship.sh
 $ yaourt -S ship
 $ ship
 ```
+
+##### Verify (optional)
+
+```bash
+$ gpg --verify ship.sh.asc ship.sh
+```
+
+Successfully verified file should output
+
+> Good signature from "Sotirios M. Roussis <xtonousou@gmail.com>"
+
+If not, make sure you are downloading the right file from the right sources
 
 ---
 
