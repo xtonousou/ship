@@ -11,8 +11,10 @@
     <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico"/>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="assets/js/respond.js"></script>
+    <script src="assets/js/totop.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -29,7 +31,7 @@
             {% if site.show_downloads %}
             <li class="downloads"><a href="{{ site.github.zip_url }}">.zip</a></li>
             <li class="downloads"><a href="{{ site.github.tar_url }}">.tar.gz</a></li>
-            <li class="title">⏬ download</li>
+            <li class="title"><i class="fa fa-download" aria-hidden="true"></i> download</li>
           {% endif %}
         </nav>
       </div>
@@ -79,8 +81,8 @@
           </p>
           <p class="smaller_par">{{ site.github.tagline }}</p>
           <hr>
-          <span class="credits left">Project maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></span>
+          <span class="credits left"><i class="fa fa-ship" aria-hidden="true"> project</i> maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></span>
+          <span class="credits right">theme by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></span>
         </div>
 
         {{ content }}
@@ -99,5 +101,14 @@
       </script>
     {% endif %}
   </body>
+
+  <footer>
+    <a href="#" id="go-top">
+      <i class="fa fa-arrow-circle-up go-top" aria-hidden="true"></i>
+    </a>
+    <div class="wrapper footer">
+      <i class="fa fa-flask" aria-hidden="true">powered by <a href="https://jekyllrb.com/">Jekyll</a></i> <i class="fa fa-github" aria-hidden="true"> hosted on <a href="https://pages.github.com">GitHub</a></i> <i class="fa fa-font-awesome" aria-hidden="true"> icons by <a href="http://fontawesome.io">Font Awesome</a></i> <i class="fa fa-eye" aria-hidden="true"> animated with <a href="https://daneden.github.io/animate.css/">Animate.css</a></i> <i class="fa fa-diamond" aria-hidden="true"> blessed by <a href="https://www.ruby-lang.org/en">Ruby</a></i>
+    </div>
+  </footer>
 
 </html>

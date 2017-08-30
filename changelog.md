@@ -61,7 +61,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 * Converting functions (Binary to Decimal, Binary to Hexadecimal, Decimal to Binary) to be used in other functions.
 * "Show network, broadcast address, netmask, CIDR, Cisco wildcard, class, host range, maximum hosts from given IP address".
- * Seriously why need to install `ipcalc sipcalc`, when you can do this with pure Bash? :smirk:
+ * Seriously why need to install `ipcalc sipcalc`, when you can do this with pure Bash?
 * Show a list of private and reserved IP addresses (IPv4 and IPv6) with or without CIDR notation (Bogon IPs).
 * More sources to grab user's public IP.
   * Randomly choose from 6 different web sources to grab the IP.

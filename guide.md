@@ -12,11 +12,11 @@ layout: default
  ship  | **-6 , --ipv6**           | shows active interfaces with their IPv6 address             | [ipv6]
  ship  | **-a , --all**            | shows all information                                       | [all]
  ship  | **-A , --all-interfaces** | shows all available network interfaces                      | [all-interfaces]
- ship  | **-c , --calculate <>**   | shows calculated IP information                             | [calculate-with-arg]
+ ship  | **-c , --calculate &#60;&#62;**   | shows calculated IP information                             | [calculate-with-arg]
  ship  | **-d , --driver**         | shows each active interface's driver                        | [driver]
  ship  | **-e , --external**       | shows your external IP address                              | [external]
- ship  | **-e , --external <>**    | shows external IP addresses                                 | [external-with-arg]
- ship  | **-f , --find <>**        | shows valid IP and MAC addresses found on file/s            | [find-with-arg]
+ ship  | **-e , --external &#60;&#62;**    | shows external IP addresses                                 | [external-with-arg]
+ ship  | **-f , --find &#60;&#62;**        | shows valid IP and MAC addresses found on file/s            | [find-with-arg]
  ship  | **-g , --gateway**        | shows gateway of online interfaces                          | [gateway]
  ship  | **-h , --help**           | shows this help message                                     | [help]
  ship  | **-H , --hosts**          | shows active hosts on network                               | [hosts]
@@ -26,10 +26,10 @@ layout: default
  ship  | **-m , --mac**            | shows active interfaces with their MAC address              | [mac]
  ship  | **-n , --neighbor**       | shows neighbor cache                                        | [neighbor]
  ship  | **-P , --port**           | shows a list of common ports                                | [port]
- ship  | **-P , --port <>**        | shows connections to a port per IP                          | [port-with-arg]
- ship  | **-r , --route-ipv4 <>**  | shows the path to a network host using IPv4                 | [route-ipv4-with-arg]
- ship  | **-r6, --route-ipv6 <>**  | shows the path to a network host using IPv6                 | [route-ipv6-with-arg]
- ship  | **-u , --url <>**         | shows valid IP and MAC addresses found on website/s         | [url-with-arg]
+ ship  | **-P , --port &#60;&#62;**        | shows connections to a port per IP                          | [port-with-arg]
+ ship  | **-r , --route-ipv4 &#60;&#62;**  | shows the path to a network host using IPv4                 | [route-ipv4-with-arg]
+ ship  | **-r6, --route-ipv6 &#60;&#62;**  | shows the path to a network host using IPv6                 | [route-ipv6-with-arg]
+ ship  | **-u , --url &#60;&#62;**         | shows valid IP and MAC addresses found on website/s         | [url-with-arg]
  ship  | **-v , --version**        | shows the version of script                                 | [version]
  ship  | **--cidr-4, --cidr-ipv4** | shows active interfaces with their IPv4 address and CIDR    | [cidr-ipv4]
  ship  | **--cidr-6, --cidr-ipv6** | shows active interfaces with their IPv6 address and CIDR    | [cidr-ipv6]
@@ -53,7 +53,7 @@ Shows the local IPv6 address of each active network interfaces
 
 ### [](#header-3) --all
 
-Use this to display almost all :sweat_smile: useful network information
+Use this to display almost all useful network information
 
 ![all example][all-img]
 
@@ -63,7 +63,7 @@ Displays all kind of network information of the network interfaces, active or no
 
 ![all interfaces example][all-interfaces-img]
 
-### [](#header-3) --calculate <>
+### [](#header-3) --calculate &#60;&#62;
 
 This is an alternative to `ipcalc` and `sipcalc` together
 
@@ -87,7 +87,7 @@ Returns your external IP, a.k.a. Public IP
 
 ![external example][external-img]
 
-### [](#header-3) --external <>
+### [](#header-3) --external &#60;&#62;
 
 Returns the external IPs of the passed domains
 
@@ -103,7 +103,7 @@ Note that sometimes, multiple values of the same domain are returned. For that r
 $ bash ship.sh -e DOMAIN_1 DOMAIN_2 DOMAINn | awk '/DOMAIN/{print $1}'
 ```
 
-### [](#header-3) --find <>
+### [](#header-3) --find &#60;&#62;
 
 Extracts all addresses (IPv4, IPv6 and MAC) from the files specified and pretty prints them on stdout
 
@@ -151,7 +151,7 @@ Returns all active network interfaces
 
 Returns a list of common IPv4 and IPv6 addresses (bogon IPs)
 
-You can use them to configure your :fire: firewall, or even identify ranges
+You can use them to configure your firewall, or even identify ranges
 
 ![list example][list-img]
 
@@ -177,23 +177,23 @@ Displays the IPv4 and MAC address of each neighbor (ARP cache)
 
 ### [](#header-3) --port
 
-Displays a list of common protocols and ports. You can use the list to monitor your network with the argument below this one `--port <>`
+Displays a list of common protocols and ports. You can use the list to monitor your network with the argument below this one `--port &#60;&#62;`
 
 ![port example][port-img]
 
-### [](#header-3) --port <>
+### [](#header-3) --port &#60;&#62;
 
 Shows all IPv4 addresses you are connected to and how many of them exist by specifying the port. You can use the list above this one `--port` to see which port/s correspond to which protocol
 
 ![port with argument example][port-with-arg-img]
 
-### [](#header-3) --route-ipv4 <>
+### [](#header-3) --route-ipv4 &#60;&#62;
 
 Displays step by step, the route to the host specified (IPv4)
 
 ![route ipv4 with argument example][route-ipv4-with-arg-img]
 
-### [](#header-3) --route-ipv6 <>
+### [](#header-3) --route-ipv6 &#60;&#62;
 
 Displays step by step, the route to the host specified (IPv6)
 
@@ -201,11 +201,11 @@ Unfortunately, I cannot test upon IPv6 (yet), the below example shows a snapshot
 
 ![route ipv6 with argument example][route-ipv6-with-arg-img]
 
-### [](#header-3) --url <>
+### [](#header-3) --url &#60;&#62;
 
 Extracts all addresses (IPv4, IPv6 and MAC) from the online documents specified and pretty prints them on stdout
 
-:exclamation: No javascript generated content is displayed
+No javascript generated content is displayed
 
 ![url with argument example][url-with-arg-img]
 
@@ -229,7 +229,7 @@ Shows the local IPv6 address of each active network interfaces with CIDR notatio
 
 ### [](#header-3) --cidr-all
 
-Use this to display almost all :sweat_smile: useful network information with CIDR notation
+Use this to display almost all useful network information with CIDR notation
 
 ![all with cidr example][cidr-all-img]
 
@@ -237,7 +237,7 @@ Use this to display almost all :sweat_smile: useful network information with CID
 
 Returns a list of common IPv4 and IPv6 addresses (bogon IPs) with CIDR notation
 
-You can use them to configure your :fire: firewall, or even identify ranges
+You can use them to configure your firewall, or even identify ranges
 
 ![list with cidr example][cidr-list-img]
 

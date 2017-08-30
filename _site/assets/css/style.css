@@ -762,6 +762,19 @@ img:not(.title-img) {
   margin: auto;
   width: 75%; }
 
+a#go-top {
+  font-size: 3em;
+  display: none; }
+
+.go-top {
+  position: fixed;
+  bottom: 0.5em;
+  right: 0.5em; }
+
+.footer {
+  font-size: 0.75em;
+  text-align: center; }
+
 @media print, screen and (max-width: 720px) {
   #title .credits {
     display: block;
