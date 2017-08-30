@@ -1,0 +1,11 @@
+/.sass*
+/.bundle*
+/_*
+/assets*
+/script*
+/vendor*
+/*.yml
+/Gem*
+/*.lock
+/*.gem*
+/*~

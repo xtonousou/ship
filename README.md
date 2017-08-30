@@ -123,11 +123,11 @@ $ ship
 $ gpg --verify ship.sh.asc ship.sh
 ```
 
-Successfully verified file should output
+A successfully verified file outputs
 
 > Good signature from "Sotirios M. Roussis <xtonousou@gmail.com>"
 
-If not, make sure you are downloading the right file from the right sources
+If not, make sure you are getting the right file from the right sources
 
 ---
 
