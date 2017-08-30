@@ -90,7 +90,7 @@ One or more of the following tools must be installed
 
 ---
 
-### Getting Started
+### [](#header-3) Getting Started
 
 ```bash
 $ git clone --branch=master https://github.com/xtonousou/ship.git
@@ -98,7 +98,7 @@ $ cd /path/to/ship
 $ bash ship.sh
 ```
 
-#### Arch Linux
+#### [](#header-4) Arch Linux
 
 ```bash
 $ yaourt -S ship
@@ -107,7 +107,21 @@ $ ship
 
 ---
 
-### Contribution
+### [](#header-3) Verify (optional)
+
+```bash
+$ gpg --verify ship.sh.asc ship.sh
+```
+
+A successfully verified file outputs
+
+> Good signature from "Sotirios M. Roussis <xtonousou@gmail.com>"
+
+If not, make sure you are getting the right file from the right sources
+
+---
+
+### [](#header-3) Contribution
 
 Pull requests, issues, suggestions, testing and feedback are all welcome
 
@@ -126,19 +140,19 @@ Please read [this](contributing) article first, about code of conduct
 
 ---
 
-### Changelog
+### [](#header-3) Changelog
 
 Read the [Changelog](changelog) file to review changes
 
 ---
 
-### Contact
+### [](#header-3) Contact
 
 Send me an email at [xtonousou@gmail.com](mailto:xtonousou@gmail.com)
 
 ----
 
-### License
+### [](#header-3) License
 
 Copyright (c) **2017** by **Sotirios M. Roussis**. Some rights reserved
 
