@@ -2,7 +2,7 @@
 ## Title........: ship.sh
 ## Description..: A simple, handy network addressing multitool with plenty of features.
 ## Author.......: Sotirios M. Roussis a.k.a. xtonousou - xtonousou@gmail.com
-## Date.........: 20170812
+## Date.........: 20170830
 ## Usage........: bash ship.sh [options]? [arguments]?
 ## Bash Version.: 3.2 or later
 
