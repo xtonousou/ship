@@ -769,7 +769,12 @@ a#go-top {
 .go-top {
   position: fixed;
   bottom: 0.5em;
-  right: 0.5em; }
+  right: 0.5em;
+  color: #FFFFFF; }
+  .go-top:hover {
+    color: #44C2C7; }
+  .go-top:active {
+    color: #13818D; }
 
 .footer {
   font-size: 0.75em;

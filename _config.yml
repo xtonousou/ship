@@ -1,8 +1,26 @@
-title:       "ship.sh"
-description: "Official support webpage for the project 'ship'. Developed and maintained by xtonousou."
-show_downloads: true
+title:            "ship.sh"
+description:      "Official support webpage for the project 'ship'. Developed and maintained by xtonousou."
+show_downloads:   true
 google_analytics: "UA-104956050-1"
-lang:  "en-US"
+lang:             "en-US"
+
+href:
+  google_analytics: "https://www.google-analytics.com/analytics.js"
+  favicon:          "assets/images/favicon.ico"
+  style:            "assets/css/style.css"
+  animatecss:       "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"
+  fontawesome:      "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+  jquery:           "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+  respond:          "assets/js/respond.js"
+  totop:            "assets/js/totop.js"
+  html5:            "https://html5shiv.googlecode.com/svn/trunk/html5.js"
+  ie:               "assets/css/ie.css"
+  logo:             "assets/images/logo-with-text.png"
+  jekyll:           "https://jekyllrb.com"
+  gitpages:         "https://pages.github.com"
+  fontawesome_:     "http://fontawesome.io"
+  animatecss_:      "https://daneden.github.io/animate.css"
+  ruby:             "https://www.ruby-lang.org/en"
 
 project:
   version:     "2.6"
@@ -17,9 +35,9 @@ project:
 shield:
   version_shield: "https://img.shields.io/badge/version-2.6-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
   license_shield: "https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
-  bash_shield: "https://img.shields.io/badge/bash-3.2+-lightgrey.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
-  paypal_shield: "https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
-  aur_shield: "https://img.shields.io/aur/version/ship.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
+  bash_shield:    "https://img.shields.io/badge/bash-3.2+-lightgrey.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
+  paypal_shield:  "https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
+  aur_shield:     "https://img.shields.io/aur/version/ship.svg?style=flat-square&colorA=13818d&colorB=44c2c7"
 
 github:
   repository_name: "ship"
@@ -29,7 +47,7 @@ github:
   repository_url:  "https://github.com/xtonousou/ship"
   master_zip:      "https://github.com/xtonousou/ship/archive/master.zip"
   dev_zip:         "https://github.com/xtonousou/ship/archive/dev.zip"
-  pubkey: "4C18E0B77A122AD9"
+  pubkey:          "4C18E0B77A122AD9"
 
 compatibility:
   arch_from:   "4.7.5-1"

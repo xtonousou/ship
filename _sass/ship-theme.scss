@@ -155,7 +155,6 @@ dt {
   font-weight: normal;
 }
 
-
 #header {
   z-index: 100;
   left: 0;
@@ -284,6 +283,15 @@ a#go-top {
   position: fixed;
   bottom: 0.5em;
   right: 0.5em;
+  color: #FFFFFF;
+
+  &:hover {
+    color: #44C2C7;
+  }
+
+  &:active {
+    color: #13818D;
+  }
 }
 
 .footer {
