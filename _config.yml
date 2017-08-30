@@ -2,7 +2,6 @@ title:       "ship.sh"
 description: "Official support webpage for the project 'ship'. Developed and maintained by xtonousou."
 show_downloads: true
 google_analytics: "UA-104956050-1"
-theme: "ship-theme"
 lang:  "en-US"
 
 project:
@@ -30,6 +29,7 @@ github:
   repository_url:  "https://github.com/xtonousou/ship"
   zip_url:         "https://github.com/xtonousou/ship/zipball/master"
   tar_url:         "https://github.com/xtonousou/ship/tarball/master"
+  pubkey: "4C18E0B77A122AD9"
 
 compatibility:
   arch_from:   "4.7.5-1"
