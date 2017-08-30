@@ -23,12 +23,12 @@ shield:
 
 github:
   repository_name: "ship"
-  tagline:         "A simple, handy network addressing multitool with plenty of features"
+  tagline:         "a simple, handy network addressing multitool with plenty of features"
   owner_name:      "xtonousou"
   owner_url:       "https://github.com/xtonousou"
   repository_url:  "https://github.com/xtonousou/ship"
-  zip_url:         "https://github.com/xtonousou/ship/zipball/master"
-  tar_url:         "https://github.com/xtonousou/ship/tarball/master"
+  master_zip:      "https://github.com/xtonousou/ship/archive/master.zip"
+  dev_zip:         "https://github.com/xtonousou/ship/archive/dev.zip"
   pubkey: "4C18E0B77A122AD9"
 
 compatibility:
