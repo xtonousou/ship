@@ -23,3 +23,5 @@ A list of features to be implemented in the near future.
   * []
 * Implement a list of IP ranges per country. Read [this](http://www.iwik.org/ipcountry/)
 * Remove the utilization of those tools: `traceroute tracepath mtr` and completely depend on [here](https://intodns.com). Scrape properly the website and edit the appropriate stream. Maybe need to find more of these hosts, to decrease the chance of not getting data due to host's issues.
+* IP Location info using the following API
+  * [ip2country](https://ip2country.info/)
