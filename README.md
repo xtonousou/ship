@@ -9,6 +9,8 @@
     &nbsp;
   <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NJ4VLBTM8FB4C"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
+  <a href="https://saythanks.io/to/xtonousou"><img src="https://img.shields.io/badge/say%20thanks-!-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+    &nbsp;
   <a href="https://aur.archlinux.org/packages/ship/"><img src="https://img.shields.io/aur/version/ship.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
 </p>
 
