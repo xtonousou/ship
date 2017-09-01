@@ -1,6 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.6.3] - 2017-09-01
+### Added
+* Debugging option by doing the following
+  * `DEBUG=1 bash ship.sh -h`
+    * By passing `DEBUG=1` in front of the command
+
+### Changed
+* Code to follow bash styling and some standards.
+
 ## [2.6.2] - 2017-08-30
 ### Added
 * `ship -e` now can handle more than one domain.
