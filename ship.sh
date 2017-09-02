@@ -2,11 +2,13 @@
 ## Title........: ship.sh
 ## Description..: A simple, handy network addressing multitool with plenty of features.
 ## Author.......: Sotirios M. Roussis a.k.a. xtonousou - xtonousou@gmail.com
-## Date.........: 20170901
+## Date.........: 20170902
 ## Usage........: bash ship.sh [options]? [arguments]?
 ## Bash Version.: 3.2 or later
 
 [[ "${DEBUG}" -eq 1 ]] && set -x &> /dev/null
+[[ "${NOCHECK}" -eq 1 ]] && readonly NOCHECK=1 &> /dev/null
+[[ "${SILENT}" -eq 1 ]] && readonly SILENT=1 &> /dev/null
 
 ### Script's Info
 readonly VERSION="2.6.3"
@@ -243,6 +245,23 @@ check_destination() {
   [[ "${RETURNED_VALUE}" -ge 2 ]] && error_exit "${DIALOG_DESTINATION_UNREACHABLE}"
 
   return 0
+}
+
+check_http_code() {
+
+  local HTTP_CODE
+
+  if [[ ! "${SILENT}" ]]; then
+    print_check "${1}"
+    HTTP_CODE=$(curl --location --output /dev/null --silent --head --write-out '%{http_code}\n')
+    clear_line
+  else
+    HTTP_CODE=$(curl --location --output /dev/null --silent --head --write-out '%{http_code}\n')
+  fi
+
+  if [[ "${HTTP_CODE}" -ne 200 ]]; then
+    error_exit "${COLORS[3]}${DOCUMENT}${COLORS[0]} is unreachable. Input was invalid or server is down or has connection issues. ${DIALOG_ABORTING}"
+  fi
 }
 
 # Checks if a network address is valid.
@@ -1542,17 +1561,9 @@ show_ips_from_online_documents() {
   init_regexes
 
   for DOCUMENT in "${@}"; do
-    print_check "${DOCUMENT}"
-    HTTP_CODE=$(wget --spider --tries 1 --timeout="${TIMEOUT}" --server-response "${DOCUMENT}" 2>&1 | awk '/HTTP\//{print $2}' | tail --lines=1)
-    
-    clear_line
-    if [[ "${HTTP_CODE}" -ne 200 ]]; then
-      error_exit "${COLORS[3]}${DOCUMENT}${COLORS[0]} is unreachable. Input was invalid or server is down or has connection issues. ${DIALOG_ABORTING}"
-    fi
+    check_http_code "${DOCUMENT}"
 
-    echo -ne "Downloading ${COLORS[2]}$1${COLORS[0]} ..."
     wget "${DOCUMENT}" -qO- >> "${TEMP_FILE_HTML}"
-    clear_line
 
     grep --extended-regexp --only-matching "${REGEX_IPV4}" "${TEMP_FILE_HTML}" >> "${TEMP_FILE_IPV4}"
     grep --extended-regexp --only-matching "${REGEX_IPV6}" "${TEMP_FILE_HTML}" >> "${TEMP_FILE_IPV6}"
@@ -1637,7 +1648,7 @@ show_ipv4_cidr() {
 # Prints active network interfaces with their IPv6 address and CIDR suffix.
 show_ipv6_cidr() {
 
-  check_ipv6
+  [[ ! "${NOCHECK}" ]] && check_ipv6
 
   local ITEM
   declare -ra INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
@@ -1654,7 +1665,7 @@ show_ipv6_cidr() {
 # Prints all info and CIDR suffix.
 show_all_cidr() {
 
-  check_ipv6
+  [[ ! "${NOCHECK}" ]] && check_ipv6
   
   local MAC_OF DRIVER_OF GATEWAY CIDR ITEM
   declare -ra INTERFACES_ARRAY=($(ip route | awk 'tolower($0) ~ /default/ {print $5}'))
@@ -1734,6 +1745,10 @@ sail() {
   [[ -z "${1}" ]] && error_exit "${DIALOG_ERROR}"
 
   check_bash_version
+
+  trap trap_handler INT &>/dev/null
+  trap trap_handler SIGTSTP &>/dev/null
+  trap mr_proper EXIT
   
   while :; do
     case "${1}" in
@@ -1767,15 +1782,11 @@ sail() {
         ;;
       "-e"|"--external")
         check_connectivity "--internet"
-        trap trap_handler INT &>/dev/null
-        trap trap_handler SIGTSTP &>/dev/null
         show_ip_from "${@:2}"
         shift 2
         break
         ;;
       "-f"|"--find")
-        trap trap_handler INT &>/dev/null
-        trap trap_handler SIGTSTP &>/dev/null
         show_ips_from_file "${@:2}"
         break
         ;;
@@ -1790,15 +1801,11 @@ sail() {
         ;;
       "-H"|"--hosts")
         check_connectivity "--local"
-        trap trap_handler INT &>/dev/null
-        trap trap_handler SIGTSTP &>/dev/null
         show_live_hosts "--normal"
         break
         ;;
       "-HM"|"--hosts-mac")
         check_connectivity "--local"
-        trap trap_handler INT &>/dev/null
-        trap trap_handler SIGTSTP &>/dev/null
         show_live_hosts "--mac"
         break
         ;;
@@ -1823,32 +1830,24 @@ sail() {
         ;;
       "-P"|"--port")
         check_connectivity "--internet"
-        trap trap_handler INT &>/dev/null
-        trap trap_handler SIGTSTP &>/dev/null
         show_port_connections "${2}"
         shift 2
         break
         ;;
       "-r"|"--route-ipv4")
         check_connectivity "--internet"
-        trap trap_handler INT &>/dev/null
-        trap trap_handler SIGTSTP &>/dev/null
         show_next_hops "--ipv4" "${2}"
         shift 2
         break
         ;;
       "-r6"|"--route-ipv6")
         check_connectivity "--internet"
-        trap trap_handler INT &>/dev/null
-        trap trap_handler SIGTSTP &>/dev/null
         show_next_hops "--ipv6" "${2}"
         shift 2
         break
         ;;
       "-u"|"--url")
         check_connectivity "--internet"
-        trap trap_handler INT &>/dev/null
-        trap trap_handler SIGTSTP &>/dev/null
         show_ips_from_online_documents "${@:2}"
         break
         ;;
@@ -1881,9 +1880,6 @@ sail() {
     esac
   done
 
-  trap trap_handler INT &>/dev/null
-  trap trap_handler SIGTSTP &>/dev/null
-  mr_proper && trap mr_proper EXIT
   exit 0
 }
 
