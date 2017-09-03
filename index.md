@@ -107,17 +107,15 @@ $ ship
 
 ---
 
-### [](#header-3) Verify (optional)
+### [](#header-3) Checksums
 
 ```bash
-$ gpg --verify ship.sh.asc ship.sh
+$ md5sum ship.sh
 ```
 
-A successfully verified file outputs
+#### Expected Output
 
-> Good signature from "Sotirios M. Roussis <xtonousou@gmail.com>"
-
-If not, make sure you are getting the right file from the right sources
+> 
 
 ---
 
