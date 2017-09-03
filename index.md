@@ -112,11 +112,13 @@ $ ship
 #### `master` branch
 
 > MD5: 12bfc2455a348b2b660de95017076706
+
 > SHA1: 306fd0db6b8c40357c043223c43e1660bbf60ab2
 
 #### `dev` branch
 
 > MD5: 3242abd56e4b709955530de0240ee672
+
 > SHA1: 7ca97759563b4b9c95fd10076bd72df642874d7b
 
 ---
