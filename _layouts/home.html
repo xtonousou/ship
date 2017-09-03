@@ -80,7 +80,7 @@
       <section>
         <div id="title">
           <p align="center">
-            <a href="/ship"><img class="title-img animated bounceIn" width=50% src="{{ site.href.logo }}"></img></a></br>
+            <a href="/ship/"><img class="title-img animated bounceIn" width=50% src="{{ site.href.logo }}"></img></a></br>
             <a href="{{ site.project.main_url }}"><img class="title-img" src="{{ site.shield.version_shield }}"></a>
               &nbsp;
             <a href="{{ site.project.license_url }}"><img class="title-img" src="{{ site.shield.license_shield }}"></a>
@@ -96,7 +96,14 @@
           <p class="smaller_par">{{ site.github.tagline }}</p>
           <hr>
           <span class="credits left"><i class="fa fa-ship" aria-hidden="true"> project</i> maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></span>
-          <span class="credits right">theme by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></span>
+          <span class="credits right">
+            <ul id="breadcrumbs">
+              <li>
+                <i class="fa fa-home" aria-hidden="true"></i>
+                <a href="">index.md</a>
+              </li>
+            </ul>
+          </span>
         </div>
 
         {{ content }}
