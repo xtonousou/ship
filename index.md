@@ -109,13 +109,12 @@ $ ship
 
 ### [](#header-3) Checksums
 
-```bash
-$ md5sum ship.sh
-```
+#### md5
 
-#### Expected Output
-
-> 
+ Branch | Checksum                         
+:-------|:-----------------------------------
+ master | > 12bfc2455a348b2b660de95017076706 
+ dev    | > 3242abd56e4b709955530de0240ee672 
 
 ---
 
