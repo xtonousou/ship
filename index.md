@@ -109,12 +109,16 @@ $ ship
 
 ### [](#header-3) Checksums
 
-#### md5
-
- Branch | Checksum                         
-:-------|:-----------------------------------
- master | > 12bfc2455a348b2b660de95017076706 
- dev    | > 3242abd56e4b709955530de0240ee672 
+* `master` branch
+  * MD5
+    * > 12bfc2455a348b2b660de95017076706
+  * SHA1
+    * > blahblah
+* `dev` branch
+  * MD5
+    * > 3242abd56e4b709955530de0240ee672
+  * SHA1
+    * > blahblah
 
 ---
 
