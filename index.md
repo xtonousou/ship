@@ -26,8 +26,6 @@ layout: home
   * **IPv4**
   * optionally suppress the bitwise output
   * display results as HTML
-  * split into networks of size n1, n2, n3 🚧
-  * deaggregate address range 🚧
 * Show list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
 * Compatible with most of the common linux distributions
 * Drag and drop URLs or file paths on console window
@@ -44,7 +42,7 @@ Read the [Guide](guide)
 
 ### [](#header-3) Requirements
 
-`ship` uses some of the tools included in **coreutils** and shell builtins
+`ship` uses some of the tools included in **coreutils** and **shell builtins**
 
 #### [](#header-4) Mandatory
 
@@ -111,15 +109,15 @@ $ ship
 
 #### `master` branch
 
-> MD5: 12bfc2455a348b2b660de95017076706
-
-> SHA1: 306fd0db6b8c40357c043223c43e1660bbf60ab2
+> **MD5**: 12bfc2455a348b2b660de95017076706
+>
+> **SHA1**: 306fd0db6b8c40357c043223c43e1660bbf60ab2
 
 #### `dev` branch
 
-> MD5: 3242abd56e4b709955530de0240ee672
-
-> SHA1: 7ca97759563b4b9c95fd10076bd72df642874d7b
+> **MD5**: 3242abd56e4b709955530de0240ee672
+>
+> **SHA1**: 7ca97759563b4b9c95fd10076bd72df642874d7b
 
 ---
 
