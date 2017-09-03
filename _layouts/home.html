@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en-US' }}">
+  
+  <head>
+    
+    <title>{{ site.title }}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="keywords" content="linux, bash, system, network, networking"/>
+    <meta name="description" content="{{ site.description }}"/>
+
+    <script type="text/javascript">
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','{{ site.href.google_analytics }}','ga');
+      ga('create', '{{ site.google_analytics }}', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <link rel="icon" type="image/x-icon" href="{{ site.href.favicon }}"/>
+    
+    <link rel="stylesheet" href="{{ site.href.style }}">
+    
+    <link rel="stylesheet" href="{{ site.href.animatecss }}">
+    <link rel="stylesheet" href="{{ site.href.fontawesome }}">
+    <script src="{{ site.href.jquery }}"></script>
+    <script src="{{ site.href.respond }}"></script>
+    <script src="{{ site.href.totop }}"></script>
+    <!--[if lt IE 9]>
+      <script src="{{ site.href.html5 }}"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="{{ site.href.ie }}">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  </head>
+  
+  <body>
+      <div id="header">
+        <nav>
+            <li class="fork"><a href="{{ site.github.repository_url }}">View On GitHub</a></li>
+            {% if site.show_downloads %}
+              <li class="downloads"><a href="{{ site.github.dev_zip }}">dev</a></li>
+              <li class="downloads"><a href="{{ site.github.master_zip }}">master</a></li>
+              <li class="title"><i class="fa fa-download" aria-hidden="true"></i> download</li>
+            {% endif %}
+        </nav>
+      </div>
+
+      <!---                       _____|\                     -->
+      <!---                  _.--| {{ site.project.version }}  |:                     -->
+      <!---                 <____|.----||                     -->
+      <!---                        .---''---,                 -->
+      <!---                         ;..__..'    _...          -->
+      <!---                       ,'/  ;|/..--''    \         -->
+      <!---                     ,'_/.-/':            :        -->
+      <!---                _..-'''/  /  |  \    \   _|/|      -->
+      <!---               \      /-./_ \;   \    \,;'   \     -->
+      <!---               ,\    / \:  `:\    \   //    `:`.   -->
+      <!---             ,'  \  /-._;   | :    : ::    ,.   .  -->
+      <!---           ,'     ::   /`-._| |    | || ' :  `.`.) -->
+      <!---        _,'       |;._:: |  | |    | `|   :    `'  -->
+      <!---      ,'   `.     /   |`-:_ ; |    |  |  : \       -->
+      <!---      `--.   )   /|-._:    :          |   \ \      -->
+      <!---         /  /   :_|   ;`-._;   __..--';    : :     -->
+      <!---        /  (    ;|;-./_  _/.-:'o |   /     ' |     -->
+      <!---       /  , \._/_/_./--''/_|:|___|_,'        |     -->
+      <!---      :  /   `'-'--'----'---------'          |     -->
+      <!---      | :     O ._O   O_. O ._O   O_.      ; ;     -->
+      <!---      : `.      //    //    //    //     ,' /      -->
+      <!---    ~~~`.______//____//____//____//_______,'~      -->
+      <!---              //    //~   //    //                 -->
+      <!---       ~~   _//   _//   _// ~ _//     ~            -->
+      <!---     ~     / /   / /   / /   / /  ~      ~~        -->
+      <!---          ~~~   ~~~   ~~~   ~~~                    -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <p align="center">
+            <a href="/ship"><img class="title-img animated bounceIn" width=50% src="{{ site.href.logo }}"></img></a></br>
+            <a href="{{ site.project.main_url }}"><img class="title-img" src="{{ site.shield.version_shield }}"></a>
+              &nbsp;
+            <a href="{{ site.project.license_url }}"><img class="title-img" src="{{ site.shield.license_shield }}"></a>
+              &nbsp;
+            <a href="{{ site.project.bash_url }}"><img class="title-img" src="{{ site.shield.bash_shield }}"></a>
+              &nbsp;
+            <a href="{{ site.project.paypal_url }}"><img class="title-img" src="{{ site.shield.paypal_shield }}"></a>
+              &nbsp;
+            <a href="{{ site.project.say_thanks_url }}"><img class="title-img" src="{{ site.shield.say_thanks_shield }}"></a>
+              &nbsp;
+            <a href="{{ site.project.aur_url }}"><img class="title-img" src="{{ site.shield.aur_shield }}"></a>
+          </p>
+          <p class="smaller_par">{{ site.github.tagline }}</p>
+          <hr>
+          <span class="credits left"><i class="fa fa-ship" aria-hidden="true"> project</i> maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></span>
+          <span class="credits right">theme by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></span>
+        </div>
+
+        {{ content }}
+
+      </section>
+    </div>
+  </body>
+
+  <footer>
+    <a href="#" id="go-top">
+      <i class="fa fa-arrow-circle-up go-top" aria-hidden="true"></i>
+    </a>
+    <div class="wrapper footer">
+      <i class="fa fa-flask" aria-hidden="true">
+        powered by
+        <a href="{{ site.href.jekyll }}">Jekyll</a>
+      </i>
+      
+      <i class="fa fa-github" aria-hidden="true">
+        hosted on
+        <a href="{{ site.href.gitpages }}">GitHub</a>
+      </i>
+      
+      <i class="fa fa-font-awesome" aria-hidden="true">
+        icons by
+        <a href="{{ site.href.fontawesome_ }}">Font Awesome</a>
+      </i>
+      
+      <i class="fa fa-eye" aria-hidden="true">
+        animated with
+        <a href="{{ site.href.animatecss_ }}">Animate.css</a>
+      </i>
+
+      <i class="fa fa-diamond" aria-hidden="true">
+        blessed by
+        <a href="{{ site.href.ruby }}">Ruby</a>
+      </i>
+    </div>
+  </footer>
+
+</html>

@@ -3,6 +3,7 @@ description:      "Official support webpage for the project 'ship'. Developed an
 show_downloads:   true
 google_analytics: "UA-104956050-1"
 lang:             "en-US"
+baseurl:          "/ship"
 
 href:
   google_analytics: "https://www.google-analytics.com/analytics.js"

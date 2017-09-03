@@ -274,6 +274,32 @@ img:not(.title-img) {
   width: 75%;
 }
 
+ul#breadcrumbs {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul#breadcrumbs > li {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+ul#breadcrumbs > li:not(:last-child)::after {
+  content: ' /';
+}
+
+ul#breadcrumbs > li > a {
+  text-decoration: none;
+  line-height: 1;
+}
+
+ul#breadcrumbs > li > a:hover {
+  text-decoration: underline;
+}
+
 a#go-top {
   font-size: 3em;
   display: none;

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 ---
 
 # [](#header-1) Contributor Covenant Code of Conduct
