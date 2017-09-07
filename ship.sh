@@ -2,33 +2,56 @@
 ## Title........: ship.sh
 ## Description..: A simple, handy network addressing multitool with plenty of features.
 ## Author.......: Sotirios M. Roussis a.k.a. xtonousou - xtonousou@gmail.com
-## Date.........: 20170902
+## Date.........: 20170907
 ## Usage........: bash ship.sh [options]? [arguments]?
 ## Bash Version.: 3.2 or later
+## License .....: GPLv3+
+
+### FLAGS
+if [[ "${COLOR}" ]]; then ## COLOR SCHEME
+  if [[ "${COLOR}" -eq 1 ]]; then
+    declare -ra color_arr=(
+      "\e[1;0m"      # Normal  ## color_arr[0]
+      "\e[1;31;40m"  # Red     ## color_arr[1]
+      "\e[1;32;40m"  # Green   ## color_arr[2]
+      "\e[1;33;40m"  # Orange  ## color_arr[3]
+      "\e[1;34;40m"  # Cyan    ## color_arr[4]
+      "\e[1;35;40m"  # Magenta ## color_arr[5]
+    )
+  elif [[ "${COLOR}" -eq 2 ]]; then
+    declare -ra color_arr=(
+      "\e[1;0m"      # Normal  ## color_arr[0]
+      "\e[1;32;40m"  # Green   ## color_arr[1]
+      "\e[1;31;40m"  # Red     ## color_arr[2]
+      "\e[1;35;40m"  # Magenta ## color_arr[3]
+      "\e[1;33;40m"  # Orange  ## color_arr[4]
+      "\e[1;34;40m"  # Cyan    ## color_arr[5]
+    )
+  elif [[ "${COLOR}" -eq 3 ]]; then
+    declare -ra color_arr=(
+      "\e[1;0m"      # Normal  ## color_arr[0]
+      "\e[1;34;40m"  # Cyan    ## color_arr[1]
+      "\e[1;35;40m"  # Magenta ## color_arr[2]
+      "\e[1;32;40m"  # Green   ## color_arr[3]
+      "\e[1;31;40m"  # Red     ## color_arr[4]
+      "\e[1;33;40m"  # Orange  ## color_arr[5]
+    )
+  fi
+fi
 
 [[ "${DEBUG}" -eq 1 ]] && set -x &> /dev/null
-[[ "${NOCHECK}" -eq 1 ]] && readonly NOCHECK=1 &> /dev/null
 [[ "${SILENT}" -eq 1 ]] && readonly SILENT=1 &> /dev/null
+[[ "${NOCHECK}" -eq 1 ]] && readonly NOCHECK=1 &> /dev/null
 
 ### Script's Info
-readonly VERSION="2.6.3"
-readonly SCRIPT_NAME="ship"
+readonly version="2.6.3"
+readonly script_name="ship"
 
 ### Author's Info
 readonly AUTHOR="Sotirios M. Roussis"
 readonly AUTHOR_NICKNAME="xtonousou"
 readonly GMAIL="${AUTHOR_NICKNAME}@gmail.com"
 readonly GITHUB="https://github.com/${AUTHOR_NICKNAME}"
-
-### Colors
-declare -ra COLORS=(
-  "\e[1;0m"     # Normal  ## COLORS[0]
-  "\033[1;31m"  # Red     ## COLORS[1]
-  "\033[1;32m"  # Green   ## COLORS[2]
-  "\033[1;33m"  # Orange  ## COLORS[3]
-  "\033[1;36m"  # Cyan    ## COLORS[4]
-  "\033[1;95m"  # Magenta ## COLORS[5]
-)
 
 ### Locations
 readonly GOOGLE_DNS="8.8.8.8"
@@ -46,21 +69,26 @@ readonly TIMEOUT="6"
 readonly LONG_TIMEOUT="17"
 
 ### Dialogs
-readonly DIALOG_UNDER_DEVELOPMENT="${COLORS[1]}under development${COLORS[0]}"
+readonly DIALOG_UNDER_DEVELOPMENT="${color_arr[1]}under development${color_arr[0]}"
 readonly DIALOG_PRESS_CTRL_C="Press [CTRL+C] to stop"
-readonly DIALOG_ERROR="Try ${SCRIPT_NAME} ${COLORS[2]}-h${COLORS[0]} or ${SCRIPT_NAME} ${COLORS[2]}--help${COLORS[0]} for more information."
-readonly DIALOG_ABORTING="${COLORS[1]}Aborting${COLORS[0]}."
-readonly DIALOG_NO_ARGUMENTS="No arguments. ${DIALOG_ABORTING}"
-readonly DIALOG_NO_INTERNET="Internet connection unavailable. ${DIALOG_ABORTING}"
-readonly DIALOG_IPV6_UNAVAILABLE="IPv6 unavailable. ${DIALOG_ABORTING}"
-readonly DIALOG_NO_LOCAL_CONNECTION="Local connection unavailable. ${DIALOG_ABORTING}"
-readonly DIALOG_DESTINATION_UNREACHABLE="Destination is unreachable. ${DIALOG_ABORTING}"
-readonly DIALOG_SERVER_IS_DOWN="Destination is unreachable. Server may be down or has connection issues. ${DIALOG_ABORTING}"
-readonly DIALOG_NO_VALID_MASK="The netmask is invalid. ${DIALOG_ABORTING}"
-readonly DIALOG_NO_VALID_CIDR="The CIDR is invalid. ${DIALOG_ABORTING}"
-readonly DIALOG_NO_VALID_ADDRESSES="No valid IPv4, IPv6 or MAC addresses found. ${DIALOG_ABORTING}"
-readonly DIALOG_NO_TRACEPATH6="${COLORS[3]}tracepath6${COLORS[0]} is missing, will use ${COLORS[3]}tracepath${COLORS[0]} with no IPv6 compatibility"
-readonly DIALOG_NO_TRACE_COMMAND="You must install at least one of the following tools to perform this action: ${COLORS[3]}tracepath${COLORS[0]}, ${COLORS[3]}traceroute${COLORS[0]}, ${COLORS[3]}mtr${COLORS[0]}. ${DIALOG_ABORTING}"
+if [[ ! "${SILENT}" ]]; then
+  readonly DIALOG_ERROR="Try ${script_name} ${color_arr[2]}-h${color_arr[0]} or ${script_name} ${color_arr[2]}--help${color_arr[0]} for more information."
+  readonly DIALOG_ABORTING="${color_arr[1]}Aborting${color_arr[0]}."
+  readonly DIALOG_INVALID_BASH="Insufficient Bash version. Bash 3.2 or newer is required. ${DIALOG_ABORTING}"
+  readonly DIALOG_NO_ARGUMENTS="No arguments. ${DIALOG_ABORTING}"
+  readonly DIALOG_NO_INTERNET="Internet connection unavailable. ${DIALOG_ABORTING}"
+  readonly DIALOG_IPV6_UNAVAILABLE="IPv6 unavailable. ${DIALOG_ABORTING}"
+  readonly DIALOG_NO_IPV6_MODULE="IPv6 is supported but the 'ipv6' module is not loaded\n"
+  readonly DIALOG_NO_LOCAL_CONNECTION="Local connection unavailable. ${DIALOG_ABORTING}"
+  readonly DIALOG_DESTINATION_UNREACHABLE="Destination is unreachable. ${DIALOG_ABORTING}"
+  readonly DIALOG_SERVER_IS_DOWN="Destination is unreachable. Server may be down or has connection issues. ${DIALOG_ABORTING}"
+  readonly DIALOG_NO_VALID_MASK="The netmask is invalid. ${DIALOG_ABORTING}"
+  readonly DIALOG_NO_VALID_CIDR="The CIDR is invalid. ${DIALOG_ABORTING}"
+  readonly DIALOG_NO_VALID_ADDRESSES="No valid IPv4, IPv6 or MAC addresses found. ${DIALOG_ABORTING}"
+  readonly DIALOG_NO_TRACEPATH6="${color_arr[3]}tracepath6${color_arr[0]} is missing, will use ${color_arr[3]}tracepath${color_arr[0]} with no IPv6 compatibility"
+  readonly DIALOG_NO_TRACE_COMMAND="You must install at least one of the following tools to perform this action: ${color_arr[3]}tracepath${color_arr[0]}, ${color_arr[3]}traceroute${color_arr[0]}, ${color_arr[3]}mtr${color_arr[0]}. ${DIALOG_ABORTING}"
+  readonly DIALOG_ROOT_PERMISSIONS="${color_arr[2]}${script_name}${color_arr[0]} requires ${color_arr[1]}root${color_arr[0]} privileges for this action."
+fi
 
 ########################################################################
 #                                                                      #
@@ -159,7 +187,8 @@ dotted_quad_ip_to_decimal() {
 # Prints a message while checking a network host.
 print_check() {
 
-  echo -ne "Checking ${COLORS[2]}${1}${COLORS[0]} ..."
+  [[ ! "${SILENT}" ]] \
+    && printf "Checking %s%s%s ..." "${color_arr[2]}${1}${color_arr[0]}"
 
   return 0
 }
@@ -204,32 +233,17 @@ print_port_protocol_list() {
 # Used with two parameters : invalid option, then echoes first parameter, usually error dialogs.
 error_exit() {
 
-  [[ -z "${1}" ]] && clear_line && exit 1 \
-    || [[ -z "${2}" ]] \
-      && clear_line \
-      && echo -e "${1}" \
-      && exit 1 \
-    || clear_line\
-      && echo -e "${SCRIPT_NAME}: invalid option '${2}'" \
-      && echo -e "${1}" && \
-      exit 1
-}
-
-# Checks network connection (local or internet).
-check_connectivity() {
-
-  case "${1}" in
-    "--local")
-      ip route | grep ^default &>/dev/null \
-        || error_exit "${DIALOG_NO_LOCAL_CONNECTION}"
-      ;;
-    "--internet")
-      ping -q -c 1 -W "${LONG_TIMEOUT}" "${GOOGLE_DNS}" &>/dev/null \
-        || error_exit "${DIALOG_NO_INTERNET}"
-      ;;
-  esac
-
-  return 0
+  [[ ! "${SILENT}" ]] \
+    && [[ -z "${1}" ]] && clear_line && exit 1 \
+      || [[ -z "${2}" ]] \
+        && clear_line \
+        && echo -e "${1}" \
+        && exit 1 \
+      || clear_line \
+        && echo -e "${script_name}: invalid option '${2}'" \
+        && echo -e "${1}" && \
+        exit 1 \
+    || exit 1
 }
 
 # Exits ship, if ping fails to reach $1 in an amount of time.
@@ -260,8 +274,27 @@ check_http_code() {
   fi
 
   if [[ "${HTTP_CODE}" -ne 200 ]]; then
-    error_exit "${COLORS[3]}${DOCUMENT}${COLORS[0]} is unreachable. Input was invalid or server is down or has connection issues. ${DIALOG_ABORTING}"
+    error_exit "${color_arr[3]}${1}${color_arr[0]} is unreachable. Input was invalid or server is down or has connection issues. ${DIALOG_ABORTING}"
   fi
+
+  return 0
+}
+
+# Checks network connection (local or internet).
+check_connectivity() {
+
+  case "${1}" in
+  "--local")
+    ip route | grep ^default &>/dev/null \
+      || error_exit "${DIALOG_NO_LOCAL_CONNECTION}"
+  ;;
+  "--internet")
+    [[ $(curl --location --output /dev/null --silent --head --write-out '%{http_code}\n') = 200 ]] \
+      || error_exit "${DIALOG_NO_INTERNET}"
+  ;;
+  esac
+
+  return 0
 }
 
 # Checks if a network address is valid.
@@ -300,9 +333,10 @@ check_dotted_quad_address() {
 check_ipv6() {
 
   grep -i "ipv6" "/proc/modules" &> /dev/null \
-    || echo "IPv6 is supported but the 'ipv6' module is not loaded"
+    || echo -en "${DIALOG_NO_IPV6_MODULE}"
   
-  test -f "/proc/net/if_inet6" || error_exit "${DIALOG_IPV6_UNAVAILABLE}"
+  [[ -f "/proc/net/if_inet6" ]] \
+    || error_exit "${DIALOG_IPV6_UNAVAILABLE}"
 
   return 0
 }
@@ -329,7 +363,7 @@ check_if_parameter_is_positive_integer() {
 check_root_permissions() {
 
   [[ "$(id -u)" -ne 0 ]] \
-    && error_exit "${COLORS[2]}${SCRIPT_NAME}${COLORS[0]} requires ${COLORS[1]}root${COLORS[0]} privileges for this action."
+    && error_exit "${DIALOG_ROOT_PERMISSIONS}"
 
   return 0
 }
@@ -338,7 +372,7 @@ check_root_permissions() {
 check_bash_version() {
 
   [[ "${BASH_VERSINFO[0]}${BASH_VERSINFO[1]}" -lt 32 ]] \
-    && error_exit "Insufficient Bash version. Bash 3.2 or newer is required. ${DIALOG_ABORTING}"
+    && error_exit "${DIALOG_INVALID_BASH}"
 
   return 0
 }
@@ -346,7 +380,7 @@ check_bash_version() {
 # Deletes every file that is created by this script. Usually in /tmp.
 mr_proper() {
 
-  rm --recursive --force "/tmp/${SCRIPT_NAME^^}"*
+  rm --recursive --force "/tmp/${script_name^^}"*
 
   return 0
 }
@@ -405,7 +439,7 @@ show_ipv4() {
 # Prints active network interfaces with their IPv6 address.
 show_ipv6() {
 
-  check_ipv6
+  [[ ! "${NOCHECK}" ]] && check_ipv6
 
   local ITEM
   declare -a IPV6_ARRAY
@@ -422,7 +456,7 @@ show_ipv6() {
 # Prints all "basic" info.
 show_all() {
 
-  check_ipv6
+  [[ ! "${NOCHECK}" ]] && check_ipv6
 
   local MAC_OF DRIVER_OF GATEWAY ITEM
   declare -a IPV4_ARRAY IPV6_ARRAY
@@ -472,12 +506,12 @@ show_ip_from() {
   local HTTP_CODE TEMP_FILE RANDOM_SOURCE INPUT ITEM HOST
 
   RANDOM_SOURCE="${PUBLIC_IP["$(( RANDOM % ${#PUBLIC_IP[@]} ))"]}"
-  TEMP_FILE="/tmp/${SCRIPT_NAME^^}.ips"
+  TEMP_FILE="/tmp/${script_name^^}.ips"
   
   touch "${TEMP_FILE}"
 
   if [[ -z "${1}" ]]; then
-    print_check "${RANDOM_SOURCE}"
+    [[ ! "${SILENT}" ]] && print_check "${RANDOM_SOURCE}"
     HTTP_CODE=$(wget --spider --tries=1 --timeout="${TIMEOUT}" --server-response "${RANDOM_SOURCE}" 2>&1 | awk '/HTTP\//{print $2}' | tail --lines=1)
 
     if [[ "${HTTP_CODE}" -ne 200 ]]; then
@@ -485,41 +519,39 @@ show_ip_from() {
     fi
 
     clear_line
-    echo -ne "Grabbing ${COLORS[2]}IP${COLORS[0]} ..."
+    [[ ! "${SILENT}" ]] && echo -ne "Grabbing ${color_arr[2]}IP${color_arr[0]} ..."
     wget "${RANDOM_SOURCE}" --quiet --output-document="${TEMP_FILE}"
 
     clear_line
     awk '{print $0}' "${TEMP_FILE}"
   elif [[ "${#}" -eq 1 ]]; then
-    print_check "${1}"
-    check_destination "${1}"
+    [[ ! "${SILENT}" ]] && print_check "${1}"
+    [[ ! "${NOCHECK}" ]] && check_destination "${1}"
 
     clear_line    
     INPUT=$(echo "${1}" | sed --expression='s/^http\(\|s\):\/\///g' --expression='s/^`//' --expression='s/`//' --expression='s/`$//' | cut --fields=1 --delimiter="/")
 
     ping_source() {
-      
       for ITEM in {1..10}; do
         ping -c 1 -w "${LONG_TIMEOUT}" "${INPUT}" 2> /dev/null | awk -F '[()]' '/PING/{print $2}' >> "${TEMP_FILE}" &
       done
       handle_jobs
     }
 
-    echo -ne "Pinging ${COLORS[2]}${1}${COLORS[0]} ..."
+    [[ ! "${SILENT}" ]] && echo -ne "Pinging ${color_arr[2]}${1}${color_arr[0]} ..."
     ping_source
 
     clear_line
     sort --version-sort --unique "${TEMP_FILE}"
   elif [[ "${#}" -gt 1 ]]; then
     for HOST in "${@}"; do
-      print_check "${HOST}"
-      check_destination "${HOST}"
+      [[ ! "${SILENT}" ]] && print_check "${HOST}"
+      [[ ! "${NOCHECK}" ]] && check_destination "${HOST}"
 
       clear_line    
       INPUT=$(echo "${HOST}" | sed --expression='s/^http\(\|s\):\/\///g' --expression='s/^`//' --expression='s/`//' --expression='s/`$//' | cut --fields=1 --delimiter="/")
 
       ping_source() {
-
         declare IP
 
         for ITEM in {1..10}; do
@@ -528,7 +560,7 @@ show_ip_from() {
         handle_jobs
       }
 
-      echo -ne "Pinging ${COLORS[2]}${INPUT}${COLORS[0]} ..."
+      [[ ! "${SILENT}" ]] && echo -ne "Pinging ${color_arr[2]}${INPUT}${color_arr[0]} ..."
       ping_source
 
       clear_line
@@ -546,15 +578,15 @@ show_ips_from_file() {
     
   [[ -z "${1}" ]] && error_exit "No file was specified. ${DIALOG_ABORTING}"
   for FILE in "${@}"; do
-    [[ ! -f "${FILE}" ]] && error_exit "${COLORS[3]}${FILE}${COLORS[0]} does not exist. ${DIALOG_ABORTING}"
+    [[ ! -f "${FILE}" ]] && error_exit "${color_arr[3]}${FILE}${color_arr[0]} does not exist. ${DIALOG_ABORTING}"
   done
 
   local TEMP_FILE_IPV4 TEMP_FILE_IPV6 TEMP_FILE_MAC
   local IS_TEMP_FILE_IPV4_EMPTY IS_TEMP_FILE_IPV6_EMPTY IS_TEMP_FILE_MAC_EMPTY
 
-  TEMP_FILE_IPV4="/tmp/${SCRIPT_NAME^^}.ipv4"
-  TEMP_FILE_IPV6="/tmp/${SCRIPT_NAME^^}.ipv6"
-  TEMP_FILE_MAC="/tmp/${SCRIPT_NAME^^}.mac"
+  TEMP_FILE_IPV4="/tmp/${script_name^^}.ipv4"
+  TEMP_FILE_IPV6="/tmp/${script_name^^}.ipv6"
+  TEMP_FILE_MAC="/tmp/${script_name^^}.mac"
 
   touch "${TEMP_FILE_IPV4}"
   touch "${TEMP_FILE_IPV6}"
@@ -630,7 +662,7 @@ show_gateway() {
 # Scans live hosts on network and prints their IPv4 address with or without MAC address. ICMP and ARP.
 show_live_hosts() {
   
-  check_root_permissions
+  [[ ! "${NOCHECK}" ]] && check_root_permissions
   
   local ONLINE_INTERFACE NETWORK_IP NETWORK_IP_CIDR FILTERED_IP HOST
 
@@ -641,7 +673,7 @@ show_live_hosts() {
 
   ip -statistics neighbour flush all &>/dev/null
   
-  echo -ne "Pinging ${COLORS[2]}${NETWORK_IP_CIDR}${COLORS[0]}, please wait ..."
+  [[ ! "${SILENT}" ]] && echo -ne "Pinging ${color_arr[2]}${NETWORK_IP_CIDR}${color_arr[0]}, please wait ..."
   for HOST in {1..254}; do
     ping "${FILTERED_IP}.${HOST}" -c 1 -w "${LONG_TIMEOUT}" &>/dev/null &
   done
@@ -765,7 +797,7 @@ show_neighbor_cache() {
   
   local TEMP_FILE
 
-  TEMP_FILE="/tmp/${SCRIPT_NAME^^}.file"
+  TEMP_FILE="/tmp/${script_name^^}.file"
 
   touch "${TEMP_FILE}"
 
@@ -782,19 +814,21 @@ show_port_connections() {
   
   [[ -z "${1}" ]] && print_port_protocol_list && exit 0
   
-  check_root_permissions
-  check_if_parameter_is_positive_integer "${1}"
+  [[ ! "${NOCHECK}" ]] && check_root_permissions
+  [[ ! "${NOCHECK}" ]] && check_if_parameter_is_positive_integer "${1}"
 
   init_regexes
   
   clear
   while :; do
     clear
-    echo -e "${DIALOG_PRESS_CTRL_C}"
-    echo
-    echo -e "      ${COLORS[2]}┌─> ${COLORS[1]}Count Port ${COLORS[2]}──┐"
-    echo -e "      │ ┌───────> ${COLORS[1]}IPv4 ${COLORS[2]}└─> ${COLORS[1]}${1}"
-    echo -e "    ${COLORS[2]}┌─┘ └──────────────┐${COLORS[0]}"
+    if [[ ! "${SILENT}" ]]; then
+      echo -e "${DIALOG_PRESS_CTRL_C}"
+      echo
+      echo -e "      ${color_arr[2]}┌─> ${color_arr[1]}Count Port ${color_arr[2]}──┐"
+      echo -e "      │ ┌───────> ${color_arr[1]}IPv4 ${color_arr[2]}└─> ${color_arr[1]}${1}"
+      echo -e "    ${color_arr[2]}┌─┘ └──────────────┐${color_arr[0]}"
+    fi
     ss --all --numeric --process | grep --extended-regexp "${REGEX_IPV4}" | grep ":${1}" | awk '{print $6}' | cut --delimiter=":" --fields=1 | sort --version-sort | uniq --count
     sleep 2
   done
@@ -807,7 +841,7 @@ show_next_hops() {
   
   local FILTERED_INPUT PROTOCOL TRACEPATH_CMD TRACEROUTE_CMD MTR_CMD TEMP_FILE
 
-  TEMP_FILE="/tmp/${SCRIPT_NAME^^}.file"
+  TEMP_FILE="/tmp/${script_name^^}.file"
 
   touch "${TEMP_FILE}"
 
@@ -817,7 +851,7 @@ show_next_hops() {
 
   FILTERED_INPUT=$(echo "${2}" | sed 's/^http\(\|s\):\/\///g' | cut --fields=1 --delimiter="/")
 
-  check_for_missing_args "${DIALOG_NO_ARGUMENTS}" "${FILTERED_INPUT}"
+  [[ ! "${NOCHECK}" ]] && check_for_missing_args "${DIALOG_NO_ARGUMENTS}" "${FILTERED_INPUT}"
   
   case "${1}" in
     "--ipv4")
@@ -831,12 +865,11 @@ show_next_hops() {
 
   print_check "${FILTERED_INPUT}"
 
-  check_destination "${FILTERED_INPUT}"
+  [[ ! "${NOCHECK}" ]] && check_destination "${FILTERED_INPUT}"
 
   init_regexes
 
   trace_hops() {
-    
     # traceroute is deprecated, nevertheless it is preferred over all
     case "${TRACEPATH_CMD}:${TRACEROUTE_CMD}:${MTR_CMD}" in
       # If none of the tools (tracepath, traceroute, mtr) is installed
@@ -949,8 +982,9 @@ show_next_hops() {
     esac >> "${TEMP_FILE}"
   }
 
-  clear_line
-  echo -ne "Tracing path to ${COLORS[2]}${FILTERED_INPUT}${COLORS[0]} ..."
+  [[ ! "${SILENT}" ]] \
+    && clear_line \
+    && echo -ne "Tracing path to ${color_arr[2]}${FILTERED_INPUT}${color_arr[0]} ..."
   trace_hops
 
   # Ensure that TEMP_FILE is written on /tmp
@@ -1006,7 +1040,7 @@ show_ipcalc() {
   # pass the input into a variable
   IP=$(grep --extended-regexp "${REGEX_IPV4}" <<< "${1}")
   # check only the IP part
-  check_dotted_quad_address "$(awk -F '/' '{print $1}' <<< "${IP}")"
+  [[ ! "${NOCHECK}" ]] && check_dotted_quad_address "$(awk -F '/' '{print $1}' <<< "${IP}")"
 
   # if ipv4/cidr
   if grep --extended-regexp --only-matching "${REGEX_IPV4_CIDR}" <<< "${1}" &> /dev/null; then
@@ -1042,7 +1076,7 @@ show_ipcalc() {
     NETMASK_ARRAY=($(tr " " "\n" <<< "${NETMASK}"))
     
     # check if netmask is valid
-    check_dotted_quad_address "${NETMASK}"
+    [[ ! "${NOCHECK}" ]] && check_dotted_quad_address "${NETMASK}"
     # if netmask first part is 0
     [[ "${NETMASK_ARRAY[0]}" -eq 0 ]] && echo -e "${DIALOG_NO_VALID_MASK}" && show_usage_subnet && error_exit
     
@@ -1185,42 +1219,42 @@ show_ipcalc() {
   IFS=
   print_with_binary() {
 
-    printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address:" "${IP}" "${IP_BINARY}"
-    printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address (dec):" "$(dotted_quad_ip_to_decimal "${IP}")"
-    printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${IP}")")"
-    printf "%-16s${COLORS[4]}%-21s${COLORS[1]}%s${COLORS[0]}\n" "Netmask:" "${NETMASK} = ${CIDR}" "${NETMASK_BINARY}"
-    printf "%-16s${COLORS[4]}%-21s${COLORS[1]}%s${COLORS[0]}\n" "Netmask (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${NETMASK}")")"
-    printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Wildcard:" "${WILDCARD}" "${WILDCARD_BINARY}"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[3]}%s${color_arr[0]}\n" "Address:" "${IP}" "${IP_BINARY}"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[3]}%s${color_arr[0]}\n" "Address (dec):" "$(dotted_quad_ip_to_decimal "${IP}")"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[3]}%s${color_arr[0]}\n" "Address (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${IP}")")"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[1]}%s${color_arr[0]}\n" "Netmask:" "${NETMASK} = ${CIDR}" "${NETMASK_BINARY}"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[1]}%s${color_arr[0]}\n" "Netmask (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${NETMASK}")")"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[3]}%s${color_arr[0]}\n" "Wildcard:" "${WILDCARD}" "${WILDCARD_BINARY}"
     printf "=>\n"
     [[ "${CIDR}" -le 31 ]] \
-      && printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Network:" "${NETWORK_ADDRESS}/${CIDR}" "${NETWORK_ADDRESS_BINARY}" \
-      && printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "HostMin:" "${HOST_MINIMUM}" "${HOST_MINIMUM_BINARY}" \
-      && printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "HostMax:" "${HOST_MAXIMUM}" "${HOST_MAXIMUM_BINARY}" \
-      || printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Hostroute:" "${IP}" "${IP_BINARY}"
+      && printf "%-16s${color_arr[4]}%-21s${color_arr[3]}%s${color_arr[0]}\n" "Network:" "${NETWORK_ADDRESS}/${CIDR}" "${NETWORK_ADDRESS_BINARY}" \
+      && printf "%-16s${color_arr[4]}%-21s${color_arr[3]}%s${color_arr[0]}\n" "HostMin:" "${HOST_MINIMUM}" "${HOST_MINIMUM_BINARY}" \
+      && printf "%-16s${color_arr[4]}%-21s${color_arr[3]}%s${color_arr[0]}\n" "HostMax:" "${HOST_MAXIMUM}" "${HOST_MAXIMUM_BINARY}" \
+      || printf "%-16s${color_arr[4]}%-21s${color_arr[3]}%s${color_arr[0]}\n" "Hostroute:" "${IP}" "${IP_BINARY}"
     [[ "${CIDR}" -le 30 ]] \
-      && printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Broadcast:" "${BROADCAST_ADDRESS}" "${BROADCAST_ADDRESS_BINARY}"
-    printf "%-16s${COLORS[4]}%-21s${COLORS[5]}%s${COLORS[0]}%-22s${COLORS[4]}\n" "Hosts/Net:" "${HOSTS}" "Class ${CLASS}" " ${CLASS_DESCRIPTION}"
-    echo -e "${COLORS[0]}" # revert color back to normal
+      && printf "%-16s${color_arr[4]}%-21s${color_arr[3]}%s${color_arr[0]}\n" "Broadcast:" "${BROADCAST_ADDRESS}" "${BROADCAST_ADDRESS_BINARY}"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[5]}%s${color_arr[0]}%-22s${color_arr[4]}\n" "Hosts/Net:" "${HOSTS}" "Class ${CLASS}" " ${CLASS_DESCRIPTION}"
+    echo -e "${color_arr[0]}" # revert color back to normal
   }
 
   print_without_binary() {
     
-    printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n"               "Address:" "${IP}"
-    printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address (dec):" "$(dotted_quad_ip_to_decimal "${IP}")"
-    printf "%-16s${COLORS[4]}%-21s${COLORS[3]}%s${COLORS[0]}\n" "Address (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${IP}")")"
-    printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n"               "Netmask:" "${NETMASK} = ${CIDR}"
-    printf "%-16s${COLORS[4]}%-21s${COLORS[1]}%s${COLORS[0]}\n" "Netmask (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${NETMASK}")")"
-    printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n"               "Wildcard:" "${WILDCARD}"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[0]}\n"               "Address:" "${IP}"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[3]}%s${color_arr[0]}\n" "Address (dec):" "$(dotted_quad_ip_to_decimal "${IP}")"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[3]}%s${color_arr[0]}\n" "Address (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${IP}")")"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[0]}\n"               "Netmask:" "${NETMASK} = ${CIDR}"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[1]}%s${color_arr[0]}\n" "Netmask (hex):" "$(dec_to_hex "$(dotted_quad_ip_to_decimal "${NETMASK}")")"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[0]}\n"               "Wildcard:" "${WILDCARD}"
     printf "=>\n"
     [[ "${CIDR}" -le 31 ]] \
-      && printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n" "Network:"   "${NETWORK_ADDRESS}/${CIDR}" \
-      && printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n" "HostMin:"   "${HOST_MINIMUM}" \
-      && printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n" "HostMax:"   "${HOST_MAXIMUM}" \
-      || printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n" "Hostroute:" "${IP}"
+      && printf "%-16s${color_arr[4]}%-21s${color_arr[0]}\n" "Network:"   "${NETWORK_ADDRESS}/${CIDR}" \
+      && printf "%-16s${color_arr[4]}%-21s${color_arr[0]}\n" "HostMin:"   "${HOST_MINIMUM}" \
+      && printf "%-16s${color_arr[4]}%-21s${color_arr[0]}\n" "HostMax:"   "${HOST_MAXIMUM}" \
+      || printf "%-16s${color_arr[4]}%-21s${color_arr[0]}\n" "Hostroute:" "${IP}"
     [[ "${CIDR}" -le 30 ]] \
-      && printf "%-16s${COLORS[4]}%-21s${COLORS[0]}\n"                           "Broadcast:" "${BROADCAST_ADDRESS}"
-    printf "%-16s${COLORS[4]}%-21s${COLORS[5]}%s${COLORS[0]}%-22s${COLORS[4]}\n" "Hosts/Net:" "${HOSTS}" "Class ${CLASS}" " ${CLASS_DESCRIPTION}"
-    echo -e "${COLORS[0]}" # revert color back to normal
+      && printf "%-16s${color_arr[4]}%-21s${color_arr[0]}\n"                           "Broadcast:" "${BROADCAST_ADDRESS}"
+    printf "%-16s${color_arr[4]}%-21s${color_arr[5]}%s${color_arr[0]}%-22s${color_arr[4]}\n" "Hosts/Net:" "${HOSTS}" "Class ${CLASS}" " ${CLASS_DESCRIPTION}"
+    echo -e "${color_arr[0]}" # revert color back to normal
   }
 
   print_html_with_binary() {
@@ -1551,17 +1585,17 @@ show_ips_from_online_documents() {
   local TEMP_FILE_IPV4 TEMP_FILE_IPV6 TEMP_FILE_MAC TEMP_FILE_HTML
   local IS_TEMP_FILE_IPV4_EMPTY IS_TEMP_FILE_IPV6_EMPTY IS_TEMP_FILE_MAC_EMPTY
 
-  TEMP_FILE_IPV4="/tmp/${SCRIPT_NAME^^}.ipv4"
-  TEMP_FILE_IPV6="/tmp/${SCRIPT_NAME^^}.ipv6"
-  TEMP_FILE_MAC="/tmp/${SCRIPT_NAME^^}.mac"
-  TEMP_FILE_HTML="/tmp/${SCRIPT_NAME^^}.html"
+  TEMP_FILE_IPV4="/tmp/${script_name^^}.ipv4"
+  TEMP_FILE_IPV6="/tmp/${script_name^^}.ipv6"
+  TEMP_FILE_MAC="/tmp/${script_name^^}.mac"
+  TEMP_FILE_HTML="/tmp/${script_name^^}.html"
 
   touch "${TEMP_FILE_IPV4}" "${TEMP_FILE_IPV6}" "${TEMP_FILE_MAC}" "${TEMP_FILE_HTML}"
 
   init_regexes
 
   for DOCUMENT in "${@}"; do
-    check_http_code "${DOCUMENT}"
+    [[ ! "${NOCHECK}" ]] && check_http_code "${DOCUMENT}"
 
     wget "${DOCUMENT}" -qO- >> "${TEMP_FILE_HTML}"
 
@@ -1618,14 +1652,14 @@ show_ips_from_online_documents() {
 # Prints script's version and author's info.
 show_version() {
 
-  echo -e "${COLORS[4]}"
+  echo -e "${color_arr[4]}"
   echo -e "   ▄▄▄▄▄    ▄  █ ▄█ █ ▄▄"
-  echo -e "  █     ▀▄ █   █ ██ █   █ \t ${COLORS[0]}Author .: ${COLORS[4]}${AUTHOR} - xtonousou"
-  echo -e "▄  ▀▀▀▀▄   ██▀▀█ ██ █▀▀▀ \t ${COLORS[0]}Mail ...: ${COLORS[4]}${GMAIL}"
-  echo -e " ▀▄▄▄▄▀    █   █ ▐█ █ \t\t ${COLORS[0]}Github .: ${COLORS[4]}${GITHUB}"
-  echo -e "              █   ▐  █ \t\t ${COLORS[0]}Version : ${COLORS[4]}${VERSION}"
+  echo -e "  █     ▀▄ █   █ ██ █   █ \t ${color_arr[0]}Author .: ${color_arr[4]}${AUTHOR} - xtonousou"
+  echo -e "▄  ▀▀▀▀▄   ██▀▀█ ██ █▀▀▀ \t ${color_arr[0]}Mail ...: ${color_arr[4]}${GMAIL}"
+  echo -e " ▀▄▄▄▄▀    █   █ ▐█ █ \t\t ${color_arr[0]}Github .: ${color_arr[4]}${GITHUB}"
+  echo -e "              █   ▐  █ \t\t ${color_arr[0]}Version : ${color_arr[4]}${version}"
   echo -e "             ▀        ▀"
-  echo -e "${COLORS[0]}"
+  echo -e "${color_arr[0]}"
 
   return 0
 }
@@ -1689,36 +1723,34 @@ show_all_cidr() {
 # Prints help message.
 show_usage() {
   
-  echo    " usage: ${SCRIPT_NAME} [OPTION] <ARGUMENT/S>"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-4 ${COLORS[0]}, ${COLORS[0]}--ipv4 ${COLORS[0]}          shows active interfaces with their IPv4 address"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-6 ${COLORS[0]}, ${COLORS[0]}--ipv6 ${COLORS[0]}          shows active interfaces with their IPv6 address"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-a ${COLORS[0]}, ${COLORS[0]}--all ${COLORS[0]}           shows all information"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-A ${COLORS[0]}, ${COLORS[0]}--all-interfaces ${COLORS[0]}shows all available network interfaces"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-c ${COLORS[0]}, ${COLORS[0]}--calculate ${COLORS[0]}<>   shows calculated IP information"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-d ${COLORS[0]}, ${COLORS[0]}--driver ${COLORS[0]}        shows each active interface's driver"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-e ${COLORS[0]}, ${COLORS[0]}--external ${COLORS[0]}      shows your external IP address"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-e ${COLORS[0]}, ${COLORS[0]}--external ${COLORS[0]}<>    shows external IP addresses"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-f ${COLORS[0]}, ${COLORS[0]}--find ${COLORS[0]}<>        shows valid IP and MAC addresses found on file/s"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-g ${COLORS[0]}, ${COLORS[0]}--gateway ${COLORS[0]}       shows gateway of online interfaces"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-h ${COLORS[0]}, ${COLORS[0]}--help${COLORS[0]}           shows this help message"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[1]}-H ${COLORS[0]}, ${COLORS[1]}--hosts ${COLORS[0]}         shows active hosts on network"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[1]}-HM${COLORS[0]}, ${COLORS[1]}--hosts-mac ${COLORS[0]}     shows active hosts on network with their MAC address"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-i ${COLORS[0]}, ${COLORS[0]}--interfaces ${COLORS[0]}    shows active interfaces"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-l ${COLORS[0]}, ${COLORS[0]}--list ${COLORS[0]}          shows a list of private and reserved IP addresses"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-m ${COLORS[0]}, ${COLORS[0]}--mac ${COLORS[0]}           shows active interfaces with their MAC address"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-n ${COLORS[0]}, ${COLORS[0]}--neighbor ${COLORS[0]}      shows neighbor cache"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-P ${COLORS[0]}, ${COLORS[0]}--port ${COLORS[0]}          shows a list of common ports"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[1]}-P ${COLORS[0]}, ${COLORS[1]}--port ${COLORS[0]}<>        shows connections to a port per IP"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-r ${COLORS[0]}, ${COLORS[0]}--route-ipv4 ${COLORS[0]}<>  shows the path to a network host using IPv4"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-r6${COLORS[0]}, ${COLORS[0]}--route-ipv6 ${COLORS[0]}<>  shows the path to a network host using IPv6"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-u ${COLORS[0]}, ${COLORS[0]}--url ${COLORS[0]}<>         shows valid IP and MAC addresses found on website/s"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[0]}-v ${COLORS[0]}, ${COLORS[0]}--version ${COLORS[0]}       shows the version of script"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[2]}--cidr-4${COLORS[0]}, ${COLORS[2]}--cidr-ipv4 ${COLORS[0]}shows active interfaces with their IPv4 address and CIDR"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[2]}--cidr-6${COLORS[0]}, ${COLORS[2]}--cidr-ipv6 ${COLORS[0]}shows active interfaces with their IPv6 address and CIDR"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[2]}--cidr-a${COLORS[0]}, ${COLORS[2]}--cidr-all ${COLORS[0]} shows all information with CIDR"
-  echo -e "  ${SCRIPT_NAME} ${COLORS[2]}--cidr-l${COLORS[0]}, ${COLORS[2]}--cidr-list ${COLORS[0]}shows a list of private and reserved IP addresses with CIDR"
-  echo -e " options in ${COLORS[2]}green${COLORS[0]} force include ${COLORS[2]}CIDR${COLORS[0]} notation"
-  echo -e " options in ${COLORS[1]}red${COLORS[0]} require ${COLORS[1]}ROOT${COLORS[0]} privileges"
+  echo    " usage: ${script_name} [OPTION] <ARGUMENT/S>"
+  echo -e "  ${script_name} ${color_arr[0]}-4 ${color_arr[0]}, ${color_arr[0]}--ipv4 ${color_arr[0]}          shows active interfaces with their IPv4 address"
+  echo -e "  ${script_name} ${color_arr[0]}-6 ${color_arr[0]}, ${color_arr[0]}--ipv6 ${color_arr[0]}          shows active interfaces with their IPv6 address"
+  echo -e "  ${script_name} ${color_arr[0]}-a ${color_arr[0]}, ${color_arr[0]}--all ${color_arr[0]}           shows all information"
+  echo -e "  ${script_name} ${color_arr[0]}-A ${color_arr[0]}, ${color_arr[0]}--all-interfaces ${color_arr[0]}shows all available network interfaces"
+  echo -e "  ${script_name} ${color_arr[0]}-c ${color_arr[0]}, ${color_arr[0]}--calculate ${color_arr[0]}<>   shows calculated IP information"
+  echo -e "  ${script_name} ${color_arr[0]}-d ${color_arr[0]}, ${color_arr[0]}--driver ${color_arr[0]}        shows each active interface's driver"
+  echo -e "  ${script_name} ${color_arr[0]}-e ${color_arr[0]}, ${color_arr[0]}--external ${color_arr[0]}      shows your external IP address"
+  echo -e "  ${script_name} ${color_arr[0]}-e ${color_arr[0]}, ${color_arr[0]}--external ${color_arr[0]}<>    shows external IP addresses"
+  echo -e "  ${script_name} ${color_arr[0]}-f ${color_arr[0]}, ${color_arr[0]}--find ${color_arr[0]}<>        shows valid IP and MAC addresses found on file/s"
+  echo -e "  ${script_name} ${color_arr[0]}-g ${color_arr[0]}, ${color_arr[0]}--gateway ${color_arr[0]}       shows gateway of online interfaces"
+  echo -e "  ${script_name} ${color_arr[0]}-h ${color_arr[0]}, ${color_arr[0]}--help${color_arr[0]}           shows this help message"
+  echo -e "  ${script_name} ${color_arr[1]}-H ${color_arr[0]}, ${color_arr[1]}--hosts ${color_arr[0]}         shows active hosts on network"
+  echo -e "  ${script_name} ${color_arr[1]}-HM${color_arr[0]}, ${color_arr[1]}--hosts-mac ${color_arr[0]}     shows active hosts on network with their MAC address"
+  echo -e "  ${script_name} ${color_arr[0]}-i ${color_arr[0]}, ${color_arr[0]}--interfaces ${color_arr[0]}    shows active interfaces"
+  echo -e "  ${script_name} ${color_arr[0]}-l ${color_arr[0]}, ${color_arr[0]}--list ${color_arr[0]}          shows a list of private and reserved IP addresses"
+  echo -e "  ${script_name} ${color_arr[0]}-m ${color_arr[0]}, ${color_arr[0]}--mac ${color_arr[0]}           shows active interfaces with their MAC address"
+  echo -e "  ${script_name} ${color_arr[0]}-n ${color_arr[0]}, ${color_arr[0]}--neighbor ${color_arr[0]}      shows neighbor cache"
+  echo -e "  ${script_name} ${color_arr[0]}-P ${color_arr[0]}, ${color_arr[0]}--port ${color_arr[0]}          shows a list of common ports"
+  echo -e "  ${script_name} ${color_arr[1]}-P ${color_arr[0]}, ${color_arr[1]}--port ${color_arr[0]}<>        shows connections to a port per IP"
+  echo -e "  ${script_name} ${color_arr[0]}-r ${color_arr[0]}, ${color_arr[0]}--route-ipv4 ${color_arr[0]}<>  shows the path to a network host using IPv4"
+  echo -e "  ${script_name} ${color_arr[0]}-r6${color_arr[0]}, ${color_arr[0]}--route-ipv6 ${color_arr[0]}<>  shows the path to a network host using IPv6"
+  echo -e "  ${script_name} ${color_arr[0]}-u ${color_arr[0]}, ${color_arr[0]}--url ${color_arr[0]}<>         shows valid IP and MAC addresses found on website/s"
+  echo -e "  ${script_name} ${color_arr[0]}-v ${color_arr[0]}, ${color_arr[0]}--version ${color_arr[0]}       shows the version of script"
+  echo -e "  ${script_name} ${color_arr[2]}--cidr-4${color_arr[0]}, ${color_arr[2]}--cidr-ipv4 ${color_arr[0]}shows active interfaces with their IPv4 address and CIDR"
+  echo -e "  ${script_name} ${color_arr[2]}--cidr-6${color_arr[0]}, ${color_arr[2]}--cidr-ipv6 ${color_arr[0]}shows active interfaces with their IPv6 address and CIDR"
+  echo -e "  ${script_name} ${color_arr[2]}--cidr-a${color_arr[0]}, ${color_arr[2]}--cidr-all ${color_arr[0]} shows all information with CIDR"
+  echo -e "  ${script_name} ${color_arr[2]}--cidr-l${color_arr[0]}, ${color_arr[2]}--cidr-list ${color_arr[0]}shows a list of private and reserved IP addresses with CIDR"
 
   return 0
 }
@@ -1727,14 +1759,14 @@ show_usage() {
 show_usage_ipcalc() {
 
   echo    " usage:"
-  echo -e "  ${SCRIPT_NAME} -c, --calculate <OPTIONS> ${COLORS[5]}192.168.0.1${COLORS[0]}"
-  echo -e "  ${SCRIPT_NAME} -c, --calculate <OPTIONS> ${COLORS[5]}192.168.0.1/24${COLORS[0]}"
-  echo -e "  ${SCRIPT_NAME} -c, --calculate <OPTIONS> ${COLORS[5]}192.168.0.1 255.255.255.0${COLORS[0]}"
+  echo -e "  ${script_name} -c, --calculate <OPTIONS> ${color_arr[5]}192.168.0.1${color_arr[0]}"
+  echo -e "  ${script_name} -c, --calculate <OPTIONS> ${color_arr[5]}192.168.0.1/24${color_arr[0]}"
+  echo -e "  ${script_name} -c, --calculate <OPTIONS> ${color_arr[5]}192.168.0.1 255.255.255.0${color_arr[0]}"
   echo    " options:"
-  echo -e "  -b, --nobinary ${COLORS[5]}suppress the bitwise output ${COLORS[0]}"
-  echo -e "  -h, --html     ${COLORS[5]}display results as HTML${COLORS[0]}"
-  echo -e "  -s, --split    ${COLORS[5]}split into networks of size n1, n2, n3 ${DIALOG_UNDER_DEVELOPMENT}" #TODO
-  echo -e "  -r, --range    ${COLORS[5]}deaggregate address range ${DIALOG_UNDER_DEVELOPMENT}" #TODO
+  echo -e "  -b, --nobinary ${color_arr[5]}suppress the bitwise output ${color_arr[0]}"
+  echo -e "  -h, --html     ${color_arr[5]}display results as HTML${color_arr[0]}"
+  echo -e "  -s, --split    ${color_arr[5]}split into networks of size n1, n2, n3 ${DIALOG_UNDER_DEVELOPMENT}" #TODO
+  echo -e "  -r, --range    ${color_arr[5]}deaggregate address range ${DIALOG_UNDER_DEVELOPMENT}" #TODO
 
   return 0
 }

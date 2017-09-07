@@ -1,11 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.6.3] - 2017-09-01
+## [2.6.3] - 2017-09-06
 ### Added
-* Debugging option by doing the following
-  * `DEBUG=1 bash ship.sh -h`
-    * By passing `DEBUG=1` in front of the command
+* `DEBUG`, `SILENT`, `COLOR` and `NOCHECK` flags
+  * You can use one or more flags as following: `DEBUG=1 bash ship.sh`
+    * `DEBUG=1`: enable trace mode
+    * `SILENT=1`: suppress status, warning and error messages
+    * `COLOR=1`: enable colors
+    * `NOCHECK=1`: disable checking functions (LAN/WAN connection, input, ipv6, etc...)
 
 ### Changed
 * Code to follow bash styling and some standards.
