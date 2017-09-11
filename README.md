@@ -1,7 +1,7 @@
 <p align="center"><img width=50% src="/imgs/logo-with-text.png"></img></p>
 <p align="center">a simple, handy network addressing multitool with plenty of features</p>
 <p align="center">
-  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6.2-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
+  <a href="ship.sh"><img src="https://img.shields.io/badge/version-2.6.3-blue.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
   <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL%20v3%2B-yellow.svg?style=flat-square&colorA=13818d&colorB=44c2c7"></a>
     &nbsp;
@@ -43,6 +43,13 @@
   * split into networks of size n1, n2, n3 :construction:
   * deaggregate address range :construction:
 * Show list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
+* Configuration FLAGS to change behavior, color theme and verbosity
+  * `COLOR`: choose `a` color theme 1 to 4
+  * `SILENT`: choose `1` to skip checking, warning and error messages (not critical, useful on scripting)
+  * `NOCHECK`: choose `1` to skip validation and checking functions (faster, expects well-formatted inputs)
+  * `DEBUG`: choose `1` to enter debugging mode a.k.a. trace mode
+* Mulitple flags can be also used
+  * e.g. `COLOR=3 SILENT=1 NOCHECK=1 bash ship.sh -h`
 * Compatible with most of the common linux distributions
 * Drag and drop URLs or file paths on console window
 * Cleaning temp files and handling remaining tasks on exit
@@ -82,21 +89,13 @@ One or more of the following tools must be installed
  tracepath  | iputils      
  traceroute | traceroute   
 
-#### NOTE
-
-`ship` utilizes the functionality of `ping` to check and validate LAN and WAN connections
-
-* **CAP_NET_RAW** capability should be permitted
-* Kernel must support non-raw ICMP sockets
-* User must be allowed to create ICMP echo sockets
-
 ---
 
 ### Compatibility
 
  :penguin: | Version             
 :----------|:--------------------
- Arch      | 4.7.5-1 - 4.12.8-2  
+ Arch      | 4.7.5-1 - 4.12.12-1 
  CentOS    | 7                   
  Debian    | 7 - 8               
  Kali      | 2016.2              
@@ -121,17 +120,19 @@ $ ship
 
 ---
 
-### Verify (optional)
+### Checksums
 
-```bash
-$ gpg --verify ship.sh.asc ship.sh
-```
+#### `master` branch
 
-A successfully verified file outputs
+> **MD5**: 12bfc2455a348b2b660de95017076706
+>
+> **SHA1**: 306fd0db6b8c40357c043223c43e1660bbf60ab2
 
-> Good signature from "Sotirios M. Roussis <xtonousou@gmail.com>"
+#### `dev` branch
 
-If not, make sure you are getting the right file from the right sources
+> **MD5**: 233e64436f973079e7f9545eba5cd7c3
+>
+> **SHA1**: eb258ebdc0fae889a3b600e9d4797eb201f5d3f5
 
 ---
 
