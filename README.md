@@ -48,7 +48,7 @@
   * `SILENT`: choose `1` to skip checking, warning and error messages (not critical, useful on scripting)
   * `NOCHECK`: choose `1` to skip validation and checking functions (faster, expects well-formatted inputs)
   * `DEBUG`: choose `1` to enter debugging mode a.k.a. trace mode
-* Mulitple flags can be also used
+* Mulitple flags can also be used
   * e.g. `COLOR=3 SILENT=1 NOCHECK=1 bash ship.sh -h`
 * Compatible with most of the common linux distributions
 * Drag and drop URLs or file paths on console window
@@ -169,7 +169,7 @@ Send me an email at [xtonousou@gmail.com] :e-mail:
 
 ### License
 
-Copyright (c) **2017** by **Sotirios M. Roussis**. Some rights reserved
+Copyleft (&#8580;) **2017** by **Sotirios M. Roussis**. Some rights reserved
 
 
 `ship` is under the terms of the GPLv3+ License, following all clarifications stated in the [license] file
