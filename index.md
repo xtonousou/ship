@@ -26,7 +26,16 @@ layout: home
   * **IPv4**
   * optionally suppress the bitwise output
   * display results as HTML
+  * split into networks of size n1, n2, n3 :construction:
+  * deaggregate address range :construction:
 * Show list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
+* Configuration FLAGS to change behavior, color theme and verbosity
+  * `COLOR`: choose `a` color theme 1 to 4
+  * `SILENT`: choose `1` to skip checking, warning and error messages (not critical, useful on scripting)
+  * `NOCHECK`: choose `1` to skip validation and checking functions (faster, expects well-formatted inputs)
+  * `DEBUG`: choose `1` to enter debugging mode a.k.a. trace mode
+* Mulitple flags can also be used
+  * e.g. `COLOR=3 SILENT=1 NOCHECK=1 bash ship.sh -h`
 * Compatible with most of the common linux distributions
 * Drag and drop URLs or file paths on console window
 * Cleaning temp files and handling remaining tasks on exit
@@ -66,21 +75,13 @@ One or more of the following tools must be installed
  tracepath  | iputils      
  traceroute | traceroute   
 
-#### [](#header-4) NOTE
-
-`ship` utilizes the functionality of `ping` to check and validate LAN and WAN connections
-
-* **CAP_NET_RAW** capability should be permitted
-* Kernel must support non-raw ICMP sockets
-* User must be allowed to create ICMP echo sockets
-
 ---
 
 ### [](#header-3) Compatibility
 
  🐧     | Version             
 :-------|:--------------------
- Arch   | 4.7.5-1 - 4.12.8-2  
+ Arch   | 4.7.5-1 - 4.12.12-1 
  CentOS | 7                   
  Debian | 7 - 8               
  Kali   | 2016.2              
@@ -115,9 +116,9 @@ $ ship
 
 #### `dev` branch
 
-> **MD5**: 3242abd56e4b709955530de0240ee672
+> **MD5**: 233e64436f973079e7f9545eba5cd7c3
 >
-> **SHA1**: 7ca97759563b4b9c95fd10076bd72df642874d7b
+> **SHA1**: eb258ebdc0fae889a3b600e9d4797eb201f5d3f5
 
 ---
 
@@ -154,7 +155,7 @@ Send me an email at [xtonousou@gmail.com](mailto:xtonousou@gmail.com)
 
 ### [](#header-3) License
 
-Copyright (c) **2017** by **Sotirios M. Roussis**. Some rights reserved
+Copyleft (&#8580;) **2017** by **Sotirios M. Roussis**. Some rights reserved
 
 
 `ship` is under the terms of the GPLv3+ License, following all clarifications stated in the [license](license.md) file
