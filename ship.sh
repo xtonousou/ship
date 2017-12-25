@@ -38,11 +38,11 @@ elif [[ "${COLOR}" -eq 3 ]]; then
 elif [[ "${COLOR}" -eq 4 ]]; then
   declare -ra color_arr=(
     "\e[1;0m"      # normal  ## color_arr[0]
-    "\e[7;31;47m"  # red     ## color_arr[1]
-    "\e[7;32;47m"  # green   ## color_arr[2]
-    "\e[7;33;47m"  # orange  ## color_arr[3]
-    "\e[7;34;47m"  # cyan    ## color_arr[4]
-    "\e[7;35;47m"  # magenta ## color_arr[5]
+    "\e[7;31;40m"  # red     ## color_arr[1]
+    "\e[7;32;40m"  # green   ## color_arr[2]
+    "\e[7;33;40m"  # orange  ## color_arr[3]
+    "\e[7;34;40m"  # cyan    ## color_arr[4]
+    "\e[7;35;40m"  # magenta ## color_arr[5]
   )
 fi
 
@@ -273,19 +273,9 @@ check_http_code() {
 
   local http_code
 
-  if [[ ! "${SILENT}" ]]; then
-    print_check "${1}"
-    http_code=$(curl --location --output /dev/null --silent --head --write-out '%{http_code}\n')
-    clear_line
-  else
-    http_code=$(curl --location --output /dev/null --silent --head --write-out '%{http_code}\n')
-  fi
+  http_code=$(curl --location --output /dev/null --silent --head --write-out '%{http_code}\n' "${1}")
 
-  if [[ "${http_code}" -ne 200 ]]; then
-    error_exit "${color_arr[3]}${1}${color_arr[0]} is unreachable. input was invalid or server is down or has connection issues. ${dialog_aborting}"
-  fi
-
-  return 0
+  return "${http_code}"
 }
 
 # checks network connection (local or internet).
@@ -297,7 +287,7 @@ check_connectivity() {
       || error_exit "${dialog_no_local_connection}"
   ;;
   "--internet")
-    [[ $(curl --location --output /dev/null --silent --head --write-out '%{http_code}\n' "${google}") = 200 ]] \
+    [[ $(check_http_code "google.com"; echo "${?}") = 200 ]] \
       || error_exit "${dialog_no_internet}"
   ;;
   esac
@@ -520,15 +510,12 @@ show_ip_from() {
 
   if [[ -z "${1}" ]]; then
     [[ ! "${SILENT}" ]] && print_check "${random_source}"
-    http_code=$(wget --spider --tries=1 --timeout="${timeout}" --server-response "${random_source}" 2>&1 | awk '/HTTP\//{print $2}' | tail --lines=1)
-
-    if [[ "${http_code}" -ne 200 ]]; then
-      error_exit "${dialog_server_is_down}"
-    fi
+    [[ ! "${NOCHECK}" ]] \
+      && check_destination "${random_source}"
 
     clear_line
-    [[ ! "${SILENT}" ]] && printf "%s\n" "grabbing ip ..."
-    wget "${random_source}" --quiet --output-document="${temp_file}"
+    [[ ! "${SILENT}" ]] && printf "%s" "grabbing ip ..."
+    curl "${random_source}" --silent --output "${temp_file}"
 
     clear_line
     awk '{print $0}' "${temp_file}"
@@ -559,21 +546,16 @@ show_ip_from() {
       clear_line    
       input=$(printf "${host}" | sed --expression='s/^http\(\|s\):\/\///g' --expression='s/^`//' --expression='s/`//' --expression='s/`$//' | cut --fields=1 --delimiter="/")
 
-      ping_source() {
-        declare ip
-
-        for item in {1..10}; do
-          (ip=$(ping -c 1 -w "${long_timeout}" "${input}" 2> /dev/null | awk -F '[()]' '/PING/{print $2}'); printf "%s %s\n" "${ip} ${input}" >> "${temp_file}") &
-        done
-        handle_jobs
-      }
-
       [[ ! "${SILENT}" ]] && printf "%s ${color_arr[2]}%s${color_arr[0]} %s" "pinging" "${input}" "..."
-      ping_source
 
+      for item in {1..5}; do
+        ( printf "%s %s\n" "$(ping -c 1 -w "${long_timeout}" "${input}" 2> /dev/null | awk -F '[()]' '/PING/{print $2}')" "${input}" &>> "${temp_file}" ) &
+      done
       clear_line
+
+      handle_jobs
+      sort --version-sort --unique "${temp_file}"
     done
-    sort --version-sort --unique "${temp_file}"
   fi
 
   return 0

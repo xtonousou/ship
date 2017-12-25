@@ -44,7 +44,7 @@
   * deaggregate address range :construction:
 * Show list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
 * Configuration FLAGS to change behavior, color theme and verbosity
-  * `COLOR`: choose `a` color theme 1 to 4
+  * `COLOR`: choose a color theme from 1 to 4
   * `SILENT`: choose `1` to skip checking, warning and error messages (not critical, useful on scripting)
   * `NOCHECK`: choose `1` to skip validation and checking functions (faster, expects well-formatted inputs)
   * `DEBUG`: choose `1` to enter debugging mode a.k.a. trace mode
@@ -95,7 +95,7 @@ One or more of the following tools must be installed
 
  :penguin: | Version             
 :----------|:--------------------
- Arch      | 4.7.5-1 - 4.12.12-1 
+ Arch      | 4.7.5-1 - 4.13.5-1 
  CentOS    | 7                   
  Debian    | 7 - 8               
  Kali      | 2016.2              
