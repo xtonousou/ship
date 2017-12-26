@@ -48,9 +48,9 @@
   * `SILENT`: choose `1` to skip checking, warning and error messages (not critical, useful on scripting)
   * `NOCHECK`: choose `1` to skip validation and checking functions (faster, expects well-formatted inputs)
   * `DEBUG`: choose `1` to enter debugging mode a.k.a. trace mode
-* Mulitple flags can also be used
+* Multiple flags can also be used
   * e.g. `COLOR=3 SILENT=1 NOCHECK=1 bash ship.sh -h`
-* Compatible with most of the common linux distributions
+* **Compatible with almost any linux distribution**
 * Drag and drop URLs or file paths on console window
 * Cleaning temp files and handling remaining tasks on exit
 * Exiting on long running tasks needs confirmation
@@ -69,19 +69,19 @@ Read the [Guide] :mortar_board:
 
 #### Mandatory
 
- :wrench:   | Package      
-:-----------|:-------------
- awk        | awk \| gawk  
- grep       | grep         
- ip         | iproute2     
- ping       | iputils      
- sed        | sed          
- ss         | iproute2     
- wget       | wget         
+ :wrench:   | Package                 
+:-----------|:------------------------
+ awk        | awk \| gawk             
+ grep       | grep                    
+ ip         | iproute2                
+ ping       | iputils \| iputils-ping 
+ sed        | sed                     
+ ss         | iproute2                
+ wget       | wget                    
 
 #### Mandatory Choice
 
-One or more of the following tools must be installed
+One of the following tools must be installed. If more than one is installed `ship` will use the fastest one
 
  :wrench:   | Package      
 :-----------|:-------------
@@ -91,24 +91,27 @@ One or more of the following tools must be installed
 
 ---
 
-### Compatibility
+### Compatibility (tested)
 
- :penguin: | Version             
-:----------|:--------------------
- Arch      | 4.7.5-1 - 4.13.5-1 
- CentOS    | 7                   
- Debian    | 7 - 8               
- Kali      | 2016.2              
- Ubuntu    | 14.04.3 - 16.04.1   
+ :penguin:  | Version             
+:-----------|:--------------------
+ Arch       | 4.7.5-1 - 4.14.8-1  
+ Black Arch | 2017.12.11          
+ CentOS     | 7                   
+ Debian     | 7 - 8               
+ Kali       | 2016.2              
+ Ubuntu     | 14.04.3 - 16.04.1
+
+ ![with bash 3.2 or later][bash-gif]
 
 ---
 
 ### Getting Started
 
 ```bash
-$ git clone --branch=master https://github.com/xtonousou/ship.git
+$ git clone --branch=master --depth 1 https://github.com/xtonousou/ship.git
 $ cd /path/to/ship
-$ bash ship.sh
+$ bash ship
 ```
 
 #### Arch Linux
@@ -120,19 +123,11 @@ $ ship
 
 ---
 
-### Checksums
-
-#### `master` branch
+### Checksums (`master` branch)
 
 > **MD5**: 12bfc2455a348b2b660de95017076706
 >
 > **SHA1**: 306fd0db6b8c40357c043223c43e1660bbf60ab2
-
-#### `dev` branch
-
-> **MD5**: 233e64436f973079e7f9545eba5cd7c3
->
-> **SHA1**: eb258ebdc0fae889a3b600e9d4797eb201f5d3f5
 
 ---
 
@@ -161,9 +156,10 @@ Read the [Changelog] file to review changes :scroll:
 
 ---
 
-### Contact
+### Articles (about `ship`)
 
-Send me an email at [xtonousou@gmail.com] :e-mail:
+* [WonderHowTo/NullByte] - *12/22/2017*
+* [root.cz] - *08/30/2017*
 
 ----
 
@@ -176,7 +172,11 @@ Copyleft (&#8580;) **2017** by **Sotirios M. Roussis**. Some rights reserved
 
 <!-- Links -->
 
+[bash-gif]: imgs/bash.gif
 [this]: CODE_OF_CONDUCT.md
 [Guide]: https://xtonousou.github.io/ship/guide
 [Changelog]: CHANGELOG.md
 [license]: LICENSE.md
+
+[WonderHowTo/NullByte]: https://null-byte.wonderhowto.com/how-to/linux-basics-for-aspiring-hacker-using-ship-for-quick-handy-ip-address-information-0181593/
+[root.cz]: https://www.root.cz/clanky/softwarova-sklizen-30-8-2017

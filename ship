@@ -10,39 +10,39 @@
 ### flags
 if [[ "${COLOR}" -eq 1 ]]; then
   declare -ra color_arr=(
-    "\e[1;0m"      # normal  ## color_arr[0]
-    "\e[1;31;40m"  # red     ## color_arr[1]
-    "\e[1;32;40m"  # green   ## color_arr[2]
-    "\e[1;33;40m"  # orange  ## color_arr[3]
-    "\e[1;34;40m"  # cyan    ## color_arr[4]
-    "\e[1;35;40m"  # magenta ## color_arr[5]
+    $'\e[1;0m'      # normal  ## color_arr[0]
+    $'\e[1;31;40m'  # red     ## color_arr[1]
+    $'\e[1;32;40m'  # green   ## color_arr[2]
+    $'\e[1;33;40m'  # orange  ## color_arr[3]
+    $'\e[1;34;40m'  # cyan    ## color_arr[4]
+    $'\e[1;35;40m'  # magenta ## color_arr[5]
   )
 elif [[ "${COLOR}" -eq 2 ]]; then
   declare -ra color_arr=(
-    "\e[1;0m"      # normal  ## color_arr[0]
-    "\e[1;32;40m"  # green   ## color_arr[1]
-    "\e[1;31;40m"  # red     ## color_arr[2]
-    "\e[1;35;40m"  # magenta ## color_arr[3]
-    "\e[1;33;40m"  # orange  ## color_arr[4]
-    "\e[1;34;40m"  # cyan    ## color_arr[5]
+    $'\e[1;0m'      # normal  ## color_arr[0]
+    $'\e[1;32;40m'  # green   ## color_arr[1]
+    $'\e[1;31;40m'  # red     ## color_arr[2]
+    $'\e[1;35;40m'  # magenta ## color_arr[3]
+    $'\e[1;33;40m'  # orange  ## color_arr[4]
+    $'\e[1;34;40m'  # cyan    ## color_arr[5]
   )
 elif [[ "${COLOR}" -eq 3 ]]; then
   declare -ra color_arr=(
-    "\e[1;0m"      # normal  ## color_arr[0]
-    "\e[1;34;40m"  # cyan    ## color_arr[1]
-    "\e[1;35;40m"  # magenta ## color_arr[2]
-    "\e[1;32;40m"  # green   ## color_arr[3]
-    "\e[1;31;40m"  # red     ## color_arr[4]
-    "\e[1;33;40m"  # orange  ## color_arr[5]
+    $'\e[1;0m'      # normal  ## color_arr[0]
+    $'\e[1;34;40m'  # cyan    ## color_arr[1]
+    $'\e[1;35;40m'  # magenta ## color_arr[2]
+    $'\e[1;32;40m'  # green   ## color_arr[3]
+    $'\e[1;31;40m'  # red     ## color_arr[4]
+    $'\e[1;33;40m'  # orange  ## color_arr[5]
   )
 elif [[ "${COLOR}" -eq 4 ]]; then
   declare -ra color_arr=(
-    "\e[1;0m"      # normal  ## color_arr[0]
-    "\e[7;31;40m"  # red     ## color_arr[1]
-    "\e[7;32;40m"  # green   ## color_arr[2]
-    "\e[7;33;40m"  # orange  ## color_arr[3]
-    "\e[7;34;40m"  # cyan    ## color_arr[4]
-    "\e[7;35;40m"  # magenta ## color_arr[5]
+    $'\e[1;0m'      # normal  ## color_arr[0]
+    $'\e[7;31;40m'  # red     ## color_arr[1]
+    $'\e[7;32;40m'  # green   ## color_arr[2]
+    $'\e[7;33;40m'  # orange  ## color_arr[3]
+    $'\e[7;34;40m'  # cyan    ## color_arr[4]
+    $'\e[7;35;40m'  # magenta ## color_arr[5]
   )
 fi
 
@@ -792,7 +792,7 @@ show_neighbor_cache() {
   touch "${temp_file}"
 
   ip neigh \
-    | awk 'tolower($0) ~ /permanent|noarp|stale|reachable|incomplete|delay|probe/{printf ("%-16s%-20s%s\n", $1, $5, $6)}' >> "${temp_file}"
+    | awk 'tolower($0) ~ /permanent|noarp|stale|reachable|router|incomplete|delay|probe/{printf ("%-16s%-20s%s\n", $1, $5, $6)}' >> "${temp_file}"
   
   awk '{print $0}' "${temp_file}" | sort --version-sort
 
