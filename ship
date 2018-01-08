@@ -2,7 +2,7 @@
 ## title........: ship.sh
 ## description..: a simple, handy network addressing multitool with plenty of features
 ## author.......: sotirios m. roussis a.k.a. xtonousou - xtonousou@gmail.com
-## date.........: 20170911
+## date.........: 20180801
 ## usage........: bash ship.sh [options]? [arguments]?
 ## bash version.: 3.2 or later
 ## license .....: gplv3+
@@ -1171,12 +1171,12 @@ show_ipcalc() {
   ip_part_b=$(dec_to_bin "${ip_part_b}") # convert second octet to binary
   # describe the ip address by checking the first two octets
   case "${ip_part_a}:${ip_part_b}" in
-  01111111:*) class_description="loopback" ;;
-  00001010:*) class_description="private internet" ;;
-  10101100:0001*) class_description="private internet" ;;
-  11000000:10101000) class_description="private internet" ;;
-  1110*:*) class_description="multicast" ;;
-  1111*:*) class_description="experimental" ;;
+  01111111:*)         class_description="loopback"         ;;
+  00001010:*)         class_description="private internet" ;;
+  10101100:0001*)     class_description="private internet" ;;
+  11000000:10101000)  class_description="private internet" ;;
+  1110*:*)            class_description="multicast"        ;;
+  1111*:*)            class_description="experimental"     ;;
   esac
 
   # describe ip address by checking the cidr 30-32 
@@ -1586,7 +1586,7 @@ show_ips_from_online_documents() {
   for document in "${@}"; do
     [[ ! "${NOCHECK}" ]] && check_http_code "${document}"
 
-    wget "${document}" -qo- >> "${temp_file_html}"
+    wget "${document}" -qO- >> "${temp_file_html}"
 
     grep --extended-regexp --only-matching "${regex_ipv4}" "${temp_file_html}" >> "${temp_file_ipv4}"
     grep --extended-regexp --only-matching "${regex_ipv6}" "${temp_file_html}" >> "${temp_file_ipv6}"
@@ -1643,10 +1643,10 @@ show_version() {
 
   echo -e "${color_arr[4]}"
   echo -e "   ▄▄▄▄▄    ▄  █ ▄█ █ ▄▄"
-  echo -e "  █     ▀▄ █   █ ██ █   █ \t ${color_arr[0]}author .: ${color_arr[4]}${author} - xtonousou"
-  echo -e "▄  ▀▀▀▀▄   ██▀▀█ ██ █▀▀▀ \t ${color_arr[0]}mail ...: ${color_arr[4]}${gmail}"
-  echo -e " ▀▄▄▄▄▀    █   █ ▐█ █ \t\t ${color_arr[0]}github .: ${color_arr[4]}${github}"
-  echo -e "              █   ▐  █ \t\t ${color_arr[0]}version : ${color_arr[4]}${version}"
+  echo -e "  █     ▀▄ █   █ ██ █   █ \t${color_arr[0]} author .: ${color_arr[4]}${author} - xtonousou"
+  echo -e "▄  ▀▀▀▀▄   ██▀▀█ ██ █▀▀▀ \t${color_arr[0]} mail ...: ${color_arr[4]}${gmail}"
+  echo -e " ▀▄▄▄▄▀    █   █ ▐█ █ \t\t${color_arr[0]} github .: ${color_arr[4]}${github}"
+  echo -e "              █   ▐  █ \t\t${color_arr[0]} version : ${color_arr[4]}${version}"
   echo -e "             ▀        ▀"
   echo -e "${color_arr[0]}"
 
@@ -1713,33 +1713,33 @@ show_all_cidr() {
 show_usage() {
   
   echo    " usage: ${script_name} [option] <argument/s>"
-  echo -e "  ${script_name} ${color_arr[0]}-4 ${color_arr[0]}, ${color_arr[0]}--ipv4 ${color_arr[0]}          shows active interfaces with their ipv4 address"
-  echo -e "  ${script_name} ${color_arr[0]}-6 ${color_arr[0]}, ${color_arr[0]}--ipv6 ${color_arr[0]}          shows active interfaces with their ipv6 address"
-  echo -e "  ${script_name} ${color_arr[0]}-a ${color_arr[0]}, ${color_arr[0]}--all ${color_arr[0]}           shows all information"
-  echo -e "  ${script_name} ${color_arr[0]}-A ${color_arr[0]}, ${color_arr[0]}--all-interfaces ${color_arr[0]}shows all available network interfaces"
-  echo -e "  ${script_name} ${color_arr[0]}-c ${color_arr[0]}, ${color_arr[0]}--calculate ${color_arr[0]}<>   shows calculated ip information"
-  echo -e "  ${script_name} ${color_arr[0]}-d ${color_arr[0]}, ${color_arr[0]}--driver ${color_arr[0]}        shows each active interface's driver"
-  echo -e "  ${script_name} ${color_arr[0]}-e ${color_arr[0]}, ${color_arr[0]}--external ${color_arr[0]}      shows your external ip address"
-  echo -e "  ${script_name} ${color_arr[0]}-e ${color_arr[0]}, ${color_arr[0]}--external ${color_arr[0]}<>    shows external ip addresses"
-  echo -e "  ${script_name} ${color_arr[0]}-f ${color_arr[0]}, ${color_arr[0]}--find ${color_arr[0]}<>        shows valid ip and mac addresses found on file/s"
+  echo -e "  ${script_name} ${color_arr[0]}-4 ${color_arr[0]}, ${color_arr[0]}--ipv4${color_arr[0]}           shows active interfaces with their ipv4 address"
+  echo -e "  ${script_name} ${color_arr[0]}-6 ${color_arr[0]}, ${color_arr[0]}--ipv6${color_arr[0]}           shows active interfaces with their ipv6 address"
+  echo -e "  ${script_name} ${color_arr[0]}-a ${color_arr[0]}, ${color_arr[0]}--all${color_arr[0]}            shows all information"
+  echo -e "  ${script_name} ${color_arr[0]}-A ${color_arr[0]}, ${color_arr[0]}--all-interfaces${color_arr[0]} shows all available network interfaces"
+  echo -e "  ${script_name} ${color_arr[0]}-c ${color_arr[0]}, ${color_arr[0]}--calculate${color_arr[0]}<>    shows calculated ip information"
+  echo -e "  ${script_name} ${color_arr[0]}-d ${color_arr[0]}, ${color_arr[0]}--driver${color_arr[0]}         shows each active interface's driver"
+  echo -e "  ${script_name} ${color_arr[0]}-e ${color_arr[0]}, ${color_arr[0]}--external${color_arr[0]}       shows your external ip address"
+  echo -e "  ${script_name} ${color_arr[0]}-e ${color_arr[0]}, ${color_arr[0]}--external${color_arr[0]}<>     shows external ip addresses"
+  echo -e "  ${script_name} ${color_arr[0]}-f ${color_arr[0]}, ${color_arr[0]}--find${color_arr[0]}<>         shows valid ip and mac addresses found on file/s"
   echo -e "  ${script_name} ${color_arr[0]}-g ${color_arr[0]}, ${color_arr[0]}--gateway ${color_arr[0]}       shows gateway of online interfaces"
   echo -e "  ${script_name} ${color_arr[0]}-h ${color_arr[0]}, ${color_arr[0]}--help${color_arr[0]}           shows this help message"
-  echo -e "  ${script_name} ${color_arr[1]}-H ${color_arr[0]}, ${color_arr[1]}--hosts ${color_arr[0]}         shows active hosts on network"
-  echo -e "  ${script_name} ${color_arr[1]}-HM${color_arr[0]}, ${color_arr[1]}--hosts-mac ${color_arr[0]}     shows active hosts on network with their mac address"
-  echo -e "  ${script_name} ${color_arr[0]}-i ${color_arr[0]}, ${color_arr[0]}--interfaces ${color_arr[0]}    shows active interfaces"
-  echo -e "  ${script_name} ${color_arr[0]}-l ${color_arr[0]}, ${color_arr[0]}--list ${color_arr[0]}          shows a list of private and reserved ip addresses"
-  echo -e "  ${script_name} ${color_arr[0]}-m ${color_arr[0]}, ${color_arr[0]}--mac ${color_arr[0]}           shows active interfaces with their mac address"
-  echo -e "  ${script_name} ${color_arr[0]}-n ${color_arr[0]}, ${color_arr[0]}--neighbor ${color_arr[0]}      shows neighbor cache"
-  echo -e "  ${script_name} ${color_arr[0]}-P ${color_arr[0]}, ${color_arr[0]}--port ${color_arr[0]}          shows a list of common ports"
-  echo -e "  ${script_name} ${color_arr[1]}-P ${color_arr[0]}, ${color_arr[1]}--port ${color_arr[0]}<>        shows connections to a port per ip"
-  echo -e "  ${script_name} ${color_arr[0]}-r ${color_arr[0]}, ${color_arr[0]}--route-ipv4 ${color_arr[0]}<>  shows the path to a network host using ipv4"
-  echo -e "  ${script_name} ${color_arr[0]}-r6${color_arr[0]}, ${color_arr[0]}--route-ipv6 ${color_arr[0]}<>  shows the path to a network host using ipv6"
-  echo -e "  ${script_name} ${color_arr[0]}-u ${color_arr[0]}, ${color_arr[0]}--url ${color_arr[0]}<>         shows valid ip and mac addresses found on website/s"
-  echo -e "  ${script_name} ${color_arr[0]}-v ${color_arr[0]}, ${color_arr[0]}--version ${color_arr[0]}       shows the version of script"
-  echo -e "  ${script_name} ${color_arr[2]}--cidr-4${color_arr[0]}, ${color_arr[2]}--cidr-ipv4 ${color_arr[0]}shows active interfaces with their ipv4 address and cidr"
-  echo -e "  ${script_name} ${color_arr[2]}--cidr-6${color_arr[0]}, ${color_arr[2]}--cidr-ipv6 ${color_arr[0]}shows active interfaces with their ipv6 address and cidr"
-  echo -e "  ${script_name} ${color_arr[2]}--cidr-a${color_arr[0]}, ${color_arr[2]}--cidr-all ${color_arr[0]} shows all information with cidr"
-  echo -e "  ${script_name} ${color_arr[2]}--cidr-l${color_arr[0]}, ${color_arr[2]}--cidr-list ${color_arr[0]}shows a list of private and reserved ip addresses with cidr"
+  echo -e "  ${script_name} ${color_arr[1]}-H ${color_arr[0]}, ${color_arr[1]}--hosts${color_arr[0]}          shows active hosts on network"
+  echo -e "  ${script_name} ${color_arr[1]}-HM${color_arr[0]}, ${color_arr[1]}--hosts-mac${color_arr[0]}      shows active hosts on network with their mac address"
+  echo -e "  ${script_name} ${color_arr[0]}-i ${color_arr[0]}, ${color_arr[0]}--interfaces${color_arr[0]}     shows active interfaces"
+  echo -e "  ${script_name} ${color_arr[0]}-l ${color_arr[0]}, ${color_arr[0]}--list${color_arr[0]}           shows a list of private and reserved ip addresses"
+  echo -e "  ${script_name} ${color_arr[0]}-m ${color_arr[0]}, ${color_arr[0]}--mac${color_arr[0]}            shows active interfaces with their mac address"
+  echo -e "  ${script_name} ${color_arr[0]}-n ${color_arr[0]}, ${color_arr[0]}--neighbor${color_arr[0]}       shows neighbor cache"
+  echo -e "  ${script_name} ${color_arr[0]}-P ${color_arr[0]}, ${color_arr[0]}--port${color_arr[0]}           shows a list of common ports"
+  echo -e "  ${script_name} ${color_arr[1]}-P ${color_arr[0]}, ${color_arr[1]}--port${color_arr[0]}<>         shows connections to a port per ip"
+  echo -e "  ${script_name} ${color_arr[0]}-r ${color_arr[0]}, ${color_arr[0]}--route-ipv4${color_arr[0]}<>   shows the path to a network host using ipv4"
+  echo -e "  ${script_name} ${color_arr[0]}-r6${color_arr[0]}, ${color_arr[0]}--route-ipv6${color_arr[0]}<>   shows the path to a network host using ipv6"
+  echo -e "  ${script_name} ${color_arr[0]}-u ${color_arr[0]}, ${color_arr[0]}--url${color_arr[0]}<>          shows valid ip and mac addresses found on website/s"
+  echo -e "  ${script_name} ${color_arr[0]}-v ${color_arr[0]}, ${color_arr[0]}--version${color_arr[0]}        shows the version of script"
+  echo -e "  ${script_name} ${color_arr[2]}--cidr-4${color_arr[0]}, ${color_arr[2]}--cidr-ipv4${color_arr[0]} shows active interfaces with their ipv4 address and cidr"
+  echo -e "  ${script_name} ${color_arr[2]}--cidr-6${color_arr[0]}, ${color_arr[2]}--cidr-ipv6${color_arr[0]} shows active interfaces with their ipv6 address and cidr"
+  echo -e "  ${script_name} ${color_arr[2]}--cidr-a${color_arr[0]}, ${color_arr[2]}--cidr-all${color_arr[0]}  shows all information with cidr"
+  echo -e "  ${script_name} ${color_arr[2]}--cidr-l${color_arr[0]}, ${color_arr[2]}--cidr-list${color_arr[0]} shows a list of private and reserved ip addresses with cidr"
 
   return 0
 }
