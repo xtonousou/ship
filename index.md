@@ -26,11 +26,11 @@ layout: home
   * **IPv4**
   * optionally suppress the bitwise output
   * display results as HTML
-  * split into networks of size n1, n2, n3 :construction:
-  * deaggregate address range :construction:
+  * split into networks of size n1, n2, n3 🚧
+  * deaggregate address range 🚧
 * Show list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
 * Configuration FLAGS to change behavior, color theme and verbosity
-  * `COLOR`: choose `a` color theme 1 to 4
+  * `COLOR`: choose a color theme from `1` to `4`
   * `SILENT`: choose `1` to skip checking, warning and error messages (not critical, useful on scripting)
   * `NOCHECK`: choose `1` to skip validation and checking functions (faster, expects well-formatted inputs)
   * `DEBUG`: choose `1` to enter debugging mode a.k.a. trace mode
