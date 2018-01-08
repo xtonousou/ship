@@ -95,14 +95,12 @@ One of the following tools must be installed. If more than one is installed `shi
 
  :penguin:  | Version             
 :-----------|:--------------------
- Arch       | 4.7.5-1 - 4.14.8-1  
+ Arch       | 4.7.5-1 - 4.14.11-1 
  Black Arch | 2017.12.11          
  CentOS     | 7                   
  Debian     | 7 - 8               
  Kali       | 2016.2              
- Ubuntu     | 14.04.3 - 16.04.1
-
- ![with bash 3.2 or later][bash-gif]
+ Ubuntu     | 14.04.3 - 16.04.1   
 
 ---
 
@@ -172,7 +170,6 @@ Copyleft (&#8580;) **2017** by **Sotirios M. Roussis**. Some rights reserved
 
 <!-- Links -->
 
-[bash-gif]: imgs/bash.gif
 [this]: CODE_OF_CONDUCT.md
 [Guide]: https://xtonousou.github.io/ship/guide
 [Changelog]: CHANGELOG.md
