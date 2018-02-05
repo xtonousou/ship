@@ -2,7 +2,7 @@
 ## title........: ship.sh
 ## description..: a simple, handy network addressing multitool with plenty of features
 ## author.......: sotirios m. roussis a.k.a. xtonousou - xtonousou@gmail.com
-## date.........: 20180801
+## date.........: 20180502
 ## usage........: bash ship.sh [options]? [arguments]?
 ## bash version.: 3.2 or later
 ## license .....: gplv3+
@@ -63,6 +63,7 @@ readonly github="https://github.com/${author_nickname}"
 ### locations
 readonly google="google.com"
 readonly google_dns="8.8.8.8"
+readonly mac_vendor="macvendors.co/api/vendorname"
 declare -ra public_ip_hosts_arr=(
   "icanhazip.com"
   "ident.me"
@@ -93,6 +94,7 @@ if [[ ! "${SILENT}" ]]; then
   readonly dialog_no_valid_mask="the netmask is invalid"
   readonly dialog_no_valid_cidr="the cidr is invalid"
   readonly dialog_no_valid_addresses="no valid ipv4, ipv6 or mac addresses found"
+  readonly dialog_no_valid_mac="no valid mac address/es found"
   readonly dialog_no_tracepath6="tracepath6 is missing, will use tracepath with no ipv6 compatibility"
   readonly dialog_no_trace_command="you must install at least one of the following tools to perform this action: tracepath, traceroute, mtr"
   readonly dialog_root_permissions="${script_name} requires root privileges for this action"
@@ -1653,6 +1655,26 @@ show_version() {
   return 0
 }
 
+show_vendor() {
+
+  local mac vendor
+
+  [[ ! "${NOCHECK}" && -z "${1}" ]] && error_exit "${dialog_no_valid_mac}"
+
+  init_regexes
+  
+  for mac in "${@}"; do
+    if [[ $(grep --extended-regexp --only-matching "${regex_mac}" <<< "${mac}") ]]; then
+      vendor=$(wget "${mac_vendor}/${mac}" -qO-)
+      printf "%s %s\n" "${mac}" "${vendor}"
+    else
+      error_exit "${dialog_no_valid_mac}"
+    fi
+  done
+
+  return 0
+}
+
 # prints active network interfaces with their ipv4 address and cidr suffix.
 show_ipv4_cidr() {
 
@@ -1736,6 +1758,7 @@ show_usage() {
   echo -e "  ${script_name} ${color_arr[0]}-r6${color_arr[0]}, ${color_arr[0]}--route-ipv6${color_arr[0]}<>   shows the path to a network host using ipv6"
   echo -e "  ${script_name} ${color_arr[0]}-u ${color_arr[0]}, ${color_arr[0]}--url${color_arr[0]}<>          shows valid ip and mac addresses found on website/s"
   echo -e "  ${script_name} ${color_arr[0]}-v ${color_arr[0]}, ${color_arr[0]}--version${color_arr[0]}        shows the version of script"
+  echo -e "  ${script_name} ${color_arr[0]}-V ${color_arr[0]}, ${color_arr[0]}--vendor${color_arr[0]}         shows the vendor name of mac address/es"
   echo -e "  ${script_name} ${color_arr[2]}--cidr-4${color_arr[0]}, ${color_arr[2]}--cidr-ipv4${color_arr[0]} shows active interfaces with their ipv4 address and cidr"
   echo -e "  ${script_name} ${color_arr[2]}--cidr-6${color_arr[0]}, ${color_arr[2]}--cidr-ipv6${color_arr[0]} shows active interfaces with their ipv6 address and cidr"
   echo -e "  ${script_name} ${color_arr[2]}--cidr-a${color_arr[0]}, ${color_arr[2]}--cidr-all${color_arr[0]}  shows all information with cidr"
@@ -1879,6 +1902,11 @@ sail() {
     ;;
     "-v"|"--version")
       show_version
+      break
+    ;;
+    "-V"|"--vendor")
+      check_connectivity "--internet"
+      show_vendor "${@:2}"
       break
     ;;
     "--cidr-4"|"--cidr-ipv4")

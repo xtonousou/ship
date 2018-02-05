@@ -26,6 +26,7 @@
   * **IPv4**
   * **IPv6** (*if possible*)
   * **MAC**
+* Show the vendor name of MAC address/es
 * Show the **public/external IP/s**
   * of current user
   * of website/s or domain/s
