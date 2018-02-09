@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fxtonousou%2Fship.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fxtonousou%2Fship?ref=badge_shield)
+
 <p align="center"><img width=50% src="/imgs/logo-with-text.png"></img></p>
 <p align="center">a simple, handy network addressing multitool with plenty of features</p>
 <p align="center">
@@ -13,6 +15,9 @@
 </p>
 
 ---
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fxtonousou%2Fship.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fxtonousou%2Fship?ref=badge_large)
 
 ### Features
 
