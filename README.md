@@ -169,6 +169,8 @@ Copyleft (&#8580;) **2017** by **Sotirios M. Roussis**. Some rights reserved
 
 `ship` is under the terms of the GPLv3+ License, following all clarifications stated in the [license] file
 
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fxtonousou%2Fship.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fxtonousou%2Fship?ref=badge_large)
+
 <!-- Links -->
 
 [this]: CODE_OF_CONDUCT.md
