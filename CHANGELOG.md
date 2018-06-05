@@ -1,6 +1,36 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.6.3] - 2018-02-05
+### Added
+* `DEBUG`, `SILENT`, `COLOR` and `NOCHECK` flags
+  * You can use one or more flags as following: `DEBUG=1 bash ship.sh`
+    * `DEBUG=1`: enable trace mode
+    * `SILENT=1`: suppress status, warning and error messages
+    * `COLOR=1`: enable colors (COLORS{1..4})
+    * `NOCHECK=1`: disable checking functions (LAN/WAN connection, input, ipv6, etc...)
+* `ship -V, --vendor mac another_mac mac_here_too`
+  * Show vendor name of **MAC** address/es
+
+### Changed
+* Code to follow bash styling and some standards.
+* Code flow.
+* All characters are lowecase.
+* Method to check LAN/WAN connections.
+
+## [2.6.2] - 2017-08-30
+### Added
+* `ship -e` now can handle more than one domain.
+  * e.g. `ship -e github.com google.com facebook.com`
+
+### Changed
+* **Fixed** an issue displaying weird output when parsing HTML.
+  * e.g. `ship -u github.com google.com facebook.com`
+* Digitally signed `ship.sh` using GnuPG.
+* Minor changes on code.
+* Refactored `README.md`.
+* Refactored `GUIDE.md`.
+
 ## [2.6.1] - 2017-07-22
 ### Added
 * [Official website](https://xtonousou.github.io/ship).

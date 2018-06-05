@@ -1,2 +1,16 @@
+<<<<<<< HEAD
 _*
 .sass*
+=======
+/.sass*
+/.bundle*
+/_*
+/assets*
+/script*
+/vendor*
+/*.yml
+/Gem*
+/*.lock
+/*.gem*
+/*~
+>>>>>>> f8cd39cfef1e55f5c9ee9c5a97fb59c32998d418
