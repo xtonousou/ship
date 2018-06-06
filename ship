@@ -506,7 +506,7 @@ show_ip_from() {
   local http_code temp_file random_source input item host
 
   random_source="${public_ip_hosts_arr["$(( RANDOM % ${#public_ip_hosts_arr[@]} ))"]}"
-  temp_file="/tmp/${script_name^^}.ips"
+  temp_file="/tmp/ship.ips"
   
   touch "${temp_file}"
 
