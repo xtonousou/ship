@@ -11,8 +11,7 @@ Please note we have a code of conduct, please follow it in all your interactions
 1. Before making any change, please contact me by :e-mail: [xtonousou@gmail.com]. State any change
 2. Update the datetime under shebang
 3. Change the version if appropriate. We are using [Semantic Versioning 2.0.0]
-4. Follow the code style
-5. Use the linter `shellcheck` to avoid issues
+4. Use the linter `shellcheck` to avoid issues
 
 ## For testers
 

@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.6.3] - 2018-02-05
+## [2.6.3] - 2018-12-06
 ### Added
 * `DEBUG`, `SILENT`, `COLOR` and `NOCHECK` flags
   * You can use one or more flags as following: `DEBUG=1 bash ship.sh`
@@ -13,10 +13,14 @@ All notable changes to this project will be documented in this file.
   * Show vendor name of **MAC** address/es
 
 ### Changed
+* **Fixed** filenaming issues.
 * Code to follow bash styling and some standards.
 * Code flow.
-* All characters are lowecase.
+* All characters to lowecase.
 * Method to check LAN/WAN connections.
+
+### Removed
+* Some warnings with `shellcheck`.
 
 ## [2.6.2] - 2017-08-30
 ### Added
@@ -251,10 +255,10 @@ All notable changes to this project will be documented in this file.
 ### Changed
 * Usage.
 * `gawk` to `awk`
-* Method for grabbing IPv4 address of user, domain. Now using `netcat`. 
-* **Fixed** some user input 'bugs'. 
-* **Fixed** regex for domain and IP validation. 
-* Order of commands in functions. 
+* Method for grabbing IPv4 address of user, domain. Now using `netcat`.
+* **Fixed** some user input 'bugs'.
+* **Fixed** regex for domain and IP validation.
+* Order of commands in functions.
 * Execution speed increased by a little.
 * Checking methods.
 * Dialogs and messages.

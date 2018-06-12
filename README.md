@@ -26,7 +26,7 @@
   * **IPv4**
   * **IPv6** (*if possible*)
   * **MAC**
-* Show the vendor name of MAC address/es
+* Show the vendor name of MAC address/es (*needs internet connection*)
 * Show the **public/external IP/s**
   * of current user
   * of website/s or domain/s
@@ -43,7 +43,7 @@
   * display results as HTML
   * split into networks of size n1, n2, n3 :construction:
   * deaggregate address range :construction:
-* Show list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
+* Show a list of **common ports** with description, **private** and **reserved** IPv4 and IPv6 addresses with or without CIDR notation
 * Configuration FLAGS to change behavior, color theme and verbosity
   * `COLOR`: choose a color theme from 1 to 4
   * `SILENT`: choose `1` to skip checking, warning and error messages (not critical, useful on scripting)
@@ -56,7 +56,7 @@
 * Cleaning temp files and handling remaining tasks on exit
 * Exiting on long running tasks needs confirmation
 
----      
+---
 
 ### Usage
 
@@ -70,38 +70,38 @@ Read the [Guide] :mortar_board:
 
 #### Mandatory
 
- :wrench:   | Package                 
+ :wrench:   | Package
 :-----------|:------------------------
- awk        | awk \| gawk             
- grep       | grep                    
- ip         | iproute2                
- ping       | iputils \| iputils-ping 
- sed        | sed                     
- ss         | iproute2                
- wget       | wget                    
+ awk        | awk \| gawk
+ grep       | grep
+ ip         | iproute2
+ ping       | iputils \| iputils-ping
+ sed        | sed
+ ss         | iproute2
+ wget       | wget
 
 #### Mandatory Choice
 
 One of the following tools must be installed. If more than one is installed `ship` will use the fastest one
 
- :wrench:   | Package      
+ :wrench:   | Package
 :-----------|:-------------
- mtr        | mtr          
- tracepath  | iputils      
- traceroute | traceroute   
+ mtr        | mtr
+ tracepath  | iputils
+ traceroute | traceroute
 
 ---
 
 ### Compatibility (tested)
 
- :penguin:  | Version             
+ :penguin:  | Version
 :-----------|:--------------------
- Arch       | 4.7.5-1 - 4.14.11-1 
- Black Arch | 2017.12.11          
- CentOS     | 7                   
- Debian     | 7 - 8               
- Kali       | 2016.2              
- Ubuntu     | 14.04.3 - 16.04.1   
+ Arch       | 4.7.5-1 - 4.16.13-2
+ Black Arch | 2017.12.11
+ CentOS     | 7
+ Debian     | 7 - 8
+ Kali       | 2016.2
+ Ubuntu     | 14.04.3 - 16.04.1
 
 ---
 
@@ -122,13 +122,6 @@ $ ship
 
 ---
 
-### Checksums (`master` branch)
-
-> **MD5**: 12bfc2455a348b2b660de95017076706
->
-> **SHA1**: 306fd0db6b8c40357c043223c43e1660bbf60ab2
-
----
 
 ### Contribution
 
@@ -155,12 +148,15 @@ Read the [Changelog] file to review changes :scroll:
 
 ---
 
-### Articles (about `ship`)
+### About `ship`
 
+* [ToadLeap] - *04/07/2018*
+* [HelpuGroup] - *02/06/2018*
+* [MakeTechEasier] - *Unknown*
 * [WonderHowTo/NullByte] - *12/22/2017*
 * [root.cz] - *08/30/2017*
 
-----
+---
 
 ### License
 
@@ -178,5 +174,8 @@ Copyleft (&#8580;) **2017** by **Sotirios M. Roussis**. Some rights reserved
 [Changelog]: CHANGELOG.md
 [license]: LICENSE.md
 
+[ToadLeap]: https://toadleap.com/linux-basics-for-the-aspiring-hacker-using-ship-for-quick-handy-ip-address-information/
+[HelpuGroup]: https://helpugroup.ru/osnovy-linux-chast-30-ispolzovanie-ship-dlya-bystrogo-polucheniya-informatsii-ob-ip-adresah-v-udobnom-vide/
+[MakeTechEasier]: https://www.maketecheasier.com/software/ship-sh/
 [WonderHowTo/NullByte]: https://null-byte.wonderhowto.com/how-to/linux-basics-for-aspiring-hacker-using-ship-for-quick-handy-ip-address-information-0181593/
 [root.cz]: https://www.root.cz/clanky/softwarova-sklizen-30-8-2017
