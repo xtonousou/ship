@@ -31,7 +31,7 @@ declare -r COLORS=(
 
 ### Locations
 readonly TEMP="/tmp"
-readonly GOOGLE_DNS="8.8.8.8"
+readonly DNS="8.8.8.8"
 declare -r PUBLIC_IP=(
   "icanhazip.com"
   "ident.me"
@@ -203,7 +203,7 @@ function print_port_protocol_list() {
 }
 
 # Checks network connection (local or internet).
-function check_connectivity() {
+function check_your_connection() {
 
   case "${1}" in
     "--local")
