@@ -1,0 +1,4 @@
+http://docopt.org/
+https://stackoverflow.com/questions/6980090/how-to-read-from-a-file-or-stdin-in-bash
+https://editorconfig.org/
+

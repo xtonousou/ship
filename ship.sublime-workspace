@@ -1,0 +1,1429 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"hi",
+				"history"
+			],
+			[
+				"book",
+				"bookmakers_ids_map"
+			],
+			[
+				"team",
+				"teamids"
+			],
+			[
+				"histo",
+				"history"
+			],
+			[
+				"bookm",
+				"bookmaker1"
+			],
+			[
+				"his",
+				"history_chks"
+			],
+			[
+				"limi",
+				"limit_history"
+			],
+			[
+				"market",
+				"market1v"
+			],
+			[
+				"market2",
+				"market2v"
+			],
+			[
+				"market3",
+				"market3v"
+			],
+			[
+				"new",
+				"new_history"
+			],
+			[
+				"last",
+				"last_history"
+			],
+			[
+				"arb",
+				"arb_diff"
+			],
+			[
+				"str",
+				"str_arb"
+			],
+			[
+				"meme",
+				"memento_chks"
+			],
+			[
+				"mem",
+				"memento_chks"
+			],
+			[
+				"tota",
+				"total_replicas"
+			],
+			[
+				"env",
+				"envars"
+			],
+			[
+				"popu",
+				"populate_stats"
+			],
+			[
+				"SPORT",
+				"SPORTS_DIR"
+			],
+			[
+				"live",
+				"live_bets_url"
+			],
+			[
+				"events",
+				"events_chunk"
+			],
+			[
+				"sport",
+				"sport_id"
+			],
+			[
+				"away",
+				"away_block"
+			],
+			[
+				"compile",
+				"compile_home_away_blocks"
+			],
+			[
+				"db_ex",
+				"db_exception_str"
+			],
+			[
+				"date",
+				"date_time"
+			],
+			[
+				"mark",
+				"market_dict"
+			],
+			[
+				"UTILS",
+				"UTILS_MOD"
+			],
+			[
+				"sub",
+				"sub_market"
+			],
+			[
+				"hda_",
+				"hda_block_rgxp"
+			],
+			[
+				"scrapurl",
+				"scrapurl_disable"
+			],
+			[
+				"league",
+				"league_name"
+			],
+			[
+				"msa",
+				"market_short_name"
+			],
+			[
+				"over",
+				"over_exactly_under"
+			],
+			[
+				"ove",
+				"over_exactly_under"
+			],
+			[
+				"index",
+				"indexed"
+			],
+			[
+				"isi",
+				"isinstance"
+			],
+			[
+				"ft",
+				"ft_fh"
+			],
+			[
+				"sub_",
+				"sub_markets"
+			],
+			[
+				"event",
+				"event_info"
+			],
+			[
+				"even",
+				"event_info"
+			],
+			[
+				"con",
+				"connector"
+			],
+			[
+				"UTI",
+				"UTILS_MOD"
+			],
+			[
+				"marke",
+				"market_name"
+			],
+			[
+				"get",
+				"getattr"
+			],
+			[
+				"jso",
+				"jso_to_json"
+			],
+			[
+				"true",
+				"True"
+			],
+			[
+				"eve",
+				"event_id"
+			],
+			[
+				"strea",
+				"stream_params"
+			],
+			[
+				"stre",
+				"stream_headers"
+			],
+			[
+				"SPOO",
+				"SPOOF_MOD"
+			],
+			[
+				"__",
+				"__init__"
+			],
+			[
+				"is",
+				"is_memsql"
+			],
+			[
+				"Conne",
+				"ConnectionPool"
+			],
+			[
+				"Con",
+				"connection_pool"
+			],
+			[
+				"len_t",
+				"len_term2"
+			],
+			[
+				"spe",
+				"special_chars_rgxp"
+			],
+			[
+				"e_ke",
+				"e_key"
+			],
+			[
+				"cy",
+				"cypher"
+			],
+			[
+				"ser",
+				"server_date"
+			],
+			[
+				"upda",
+				"update_tick"
+			],
+			[
+				"rando",
+				"random_string"
+			],
+			[
+				"outpu",
+				"output_row"
+			],
+			[
+				"class",
+				"class_sentence"
+			],
+			[
+				"te",
+				"teams"
+			],
+			[
+				"kn",
+				"knowledge"
+			],
+			[
+				"prep",
+				"preprocess"
+			],
+			[
+				"toke",
+				"token_sort_ratio"
+			],
+			[
+				"sta",
+				"staticmethod"
+			],
+			[
+				"max",
+				"max_ratio"
+			],
+			[
+				"simi",
+				"similarity_ratio"
+			],
+			[
+				"diff",
+				"difflib_sequence_matcher_ratio"
+			],
+			[
+				"an",
+				"answer"
+			],
+			[
+				"fetch",
+				"fetch_all"
+			],
+			[
+				"from",
+				"from_database"
+			],
+			[
+				"region",
+				"region_block"
+			],
+			[
+				"conn",
+				"connector"
+			],
+			[
+				"find",
+				"find_all"
+			],
+			[
+				"results",
+				"results_db"
+			],
+			[
+				"Thre",
+				"ThreadPoolExecutor"
+			],
+			[
+				"match",
+				"match_id"
+			],
+			[
+				"SPO",
+				"SPOOF_MOD"
+			],
+			[
+				"as",
+				"as_completed"
+			],
+			[
+				"EVENT",
+				"events_count"
+			],
+			[
+				"data",
+				"database"
+			],
+			[
+				"TOT",
+				"TOTAL_NOT_OK"
+			],
+			[
+				"TOTAL",
+				"TOTAL_OK"
+			],
+			[
+				"TOTA",
+				"TOTAL_OK"
+			],
+			[
+				"evnet",
+				"event_id"
+			],
+			[
+				"teams",
+				"teams_file"
+			],
+			[
+				"m",
+				"my_url"
+			],
+			[
+				"lo",
+				"local_port_to_use"
+			],
+			[
+				"port",
+				"port_to_use"
+			],
+			[
+				"heal",
+				"healthchecked"
+			],
+			[
+				"lea",
+				"leagues_and_catids"
+			],
+			[
+				"catid",
+				"cat_id"
+			],
+			[
+				"ma",
+				"match_soup"
+			],
+			[
+				"home",
+				"home_away"
+			],
+			[
+				"hom",
+				"home_away"
+			],
+			[
+				"se",
+				"sequence"
+			],
+			[
+				"convert",
+				"converter"
+			],
+			[
+				"conne",
+				"connector"
+			],
+			[
+				"res",
+				"response"
+			],
+			[
+				"game",
+				"game_checksum"
+			],
+			[
+				"scr",
+				"scrapurls_file"
+			],
+			[
+				"cat",
+				"cat_id"
+			],
+			[
+				"main",
+				"main_block"
+			],
+			[
+				"try",
+				"try\tTry/Except"
+			],
+			[
+				"sess",
+				"session_id"
+			],
+			[
+				"dat",
+				"data_reboot"
+			],
+			[
+				"head",
+				"headers_home"
+			],
+			[
+				"url",
+				"url_home"
+			],
+			[
+				"hea",
+				"headers"
+			],
+			[
+				"par",
+				"params_login"
+			],
+			[
+				"Conn",
+				"Connector"
+			],
+			[
+				"len",
+				"len_topics"
+			],
+			[
+				"scra",
+				"scraper_at_host"
+			],
+			[
+				"CHUNK",
+				"CHUNK_TOPICS"
+			],
+			[
+				"CHU",
+				"CHUNK_TOPICS"
+			],
+			[
+				"Topic",
+				"TOPICS"
+			],
+			[
+				"foot",
+				"football_parser_data_to_sql"
+			],
+			[
+				"versio",
+				"version_info"
+			],
+			[
+				"sc",
+				"scraper_at_host"
+			],
+			[
+				"scraper",
+				"scraper_at_host"
+			],
+			[
+				"logic",
+				"logicdir"
+			],
+			[
+				"thr",
+				"threshold_sql_l_games_len"
+			],
+			[
+				"thre",
+				"threshold_sql_nl_markets_len"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "ship",
+			"settings":
+			{
+				"buffer_size": 69470,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					""
+				],
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/C++/C++ Single File.sublime-build",
+				"Run"
+			]
+		],
+		[
+			[
+				[
+					"Packages/MagicPython/settings/sublime/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/MagicPython/settings/sublime/Python.sublime-build",
+					"Syntax Check"
+				],
+				[
+					"Packages/Docker Based Build Systems/Docker Compose.sublime-build",
+					""
+				],
+				[
+					"Packages/Docker Based Build Systems/Docker Compose.sublime-build",
+					"Docker-compose build"
+				],
+				[
+					"Packages/Docker Based Build Systems/Docker Compose.sublime-build",
+					"Docker-compose kill"
+				],
+				[
+					"Packages/Docker Based Build Systems/Docker Compose.sublime-build",
+					"Docker-compose ports"
+				],
+				[
+					"Packages/Docker Based Build Systems/Docker Compose.sublime-build",
+					"Docker-compose rm"
+				],
+				[
+					"Packages/Docker Based Build Systems/Docker Compose.sublime-build",
+					"Docker-compose stop"
+				],
+				[
+					"Packages/Docker Based Build Systems/Docker Compose.sublime-build",
+					"Docker-compose restart"
+				],
+				[
+					"Packages/Docker Based Build Systems/Docker Compose.sublime-build",
+					"Docker-compose ps"
+				],
+				[
+					"Packages/Docker Based Build Systems/Python in Docker Container.sublime-build",
+					""
+				],
+				[
+					"Packages/Docker Based Build Systems/Python in Docker Container.sublime-build",
+					"Python v2.7 in Docker Container"
+				],
+				[
+					"Packages/Docker Based Build Systems/Python in Docker Container.sublime-build",
+					"Python v3.4 in Docker Container"
+				],
+				[
+					"Packages/SublimeREPL/sublimerepl_build_system_hack.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/MagicPython/settings/sublime/Python.sublime-build",
+				"Syntax Check"
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"SORT",
+				"ImportSort: Sort imports"
+			],
+			[
+				"sort",
+				"ImportSort: Sort imports"
+			],
+			[
+				"sql",
+				"uroboroSQL Formatter: Format SQL"
+			],
+			[
+				"sortr",
+				"ImportSort: Sort imports"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"html",
+				"HTML: Wrap Selection With Tag"
+			],
+			[
+				"sorr",
+				"ImportSort: Sort imports"
+			],
+			[
+				"sorrt",
+				"ImportSort: Sort imports"
+			],
+			[
+				"theme",
+				"Monokai Pro: select theme"
+			],
+			[
+				"UI",
+				"UI: Select Color Scheme"
+			],
+			[
+				"3d",
+				"Set Syntax: Tool 3D"
+			],
+			[
+				"upda",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"compa",
+				"CSV: Compact columns"
+			],
+			[
+				"just",
+				"CSV: Justify columns"
+			],
+			[
+				"csv",
+				"Set Syntax: Advanced CSV"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"soirt",
+				"ImportSort: Sort imports"
+			],
+			[
+				"monoka",
+				"Monokai Pro: select theme"
+			],
+			[
+				"json",
+				"TextFormatting - Prettify JSON"
+			],
+			[
+				"so",
+				"ImportSort: Sort imports"
+			],
+			[
+				"editor",
+				"Set Syntax: EditorConfig"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"srt",
+				"SublimeREPL: Tower Console"
+			],
+			[
+				"preview",
+				"Markdown Preview: Save to HTML"
+			],
+			[
+				"python",
+				"User: Python PEP8 Autoformat"
+			],
+			[
+				"LiveReload: Enable/disable plugins",
+				"LiveReload: Enable/disable plug-ins"
+			],
+			[
+				"python form",
+				"User: Python PEP8 Autoformat"
+			],
+			[
+				"monoko",
+				"Monokai Pro: select theme"
+			],
+			[
+				"csv j",
+				"CSV: Justify columns"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"auto",
+				"User: Python PEP8 Autoformat"
+			],
+			[
+				"form",
+				"User: Python PEP8 Autoformat"
+			],
+			[
+				"markdow",
+				"Markdown Preview: Save to HTML"
+			],
+			[
+				"upate",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"uro",
+				"uroboroSQL Formatter: Format SQL"
+			],
+			[
+				"pre",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"sor",
+				"ImportSort: Sort imports"
+			],
+			[
+				"sore",
+				"Sort Lines"
+			],
+			[
+				"previ",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"update",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"import so",
+				"ImportSort: Sort imports"
+			],
+			[
+				"organi",
+				"Python Refactor: Organize Imports"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"imports",
+				"Enable Python Fix Imports (until restart)"
+			],
+			[
+				"pytho",
+				"Python Fix Imports"
+			],
+			[
+				"isort",
+				"ImportSort: Sort imports"
+			],
+			[
+				"sort impo",
+				"ImportSort: Sort imports"
+			],
+			[
+				"fix",
+				"Enable Python Fix Imports (until restart)"
+			],
+			[
+				"anacond",
+				"Anaconda: Autoformat PEP8 Errors"
+			],
+			[
+				"Package Control: disabl",
+				"Package Control: Disable Package"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"markdown pre",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: up",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			],
+			[
+				"mark",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"magic",
+				"Set Syntax: MagicPython"
+			],
+			[
+				"disa",
+				"Package Control: Disable Package"
+			],
+			[
+				"menu",
+				"View: Toggle Menu"
+			],
+			[
+				"ayu",
+				"ayu: Activate theme"
+			],
+			[
+				"markd",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"markdown",
+				"Markdown Preview: Save to HTML"
+			],
+			[
+				"markdo",
+				"Markdown Preview: Save to HTML"
+			],
+			[
+				"lint",
+				"SublimeLinter: Show All Errors"
+			],
+			[
+				"error",
+				"SublimeLinter: Show All Errors"
+			],
+			[
+				"show",
+				"Anaconda: Show error list"
+			],
+			[
+				"errors",
+				"SublimeLinter: Show All Errors"
+			],
+			[
+				"markdon",
+				"Build With: Markdown"
+			],
+			[
+				"linter",
+				"SublimeLinter: Show All Errors"
+			],
+			[
+				"shell",
+				"SublimeLinter: Show All Errors"
+			],
+			[
+				"snippet class",
+				"Snippet: New Class"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": false,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/xtonousou/.scripts/bash/ship"
+	],
+	"file_history":
+	[
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/arbitrage/arberry.py",
+		"/home/xtonousou/bookmakers",
+		"/home/xtonousou/docs/work/hoa/git/test/xlibs/database.py",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/stacks/mkstack/calculator/mkstack_calcs.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/xlibs/__version__.py",
+		"/home/xtonousou/docs/work/hoa/git/arb/calculation/a.py",
+		"/home/xtonousou/docs/work/hoa/git/test/source_me.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/.gitignore",
+		"/home/xtonousou/docs/work/hoa/git/test/xlibs/database.py.bkp",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/arbitrage/arberry.py.bkp",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/bet365/bet365_football_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/tools/healthcheck.sh",
+		"/home/xtonousou/a",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/live/.championsbet/championsbet_football_l.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/.championsbet/championsbet_football_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/baseball/championsbet/scrapurl/championsbet_baseball_scrapurl.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/football/championsbet/scrapurl/championsbet_football_scrapurl.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/football/.championsbet/scrapurl/championsbet_football_scrapurl.py.bkp",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/.championsbet/championsbet_football_nl_xvi.py",
+		"/home/xtonousou/memento.json",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/stacks/scraper/football/pre.yml",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/stacks/mkstack/agent/mkstack_agent.sh",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/tools/scaler.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/stacks/agent/agent.yml",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/server/docker-long-term.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/server/add_node.sh",
+		"/home/xtonousou/docs/work/hoa/dumps/bookmakers/ass_array",
+		"/home/xtonousou/docs/work/hoa/dumps/bookmakers/bookmakers.txt",
+		"/home/xtonousou/docs/work/hoa/dumps/bookmakers/books.sql",
+		"/home/xtonousou/docs/work/hoa/git/arb/calculation/arberry.py",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/server/inject_cron.sh",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/.gitignore",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/server/gitgud.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/server/docker-clean.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/server/docker-update.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/images/debian/scrapy-debian-base-amd64/Dockerfile",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/images/debian/scrapy-debian-amd64/Dockerfile",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/1xbet/1xbet_football_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/football/1xbet/scrapurl/1xbet_football_scrapurl.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/baseball/1xbet/scrapurl/1xbet_baseball_scrapurl.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/tools/caduceus.sh",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/football/.1xbet/scrapurl/1xbet_football_scrapurl.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/baseball/.1xbet/scrapurl/1xbet_baseball_scrapurl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/live/1xbet/1xbet_football_l.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/baseball/non_live/1xbet/1xbet_baseball_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/baseball/live/1xbet/1xbet_baseball_l.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/baseball/non_live/stoiximan/stoiximan_baseball_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/stoiximan/stoiximan_football_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/10bet/10bet_football_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/xlibs/scraper.py",
+		"/home/xtonousou/docs/work/hoa/git/test/xlibs/utils.py",
+		"/home/xtonousou/docs/work/hoa/git/test/xlibs/_utils/_converter/_team/_baseball.py",
+		"/home/xtonousou/docs/work/hoa/git/test/xlibs/_utils/_converter/_team/_football.py",
+		"/home/xtonousou/docs/work/hoa/git/test/xlibs/_utils/_converter/_team/_fallback.py",
+		"/home/xtonousou/docs/work/hoa/git/test/xlibs/spoof.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/live/.betcity/betcity_football_l.py",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/manager/service_refresh.sh",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/football/eurolloto/scrapurl/eurolloto_football_scrapurl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/server/hosts_file.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/stacks/scraper/baseball/pre.yml",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/baseball/non_live/bet365/bet365_baseball_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/baseball/non_live/bet365/markets",
+		"/home/xtonousou/docs/work/hoa/git/test/reports/servers/hoa_report_02_10_2019.txt",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/baseball/bet365/scrapurl/bet365_baseball_scrapurl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/anonibet/anonibet_football_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/vps/e0s-sk/login-info.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/manager/portainer.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/manager/ufw/master/user.rules",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/betstars/betstars_football_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/football/10bet/scrapurl/10bet_football_scrapurl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/live/bet365/bet365_football_l.py",
+		"/home/xtonousou/docs/work/hoa/git/test/notes.txt",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/baseball/non_live/10bet/10bet_baseball_nl.py",
+		"/home/xtonousou/scraper.py.new.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/baseball/10bet/scrapurl/10bet_baseball_scrapurl.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/americanfootball/.10bet/scrapurl/10bet_americanfootball_scrapurl.py",
+		"/tmp/10bet",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/.betsson/betsson_football_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/live/favbet/favbet_football_l.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/.10bet/10bet_football_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/sql_to_csv_teams_bookmaker.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/.winmasters/winmasters_football_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/stacks/mkstack/scraper/baseball/mkstack_baseball_live.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/stacks/mkstack/scraper/baseball/mkstack_baseball_pre.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/stacks/mkstack/scraper/football/mkstack_football_live.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/stacks/mkstack/scraper/football/mkstack_football_pre.sh",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/teamsmatching/configuration.json",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/teamsmatching/teamspree.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/football/bet365/scrapurl/bet365_football_scrapurl.py",
+		"/home/xtonousou/docs/work/hoa/sec/vnc/scraper47-es",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/server/conf/kernel/limits.conf",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/live/stoiximan/stoiximan_football_l.py",
+		"/home/xtonousou/docs/work/hoa/git/scrapurl/datasets/football/stoiximan/scrapurl/stoiximan_football_scrapurl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/stacks/calculator/arbs.yml",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/docker/stacks/scraper/football/live.yml",
+		"/home/xtonousou/docs/work/hoa/git/test/tools/administration/server/conf/kernel/sysctl.conf",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/teamsmatching/datasets/pre_baseball.json",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/eurolloto/eurolloto_football_nl.py",
+		"/home/xtonousou/docs/work/hoa/research/bet365/xor.py",
+		"/home/xtonousou/bet365/5",
+		"/home/xtonousou/bet365/9",
+		"/home/xtonousou/bet365/8",
+		"/home/xtonousou/bet365_char_map_dict1",
+		"/home/xtonousou/bet365/1",
+		"/home/xtonousou/bet365/10",
+		"/home/xtonousou/bet365/3",
+		"/home/xtonousou/bet365/4",
+		"/home/xtonousou/bet365/2",
+		"/home/xtonousou/bet365/6",
+		"/home/xtonousou/bet365/7",
+		"/home/xtonousou/bet365_char_map_dict2",
+		"/home/xtonousou/bet365/75",
+		"/home/xtonousou/b",
+		"/home/xtonousou/bet365_odd_decrypt.py",
+		"/home/xtonousou/a.html",
+		"/home/xtonousou/bet365_odd_decrypt.js",
+		"/home/xtonousou/ceasar.py",
+		"/home/xtonousou/a.js",
+		"/home/xtonousou/bet365_char_map",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/arbitrage/formulas/live/2/1/football.json",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/arbitrage/formulas/live/2/1/baseball.json",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/arbitrage/formulas/live/2/0/football.json",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/arbitrage/teamsmatching/teamspree.py",
+		"/home/xtonousou/docs/work/hoa/git/test/scrapers/football/non_live/betano/betano_football_nl.py",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/arbitrage/formulas/live/2/0/baseball.json",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/arbitrage/teamsmatching/postproc.py",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/arbitrage/teamsmatching/ask.py",
+		"/home/xtonousou/docs/work/hoa/git/test/calculation/arbitrage/teamsmatching/post_processed/synapses_live_football.json"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 571.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "ship",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 69470,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								146,
+								146
+							]
+						],
+						"settings":
+						{
+							"SL.35.region_keys":
+							[
+								"SL.shellcheck.Highlights.|42c1835b984eb0db3ce359348d0742ebf3e848408103d49ab3b64dc83f31aea2|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Highlights.|31a5cb337b37beab11cb8bd85b341ebdb7395259b570fbfe4cf4aa3777194407|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Highlights.|1a57cec42e96f06d91f7bbf16809e11e4fed9171d871b56f043885c98fb1fcbe|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Highlights.|0df0fe2e86ee0838b1f3dd82d50d69785d2006423235f3e7c90e4720dc42c17b|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Highlights.|24648b5c80bd2bb14b452b00d31e86f92426533d85a31489785557798ee85ebc|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Highlights.|f18d1f6e98ce5f183e621ecacbea5179ee2e554d198866c09d467ac2c336d674|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Highlights.|2c0de0c4078957000dbac4b77a0c39df2f919ecf07390b8cf5cd78cdb6103c87|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Highlights.|8c6ff7388e7e5dcfa6e276beb9aca4d96f22b9835dcab8162260d97f3f1a9206|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Highlights.|2054f5e619598b2ca4fe211b951d57af72374776617d1be098925d8e7eccafea|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Gutter.|region.whitish|Packages/SublimeLinter/gutter-themes/Blueberry Cross/star.png",
+								"SL.shellcheck.Highlights.|c8ea5b85fcdda55c7948524cbe6d49afa74634e821ec18c1b79b980e66a7321c|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Highlights.|67aa9379cd3c9cef849e66a3286088eb89ca94c2581c19ebc951015a99db0e2d|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Highlights.|ae1b305de54282a7a40fa869605afd94c199c9d0aa04496953fef9c2b1bb01ae|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Highlights.|0d2cf752a930454bda351435f0632c3ddd34141cf2ebe1a39cb1afbc895f6b6d|region.yellowish markup.warning.sublime_linter|32",
+								"SL.shellcheck.Highlights.|84aede5be9901f2fa9b17b90f329b988e3a367a80b09d50326d6a90be67e03d4|region.yellowish markup.warning.sublime_linter|32",
+								"sublime_linter.protected_regions"
+							],
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.clone": -1,
+							"bracket_highlighter.clone_locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.clone_regions":
+							[
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"editorconfig": true,
+							"ensure_newline_at_eof_on_save": true,
+							"git_gutter_is_enabled": true,
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/ShellScript/Bash.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 35.0
+	},
+	"input":
+	{
+		"height": 193.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.SublimeLinter":
+	{
+		"height": 297.0
+	},
+	"output.SublimeLinter Messages":
+	{
+		"height": 171.400588989
+	},
+	"output.exec":
+	{
+		"height": 176.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.help":
+	{
+		"height": 171.400588989
+	},
+	"output.markdown":
+	{
+		"height": 188.0
+	},
+	"output.mdpopups":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 79.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 176.0
+	},
+	"pinned_build_system": "",
+	"project": "ship.sublime-project",
+	"replace":
+	{
+		"height": 66.0
+	},
+	"save_all_on_build": false,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 352.17238002,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 580.41136141
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 470.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
